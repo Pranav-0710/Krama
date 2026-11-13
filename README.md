@@ -36,6 +36,15 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
 
 - Base model speed on this laptop (Core Ultra 7 155H, 16 GB RAM, CPU only, Ollama 0.40.16, default 4-bit file, 986 MB): 33-36 tokens per second over three prompts on 2026-11-12. Memory in use: 1.2 GB.
 
+- Starting scores on our 30 tasks, 2026-11-13 (code run against tests; rules in `eval/RUBRIC.md`):
+
+  | System | Python passed | FastAPI passed | Quick answers, average length |
+  |---|---|---|---|
+  | Base model | 9/12 | 6/12 | 273 tokens |
+  | Base model + written instruction | 9/12 | 5/12 | 218 tokens |
+
+  Blind grading of plan, explanation, clarity and length has not been done yet.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
