@@ -1,0 +1,242 @@
+[
+  {
+    "id": "py-group-by-first-letter",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Initialize an empty dictionary to store the grouped words.\n2. Iterate through each word in the input list.\n3. If the word is not empty, extract its first letter and convert it to lowercase.\n4. If the lowercase letter is not already a key in the dictionary, add it with an empty list as the value.\n5. Append the word to the list associated with the lowercase letter in the dictionary.\n6. Return the dictionary.\n\nCode:\n```python\ndef group_by_first_letter(words):\n    grouped_words = {}\n    for word in words:\n        if word:\n            first_letter = word[0].lower()\n            if first_letter not in grouped_words:\n                grouped_words[first_letter] = []\n            grouped_words[first_letter].append(word)\n    return grouped_words\n```\n\nWhy:\n- The function `group_by_first_letter` is designed to group words by their first letter, ignoring any empty strings.\n- It uses a dictionary to store the grouped words, where each key is a lowercase first letter and each value is a list of words starting with that letter.\n- The function iterates through each word, checks if it is not empty, and then processes it to add it to the appropriate group in the dictionary.\n- The use of a dictionary ensures that the grouping is efficient and straightforward, with a time complexity of O(n), where n is the number of words in the input list.",
+    "tokens": 287,
+    "passed": true
+  },
+  {
+    "id": "py-count-words",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Split the text into words using the split() method.\n2. Convert all words to lowercase using the lower() method.\n3. Use a dictionary to count the occurrences of each word.\n4. Return the dictionary.\n\nCode:\n```python\ndef count_words(text):\n    if not text:\n        return {}\n    words = text.lower().split()\n    word_count = {}\n    for word in words:\n        if word in word_count:\n            word_count[word] += 1\n        else:\n            word_count[word] = 1\n    return word_count\n```\n\nWhy:\n- The function `count_words` takes a string `text` as input.\n- It first checks if the text is empty and returns an empty dictionary if true.\n- It then converts the text to lowercase using the `lower()` method to ensure case insensitivity.\n- The text is split into words using the `split()` method, which splits the text at each space.\n- A dictionary `word_count` is used to keep track of the count of each word.\n- The function iterates over each word in the list of words. If the word is already in the dictionary, its count is incremented by 1. If the word is not in the dictionary, it is added with a count of 1.\n- Finally, the function returns the dictionary containing the count of each word in the text.",
+    "tokens": 284,
+    "passed": true
+  },
+  {
+    "id": "py-safe-divide",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define a function `safe_divide` that takes two arguments, `a` and `b`.\n2. Check if `b` is zero.\n3. If `b` is zero, return `None`.\n4. If `b` is not zero, perform the division and return the result.\n\nCode:\n```python\ndef safe_divide(a, b):\n    if b == 0:\n        return None\n    return a / b\n```\n\nWhy:\n- The function `safe_divide` is designed to handle division by zero gracefully, returning `None` instead of crashing.\n- This prevents the program from crashing when encountering division by zero, which can happen in real-world applications.\n- The function is clear and concise, making it easy to understand and use.\n- The use of `None` as a return value is a common practice in Python for indicating that a function has completed its execution without finding a result.",
+    "tokens": 193,
+    "passed": true
+  },
+  {
+    "id": "py-flatten-one-level",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Initialize an empty list to store the flattened result.\n2. Iterate through each sublist in the input list.\n3. For each item in the sublist, if it is a list, recursively call the flatten function on it and append the result to the flattened list.\n4. If the item is not a list, append it directly to the flattened list.\n5. Return the flattened list.\n\nCode:\n```python\ndef flatten(lists):\n    flattened = []\n    for sublist in lists:\n        for item in sublist:\n            if isinstance(item, list):\n                flattened.extend(flatten(item))\n            else:\n                flattened.append(item)\n    return flattened\n```\n\nWhy:\n- The function `flatten` is designed to handle lists of lists, ensuring that only one level of nesting is flattened.\n- It uses recursion to handle nested lists, which is a common approach in Python for dealing with nested data structures.\n- The function iterates through each item in the input list, checks if it is a list, and if so, recursively calls `flatten` on it. This ensures that all levels of nesting are flattened.\n- If an item is not a list, it is appended directly to the flattened list, preserving the order of items.\n- The function returns the flattened list, which contains all the items from the input list, with all nested lists flattened into a single list.",
+    "tokens": 279,
+    "passed": false
+  },
+  {
+    "id": "py-most-common",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Initialize a dictionary to keep track of item counts.\n2. Iterate through the list, updating the count for each item.\n3. Find the item with the highest count.\n4. If there are multiple items with the highest count, return the first one encountered.\n5. Return None for an empty list.\n\nCode:\n```python\ndef most_common(items):\n    if not items:\n        return None\n    \n    item_counts = {}\n    for item in items:\n        if item in item_counts:\n            item_counts[item] += 1\n        else:\n            item_counts[item] = 1\n    \n    max_count = max(item_counts.values())\n    for item, count in item_counts.items():\n        if count == max_count:\n            return item\n```\n\nWhy:\n- We use a dictionary to keep track of item counts, which allows us to efficiently update and retrieve counts.\n- We iterate through the list only once, making the function O(n) in time complexity.\n- We find the item with the highest count by iterating through the dictionary again, which is O(n) in time complexity.\n- If there are multiple items with the highest count, we return the first one encountered, which is consistent with the problem statement.\n- We return None for an empty list, as required by the problem statement.",
+    "tokens": 266,
+    "passed": true
+  },
+  {
+    "id": "py-parse-config",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Split the input text into lines.\n2. Filter out blank lines and lines starting with '#'.\n3. Split each line on the first equals sign.\n4. Remove surrounding spaces from the key and value.\n5. Return a dictionary with the key-value pairs.\n\nCode:\n```python\ndef parse_config(text):\n    config_dict = {}\n    lines = text.split('\\n')\n    for line in lines:\n        if line.strip() and not line.startswith('#'):\n            key, value = line.split('=', 1)\n            config_dict[key.strip()] = value.strip()\n    return config_dict\n```\n\nWhy:\n- The function `split('\\n')` splits the text into a list of lines.\n- The `if line.strip() and not line.startswith('#')` filters out blank lines and lines starting with '#'.\n- The `split('=', 1)` splits each line on the first equals sign, assuming there is exactly one equals sign in each line.\n- The `strip()` method removes surrounding spaces from the key and value.\n- The result is a dictionary where each key-value pair is stored in the dictionary.",
+    "tokens": 231,
+    "passed": true
+  },
+  {
+    "id": "py-chunk",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define a function `chunk` that takes two parameters: `items` (the list to be split) and `size` (the size of each chunk).\n2. Check if the list is empty. If it is, return an empty list.\n3. Initialize an empty list `chunks` to store the result.\n4. Use a loop to iterate over the list in steps of `size`.\n5. For each iteration, extract a sublist of the specified size from the original list and append it to the `chunks` list.\n6. Return the `chunks` list.\n\nCode:\n```python\ndef chunk(items, size):\n    if not items:\n        return []\n    chunks = []\n    for i in range(0, len(items), size):\n        chunks.append(items[i:i+size])\n    return chunks\n```\n\nWhy:\n- The function `chunk` is designed to split a list into smaller lists of a specified size.\n- It handles the case where the list is empty by returning an empty list.\n- The loop iterates over the list in steps of `size`, ensuring that each chunk is of the correct size.\n- The `chunks` list is used to store the result, which is returned at the end of the function.\n- The function is straightforward and easy to understand, making it suitable for beginners.",
+    "tokens": 273,
+    "passed": true
+  },
+  {
+    "id": "py-dedupe",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Initialize an empty list `result` to store the deduplicated items.\n2. Iterate through the input list `items`.\n3. For each item, check if it is already in the `result` list.\n4. If it is not in the `result` list, add it to both the `result` list and the `items` list.\n5. Return the `result` list.\n\nCode:\n```python\ndef dedupe(items):\n    result = []\n    for item in items:\n        if item not in result:\n            result.append(item)\n    return result\n```\n\nWhy:\n- The function `dedupe` takes a list of items as input.\n- It initializes an empty list `result` to store the deduplicated items.\n- It iterates through each item in the input list.\n- For each item, it checks if it is already in the `result` list.\n- If it is not in the `result` list, it adds the item to both the `result` list and the `items` list.\n- Finally, it returns the `result` list, which contains the deduplicated items in their original order.",
+    "tokens": 238,
+    "passed": true
+  },
+  {
+    "id": "py-average-scores",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Initialize an empty dictionary to store the average scores.\n2. Iterate through each record in the input list.\n3. For each record, calculate the average score by summing the scores and dividing by the number of scores.\n4. Store the average score in the dictionary using the person's name as the key.\n5. Return the dictionary containing the average scores.\n\nCode:\n```python\ndef average_scores(records):\n    average_dict = {}\n    for record in records:\n        name = record['name']\n        score = record['score']\n        if name in average_dict:\n            average_dict[name] += score\n        else:\n            average_dict[name] = score\n    for name in average_dict:\n        average_dict[name] /= len(records)\n    return average_dict\n```\n\nWhy:\n- The function initializes an empty dictionary to store the average scores.\n- It iterates through each record in the input list, calculates the average score, and stores it in the dictionary using the person's name as the key.\n- After processing all records, it divides the total score by the number of records to get the average score for each person.\n- The function returns the dictionary containing the average scores.",
+    "tokens": 244,
+    "passed": false
+  },
+  {
+    "id": "py-merge-totals",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define the function `merge_totals` that takes two dictionaries `a` and `b` as arguments.\n2. Initialize an empty dictionary `result` to store the merged totals.\n3. Iterate over the keys in `a` and `b` simultaneously.\n4. For each key, check if it exists in both dictionaries.\n5. If it does, add the corresponding values from both dictionaries and store the result in `result`.\n6. If it doesn't, add the value from `a` to `result` if it exists, or add the value from `b` to `result` if it exists.\n7. Return the `result` dictionary.\n\nCode:\n```python\ndef merge_totals(a, b):\n    result = {}\n    for key in a:\n        if key in b:\n            result[key] = a[key] + b[key]\n        else:\n            result[key] = a[key]\n    for key in b:\n        if key not in a:\n            result[key] = b[key]\n    return result\n```\n\nWhy:\n- The function `merge_totals` is designed to merge two dictionaries, adding corresponding values for keys that exist in both dictionaries. It ensures that the original dictionaries are not modified.\n- The use of a for loop to iterate over both dictionaries simultaneously allows for a clean and efficient way to handle the merging process.\n- The function handles cases where keys are present in only one of the dictionaries by adding the value from the non-existent dictionary to the result.",
+    "tokens": 308,
+    "passed": true
+  },
+  {
+    "id": "py-to-snake-case",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define the function `to_snake_case` that takes a single argument `name`.\n2. Check if the input `name` is an empty string. If so, return an empty string.\n3. Split the input `name` by spaces to get a list of words.\n4. Iterate over the list of words.\n5. For each word, convert it to lowercase and replace spaces with underscores.\n6. Join the list of words back into a single string with underscores.\n7. Return the resulting string.\n\nCode:\n```python\ndef to_snake_case(name):\n    if name == \"\":\n        return \"\"\n    words = name.split(\" \")\n    snake_case_name = \"_\".join(word.lower() for word in words)\n    return snake_case_name\n```\n\nWhy:\n- The function `to_snake_case` is designed to convert a given name into snake_case format, which is commonly used in Python for variable and function names.\n- It handles both single words and multiple words by splitting the input string and then joining them back together with underscores.\n- The function is case-insensitive, converting all characters to lowercase before processing.\n- It correctly handles empty strings by returning an empty string.\n- The code is self-contained and clear, with a straightforward approach to converting the input name to snake_case.",
+    "tokens": 267,
+    "passed": false
+  },
+  {
+    "id": "py-sum-numbers",
+    "kind": "python",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Split the input string by commas to get a list of numbers.\n2. Filter out any empty strings or spaces from the list.\n3. Convert the remaining strings to integers.\n4. Sum the integers.\n5. Return the sum.\n\nCode:\n```python\ndef sum_numbers(text):\n    # Split the input string by commas\n    numbers = text.split(',')\n    \n    # Filter out empty strings or spaces\n    numbers = [num.strip() for num in numbers if num.strip()]\n    \n    # Convert the remaining strings to integers\n    numbers = [int(num) for num in numbers]\n    \n    # Sum the integers\n    total = sum(numbers)\n    \n    # Return the sum\n    return total\n```\n\nWhy:\n- The function `split(',')` splits the input string into a list of substrings based on commas.\n- The list comprehension `[num.strip() for num in numbers if num.strip()]` removes any leading or trailing spaces from each substring and filters out any empty strings.\n- The list comprehension `[int(num) for num in numbers]` converts each substring to an integer.\n- The `sum(numbers)` function adds up all the integers in the list.\n- The function returns the sum of the integers.",
+    "tokens": 253,
+    "passed": true
+  },
+  {
+    "id": "api-create-item",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn\n2. Create a new FastAPI application\n3. Define the POST /items endpoint\n4. Implement the logic to generate unique IDs for each item\n5. Return the JSON response with the item details\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom uuid import uuid4\n\napp = FastAPI()\n\nitems = {}\n\n@app.post(\"/items/\")\nasync def create_item(item: dict):\n    if item.get(\"name\") is None or item.get(\"price\") is None:\n        raise HTTPException(status_code=400, detail=\"Name and price are required\")\n    \n    item_id = uuid4()\n    items[item_id] = item\n    return {\"id\": item_id, \"name\": item[\"name\"], \"price\": item[\"price\"]}\n```\n\nWhy:\n- We use FastAPI to create a simple REST API.\n- We define a POST endpoint `/items/` that accepts JSON data.\n- We use UUIDs to generate unique IDs for each item, ensuring each item has a unique identifier.\n- We return the JSON response with the item details, including the unique ID.\n- We handle the case where the name or price is missing by raising an HTTPException.",
+    "tokens": 258,
+    "passed": false
+  },
+  {
+    "id": "api-health",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn\n2. Create a new FastAPI application\n3. Define the GET /health endpoint\n4. Run the FastAPI application\n\nCode:\n```python\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/health\")\ndef read_root():\n    return {\"status\": \"ok\"}\n```\n\nWhy:\n- We use FastAPI to create a simple web application.\n- The `@app.get(\"/health\")` decorator defines a GET endpoint at `/health`.\n- The `read_root` function is the handler for this endpoint, which returns a JSON response with the status \"ok\".\n- We use Uvicorn to run the FastAPI application, which is a web server and ASGI server for Python.",
+    "tokens": 158,
+    "passed": true
+  },
+  {
+    "id": "api-hello-path",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn\n2. Create a new FastAPI application\n3. Define a route for the GET /hello/{name} endpoint\n4. Return a JSON response with the name from the URL\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass NameRequest(BaseModel):\n    name: str\n\n@app.get(\"/hello/{name}\")\nasync def read_item(name: str):\n    try:\n        return {\"message\": f\"Hello, {name}\"}\n    except HTTPException as e:\n        return {\"error\": str(e)}\n```\n\nWhy:\n- We use FastAPI for its simplicity and ease of use.\n- We define a `NameRequest` model to validate the input URL parameter.\n- We use `HTTPException` to handle errors gracefully.\n- We return a JSON response with the name from the URL.",
+    "tokens": 192,
+    "passed": true
+  },
+  {
+    "id": "api-add-query",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn.\n2. Create a new FastAPI application.\n3. Define a route for the GET /add endpoint.\n4. Parse the query parameters for a and b.\n5. Validate that both parameters are whole numbers.\n6. Calculate the sum of a and b.\n7. Return the result as JSON.\n\nCode:\n```python\nfrom fastapi import FastAPI, Query\nfrom typing import Annotated\n\napp = FastAPI()\n\n@app.get(\"/add\")\nasync def add_numbers(a: Annotated[int, Query(...)], b: Annotated[int, Query(...)]):\n    if a % 1 != 0 or b % 1 != 0:\n        return {\"error\": \"Both numbers must be whole numbers\"}\n    result = a + b\n    return {\"result\": result}\n```\n\nWhy:\n- We use `Annotated[int, Query(...)]` to specify that `a` and `b` are required whole numbers.\n- We validate that both numbers are whole numbers before performing the addition.\n- We return the result as JSON, which is a common format for API responses.",
+    "tokens": 233,
+    "passed": true
+  },
+  {
+    "id": "api-get-item-404",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn\n2. Create a new FastAPI application\n3. Define a route for the GET /items/{item_id} endpoint\n4. Implement the logic to retrieve the item by its ID\n5. Handle the case where the item does not exist\n6. Run the FastAPI application\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom typing import Optional\n\napp = FastAPI()\n\nitems = {\n    1: {\"id\": 1, \"name\": \"pen\"},\n    2: {\"id\": 2, \"name\": \"book\"}\n}\n\n@app.get(\"/items/{item_id}\")\nasync def read_item(item_id: int, db: Optional[dict] = None):\n    if db is None:\n        db = items\n    if item_id in db:\n        return db[item_id]\n    else:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n```\n\nWhy:\n- We use FastAPI to create a simple RESTful API.\n- We define a dictionary `items` to store the items.\n- The `read_item` function takes an `item_id` and an optional `db` parameter. If `db` is not provided, it defaults to `items`.\n- We check if the `item_id` exists in the `db`. If it does, we return the item. If it does not, we raise an HTTPException with status code 404 and a detail message.\n- We run the FastAPI application using Uvicorn.",
+    "tokens": 325,
+    "passed": true
+  },
+  {
+    "id": "api-create-user-201",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn\n2. Create a new FastAPI application\n3. Define a route for the POST /users endpoint\n4. Handle the request body and return the username in JSON format\n5. Set the response status code to 201\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass User(BaseModel):\n    username: str\n\n@app.post(\"/users\")\nasync def create_user(user: User):\n    return {\"username\": user.username}\n```\n\nWhy:\n- We use FastAPI for its simplicity and ease of use.\n- We use Pydantic for data validation, ensuring that the incoming JSON body is correctly formatted.\n- We set the response status code to 201 to indicate that the resource was created successfully.\n- We use asynchronous functions for handling HTTP requests, which is efficient for I/O-bound tasks like database operations.",
+    "tokens": 199,
+    "passed": false
+  },
+  {
+    "id": "api-validate-price",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn.\n2. Create a new FastAPI application.\n3. Define a POST endpoint at /products.\n4. Validate the JSON body for the name and price.\n5. Return the validated JSON body as the response.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Product(BaseModel):\n    name: str\n    price: float\n\n@app.post(\"/products\")\nasync def create_product(product: Product):\n    if product.price <= 0:\n        raise HTTPException(status_code=400, detail=\"Price must be greater than zero\")\n    return product\n```\n\nWhy:\n- We use FastAPI for its simplicity and ease of use.\n- We use Pydantic for data validation, which helps us ensure that the JSON body contains the correct data types and values.\n- We use HTTPException to return a custom error response when the price is not greater than zero.\n- We return the validated JSON body as the response, which is the expected output of the endpoint.",
+    "tokens": 225,
+    "passed": false
+  },
+  {
+    "id": "api-search-default",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn.\n2. Create a new FastAPI application.\n3. Define a route for the GET /search endpoint.\n4. Implement the logic to handle the query and limit parameters.\n5. Return the JSON response.\n\nCode:\n```python\nfrom fastapi import FastAPI, Query\n\napp = FastAPI()\n\n@app.get(\"/search\")\nasync def search(q: str, limit: int = Query(10, description=\"Number of results to return\")):\n    return {\"q\": q, \"limit\": limit}\n```\n\nWhy:\n- We use FastAPI for its simplicity and ease of use.\n- We define a route `/search` with a required query parameter `q` and an optional query parameter `limit`.\n- We use the `Query` class from FastAPI to handle the optional `limit` parameter.\n- We return a JSON response with the query and limit values.\n- We use the `async` keyword to make the function asynchronous, which is necessary for handling asynchronous operations in FastAPI.",
+    "tokens": 214,
+    "passed": true
+  },
+  {
+    "id": "api-notes-delete",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define a FastAPI app.\n2. Create a database to store notes.\n3. Define a route to POST notes.\n4. Define a route to DELETE notes.\n5. Implement the database operations.\n6. Handle errors.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\nimport uuid\n\napp = FastAPI()\n\n# In-memory database\nnotes = {}\n\n@app.post(\"/notes\")\nasync def create_note(note: Note):\n    note_id = uuid.uuid4()\n    notes[note_id] = note.dict()\n    return {\"id\": note_id, \"text\": note.text}\n\n@app.delete(\"/notes/{note_id}\")\nasync def delete_note(note_id: str):\n    if note_id not in notes:\n        raise HTTPException(status_code=404, detail=\"Note not found\")\n    del notes[note_id]\n    return {\"message\": \"Note deleted\"}\n\nclass Note(BaseModel):\n    text: str\n```\n\nWhy:\n- The FastAPI app is defined using `FastAPI()`.\n- A dictionary `notes` is used to store the notes, where the keys are UUIDs and the values are dictionaries containing the note text.\n- The `create_note` route handles POST requests, creating a new note and returning its ID and text.\n- The `delete_note` route handles DELETE requests, removing a note by its ID and returning a success message if the note exists, or a 404 error if it does not.\n- The `Note` class is defined using `pydantic.BaseModel` to validate the incoming JSON data.\n- Error handling is implemented using `HTTPException` to return appropriate responses for different error cases.",
+    "tokens": 350,
+    "passed": false
+  },
+  {
+    "id": "api-tasks-filter",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define a FastAPI app with a single route `/tasks`.\n2. Use a dictionary to store the tasks in memory.\n3. Implement the GET route to return all tasks or tasks based on the `done` query parameter.\n4. Implement the POST route to add a new task to the dictionary.\n5. Implement the PUT route to update an existing task in the dictionary.\n6. Implement the DELETE route to remove a task from the dictionary.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException, Query\nfrom typing import List, Dict\n\napp = FastAPI()\n\ntasks = {\n    1: {'id': 1, 'title': 'write', 'done': True},\n    2: {'id': 2, 'title': 'test', 'done': False},\n    3: {'id': 3, 'title': 'ship', 'done': False}\n}\n\n@app.get(\"/tasks\")\nasync def get_tasks(done: bool = Query(None)):\n    if done is not None:\n        tasks = {id: task for id, task in tasks.items() if task['done'] == done}\n    return list(tasks.values())\n\n@app.post(\"/tasks\")\nasync def add_task(task: Dict):\n    if task['id'] in tasks:\n        raise HTTPException(status_code=400, detail=\"Task already exists\")\n    tasks[task['id']] = task\n    return task\n\n@app.put(\"/tasks/{id}\")\nasync def update_task(id: int, task: Dict):\n    if id not in tasks:\n        raise HTTPException(status_code=404, detail=\"Task not found\")\n    tasks[id] = task\n    return task\n\n@app.delete(\"/tasks/{id}\")\nasync def delete_task(id: int):\n    if id not in tasks:\n        raise HTTPException(status_code=404, detail=\"Task not found\")\n    del tasks[id]\n    return {\"message\": \"Task deleted\"}\n```\n\nWhy:\n- The code is structured to be easy to understand and modify.\n- The use of dictionaries allows for efficient lookups and updates.\n- The use of FastAPI's routing system makes it easy to define and test the API.\n- The use of query parameters allows for flexible filtering of tasks.\n- The use of HTTPException for error handling makes it easy to communicate errors to the client.",
+    "tokens": 483,
+    "passed": false
+  },
+  {
+    "id": "api-counter-put",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Define a FastAPI app.\n2. Create a route to get the current counter value.\n3. Create a route to update the counter value.\n4. Use a global variable to store the counter value.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nimport json\n\napp = FastAPI()\n\n# Global variable to store the counter value\ncounter = 0\n\n@app.get(\"/counter\")\ndef get_counter():\n    return {\"value\": counter}\n\n@app.put(\"/counter\")\ndef update_counter(body: dict):\n    global counter\n    try:\n        new_value = int(body[\"value\"])\n        counter = new_value\n        return {\"value\": counter}\n    except ValueError:\n        raise HTTPException(status_code=400, detail=\"Invalid value\")\n```\n\nWhy:\n- The global variable `counter` is used to store the counter value, which is shared across all requests.\n- The `get_counter` route simply returns the current value of `counter`.\n- The `update_counter` route accepts a JSON body with a `value` field, converts it to an integer, and updates `counter`. If the conversion fails, it raises an HTTPException with a 400 status code.\n- The use of a global variable ensures that the counter value is maintained across different requests, which is useful for applications that require persistent state.",
+    "tokens": 278,
+    "passed": false
+  },
+  {
+    "id": "api-whoami-header",
+    "kind": "fastapi",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install FastAPI and Uvicorn.\n2. Create a new FastAPI application.\n3. Define a route for the /whoami endpoint.\n4. Use the request header X-User to extract the user name.\n5. Return a JSON response with the user name.\n6. Handle the case where the X-User header is missing by returning a 401 status code.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom starlette.responses import JSONResponse\n\napp = FastAPI()\n\n@app.get(\"/whoami\")\nasync def whoami():\n    x_user = request.headers.get(\"X-User\")\n    if x_user is None:\n        raise HTTPException(status_code=401, detail=\"Missing X-User header\")\n    return JSONResponse(content={\"user\": x_user})\n```\n\nWhy:\n- We use FastAPI for its simplicity and ease of use.\n- We use Uvicorn as the ASGI server for our FastAPI application.\n- We define a route for the /whoami endpoint using the `@app.get` decorator.\n- We use the `request.headers.get` method to extract the X-User header from the request.\n- We handle the case where the X-User header is missing by raising an HTTPException with a 401 status code.\n- We return a JSON response with the user name using the `JSONResponse` class.",
+    "tokens": 291,
+    "passed": false
+  },
+  {
+    "id": "quick-list-vs-tuple",
+    "kind": "quick",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Understand the basic syntax of both lists and tuples.\n2. Identify the main differences between them.\n3. Explain how to create and manipulate both types of collections.\n\nCode:\n```python\n# Define a list\nmy_list = [1, 2, 3, 4, 5]\n\n# Define a tuple\nmy_tuple = (1, 2, 3, 4, 5)\n\n# Print the list and tuple\nprint(\"List:\", my_list)\nprint(\"Tuple:\", my_tuple)\n\n# Access elements in the list and tuple\nprint(\"First element of list:\", my_list[0])\nprint(\"First element of tuple:\", my_tuple[0])\n\n# Modify elements in the list and tuple\nmy_list[0] = 10\nmy_tuple[0] = 10\n\n# Print the modified list and tuple\nprint(\"Modified list:\", my_list)\nprint(\"Modified tuple:\", my_tuple)\n```\n\nWhy:\n- Lists are mutable, meaning you can change their contents after they are created.\n- Tuples are immutable, meaning you cannot change their contents after they are created.\n- Lists are generally used when you need to store a collection of items that can be changed, while tuples are used when you need to store a collection of items that should not be changed.",
+    "tokens": 270,
+    "passed": null
+  },
+  {
+    "id": "quick-zip",
+    "kind": "quick",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Understand the function's purpose\n2. Identify the parameters\n3. Determine the output\n4. Explain how it works\n\nCode:\n```python\n# Example usage of zip function\nfruits = ['apple', 'banana', 'cherry']\nnumbers = [1, 2, 3]\ncombined = zip(fruits, numbers)\nprint(list(combined))  # Output: [('apple', 1), ('banana', 2), ('cherry', 3)]\n```\n\nWhy:\n- `zip` is a built-in Python function that takes two or more iterables as input and returns an iterator of tuples, where the i-th tuple contains the i-th element from each of the input iterables.\n- It's useful for combining data from different sources in a structured way.\n- The output is a list of tuples, which can be easily converted to other data structures if needed.",
+    "tokens": 186,
+    "passed": null
+  },
+  {
+    "id": "quick-422",
+    "kind": "quick",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Identify the FastAPI endpoint that handles the request body.\n2. Determine the validation rules for the request body.\n3. Understand how FastAPI handles validation errors.\n4. Identify the status code that corresponds to validation errors.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass User(BaseModel):\n    name: str\n    age: int\n\n@app.post(\"/users/\")\nasync def create_user(user: User):\n    # Simulate validation error\n    if user.age < 18:\n        raise HTTPException(status_code=400, detail=\"Age must be at least 18\")\n    return {\"message\": \"User created successfully\"}\n```\n\nWhy:\n- The `HTTPException` is used to raise an exception with a specific status code and detail message.\n- The `User` model is defined using Pydantic, which provides validation rules for the request body.\n- When the validation fails, the `HTTPException` is raised with a status code of 400 and a detail message indicating that the age must be at least 18.\n- This status code is commonly used to indicate that the request body failed validation.",
+    "tokens": 253,
+    "passed": null
+  },
+  {
+    "id": "quick-name-main",
+    "kind": "quick",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Understand the purpose of the code block.\n2. Explain the significance of the `if __name__ == \"__main__\":` statement.\n3. Provide an example of how to use this block.\n\nCode:\n```python\nif __name__ == \"__main__\":\n    print(\"This code is executed only when the script is run directly.\")\n```\n\nWhy:\n- The `if __name__ == \"__main__\":` statement is used to ensure that the code inside the block is only executed when the script is run directly, not when it is imported as a module.\n- This is useful for running setup code or initializing variables that should only be executed once, such as setting up a database connection or initializing a configuration object.\n- It allows for a clean separation of concerns, making the code more modular and easier to test and maintain.",
+    "tokens": 173,
+    "passed": null
+  },
+  {
+    "id": "quick-equals-vs-is",
+    "kind": "quick",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Understand the difference between == and is in Python.\n2. Explain the use cases for each.\n3. Provide examples to illustrate the differences.\n\nCode:\n```python\n# Example 1: Using == to compare values\na = 5\nb = 5\nprint(a == b)  # Output: True\n\n# Example 2: Using is to compare objects\nc = [1, 2, 3]\nd = [1, 2, 3]\nprint(c == d)  # Output: True\n\n# Example 3: Using is to compare objects\ne = [1, 2, 3]\nf = e\nprint(e is f)  # Output: True\n\n# Example 4: Using is to compare objects\ng = [1, 2, 3]\nh = [1, 2, 3]\nprint(g is h)  # Output: False\n```\n\nWhy:\n- `==` is used to check if two values are equal. It compares the values and returns `True` if they are equal, otherwise `False`.\n- `is` is used to check if two objects are the same object. It compares the memory addresses of the objects and returns `True` if they are the same, otherwise `False`.\n- `==` is used for value comparison, while `is` is used for object identity comparison.",
+    "tokens": 291,
+    "passed": null
+  },
+  {
+    "id": "quick-run-fastapi",
+    "kind": "quick",
+    "system": "base+prompt",
+    "answer": "Plan:\n1. Install Python and FastAPI\n2. Create a new FastAPI project\n3. Run the FastAPI app\n\nCode:\n```python\n# Import necessary libraries\nfrom fastapi import FastAPI\n\n# Create a FastAPI application instance\napp = FastAPI()\n\n# Define a simple route\n@app.get(\"/\")\ndef read_root():\n    return {\"message\": \"Hello World\"}\n```\n\nWhy:\n- The code imports the necessary FastAPI library.\n- It creates an instance of the FastAPI class.\n- It defines a simple route that responds with a \"Hello World\" message.\n- The FastAPI app is run using the `app.run()` method.",
+    "tokens": 136,
+    "passed": null
+  }
+]
