@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 
 # ---------------- settings you may change ----------------
-LIMIT = 50          # how many requests to answer this run. Pilot = 50.
+LIMIT = 1500        # how many requests to answer this run (about 8 hours)
 BATCH_SIZE = 8      # how many requests the GPU works on at once
 MAX_NEW_TOKENS = 900
 TEACHER = "Qwen/Qwen2.5-Coder-7B-Instruct"   # Apache 2.0 licence
@@ -155,9 +155,12 @@ if not found:
     raise SystemExit("requests.jsonl not found. Add your dataset with 'Add Input' first.")
 requests = [json.loads(line) for line in open(found[0], encoding="utf-8")]
 
+# Skip requests answered before: in this run, or in an earlier run whose
+# answers file was added to the notebook as an input.
 done = set()
-if OUT_FILE.exists():
-    done = {json.loads(line)["id"] for line in open(OUT_FILE, encoding="utf-8")}
+earlier = glob.glob("/kaggle/input/**/answers*.jsonl", recursive=True)
+for answers_file in earlier + ([str(OUT_FILE)] if OUT_FILE.exists() else []):
+    done |= {json.loads(line)["id"] for line in open(answers_file, encoding="utf-8")}
 todo = [(i, r) for i, r in enumerate(requests) if r["id"] not in done][:LIMIT]
 print(f"requests: {len(requests)}  already answered: {len(done)}  doing now: {len(todo)}")
 

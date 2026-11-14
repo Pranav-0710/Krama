@@ -6,5 +6,5 @@ __pycache__/
 # Generated data. requests.jsonl holds pieces of private code and is
 # rebuilt by data/make_requests.py; answers.jsonl comes back from Kaggle.
 data/requests.jsonl
-data/answers.jsonl
+data/answers*.jsonl
 data/examples.jsonl
