@@ -7,3 +7,4 @@ __pycache__/
 # rebuilt by data/make_requests.py; answers.jsonl comes back from Kaggle.
 data/requests.jsonl
 data/answers.jsonl
+data/examples.jsonl
