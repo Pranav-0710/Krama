@@ -45,6 +45,13 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
 
   Blind grading of plan, explanation, clarity and length has not been done yet.
 
+- Training data, 2026-11-17 (`data/filter.py`, `data/leak_check.py`, `data/mix.py`):
+  - The teacher answered 3,800 requests. 2,134 answers passed their own tests: Python 850/1,200, FastAPI 730/2,000, short answers 554/600.
+  - The leak check removed 216 examples that copied the exam: 93 whose code passes an exam task's tests, and 123 short questions that ask an exam question.
+  - Final set: 1,915 examples. That is 776 Python, 741 FastAPI, 383 short answers (20%) and 15 identity examples, with the 50 hand-written examples included.
+  - This is a little under the planned 2,000. We accepted it because most removed rows were repeats of a few exam tasks.
+  - Only exact exam tasks and questions were removed, not their topics. Our own 30 tasks may therefore flatter the model a little, and the standard benchmark is the fairer measure.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle

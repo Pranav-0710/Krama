@@ -9,3 +9,4 @@ data/requests.jsonl
 data/answers*.jsonl
 data/examples.jsonl
 data/train.jsonl
+data/leaks.txt
