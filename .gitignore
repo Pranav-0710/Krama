@@ -8,3 +8,4 @@ __pycache__/
 data/requests.jsonl
 data/answers*.jsonl
 data/examples.jsonl
+data/train.jsonl
