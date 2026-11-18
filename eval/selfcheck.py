@@ -6,13 +6,15 @@ Run from the project folder:
 
 The number at the end names the run (1, 2, ...). CPU runs are not exactly
 repeatable, so run it more than once. Results: eval/results/selfcheck-run<N>.json
+Add a backend name after the number to choose the engine, e.g. `... 5 local`
+for the built-in llama.cpp engine (default: ollama).
 """
 
 import json
 import sys
 from pathlib import Path
 
-from krama_cli.backends import OllamaBackend
+from krama_cli.backends import make_backend
 from krama_cli.main import answer_with_check
 from run import extract_code, run_tests
 from tasks import TASKS
@@ -23,7 +25,8 @@ RESULTS_DIR = Path(__file__).parent / "results"
 def main():
     run_name = sys.argv[1] if len(sys.argv) > 1 else "1"
     records = []
-    backend = OllamaBackend()
+    backend_name = sys.argv[2] if len(sys.argv) > 2 else "ollama"
+    backend = make_backend(backend_name)
     for task in TASKS:
         if task["kind"] == "quick":
             continue
@@ -33,10 +36,11 @@ def main():
                                            approve=lambda: True, say=notes.append)
         passed = run_tests(task, extract_code(answer, task["kind"]))
         tries = 1 + sum("asking Krama to fix" in note for note in notes)
-        records.append({"id": task["id"], "kind": task["kind"], "answer": answer,
+        records.append({"id": task["id"], "kind": task["kind"], "backend": backend_name, "answer": answer,
                         "passed": passed, "check": result.status, "tries": tries})
         print(f"{task['id']:26} check {result.status:8} tries {tries}  tests {'yes' if passed else 'NO'}", flush=True)
 
+    backend.close()
     (RESULTS_DIR / f"selfcheck-run{run_name}.json").write_text(json.dumps(records, indent=2), encoding="utf-8")
     for kind in ("python", "fastapi"):
         marked = [r for r in records if r["kind"] == kind]

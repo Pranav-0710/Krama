@@ -7,17 +7,23 @@ It works offline. Your questions and code never leave your computer.
 
 ## Install
 
-1. Install [Ollama](https://ollama.com) and download Krama (986 MB, once):
-
-   ```sh
-   ollama pull hf.co/CoBeDigger/krama-coder-1.5b
-   ```
-
-2. Install the `krama` command from this folder (needs [uv](https://docs.astral.sh/uv/)):
+1. Install the `krama` command (needs [uv](https://docs.astral.sh/uv/)). From the root of this repository:
 
    ```sh
    uv tool install ./cli
    ```
+
+2. Set up the built-in engine. This downloads llama.cpp's ready-made engine for your computer (13-25 MB) and the Krama model (986 MB), once, and checks both against fixed fingerprints. No Ollama and no compiler are needed:
+
+   ```sh
+   krama setup
+   ```
+
+   Already have the model file? `krama setup --model-file path/to/krama-coder-1.5b-q4_k_m.gguf` uses it instead of downloading it again.
+
+   Prefer Ollama? Skip `krama setup` and run `ollama pull hf.co/CoBeDigger/krama-coder-1.5b` instead. krama uses the built-in engine when it is set up, and Ollama otherwise (`--backend local` or `--backend ollama` chooses one).
+
+Files go in `%LOCALAPPDATA%\krama` on Windows, `~/Library/Application Support/krama` on macOS and `~/.local/share/krama` on Linux.
 
 ## Use
 

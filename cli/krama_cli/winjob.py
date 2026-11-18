@@ -86,6 +86,30 @@ def create_job(memory_limit, max_processes):
     return job
 
 
+def tie_to_this_process(process):
+    """Make Windows kill `process` when krama exits, even if krama crashes.
+
+    Returns the job handle. Keep it alive (do not close it) for as long as
+    `process` should run: Windows closes it when krama ends.
+    """
+    job = kernel32.CreateJobObjectW(None, None)
+    if not job:
+        raise ctypes.WinError(ctypes.get_last_error())
+    info = EXTENDED_LIMIT_INFO()
+    info.BasicLimitInformation.LimitFlags = LIMIT_KILL_ON_JOB_CLOSE
+    if not (kernel32.SetInformationJobObject(job, EXTENDED_LIMIT_INFORMATION,
+                                             ctypes.byref(info), ctypes.sizeof(info))
+            and kernel32.AssignProcessToJobObject(job, int(process._handle))):
+        error = ctypes.get_last_error()
+        kernel32.CloseHandle(job)
+        raise ctypes.WinError(error)
+    return job
+
+
+def close(job):
+    kernel32.CloseHandle(job)
+
+
 def run(command, options, memory_limit, max_processes, timeout):
     """Run `command` inside a limited job. Return (exit code, error text).
 

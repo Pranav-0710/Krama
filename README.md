@@ -152,6 +152,16 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - Tests: 61 pass (12 new for the backend, with the network faked).
   - Done check: `selfcheck-run4.json` matches run 3 on all 24 tasks (Python 9/12, FastAPI 5/12), and 22 of the 24 final answers are word for word the same.
 
+- Step 3, the built-in engine (no Ollama), 2026-11-18 (`cli/krama_cli/engine.py`, `LlamaServerBackend` in `backends.py`):
+  - `krama setup` downloads llama.cpp's ready-made CPU build, pinned to release b12359 (Windows x64 25.1 MB; builds for Windows ARM, macOS Apple and Intel chips, and Linux x64 and ARM are listed). It also gets the Krama model (986 MB), or takes an existing file with `--model-file`. Both are checked against fixed SHA-256 fingerprints, broken downloads resume, and archives cannot unpack outside their folder.
+  - krama then starts `llama-server` on 127.0.0.1 on a free port, waits for `/health`, and stops it on exit. On Windows a job object makes sure it dies even if krama crashes. `--backend auto` (the default) uses the built-in engine once it is set up, else Ollama.
+  - Done checks on this laptop:
+    - With Ollama's address pointed at a dead port, krama answered, ran its self-check and named its maker. A full one-question run took 9.1 seconds, including starting the engine, and no engine process was left behind.
+    - Speed after warm-up, same prompts: built-in about 33 tokens per second, Ollama about 32, so within 10%.
+    - Exam (`selfcheck-run5.json`, `local` backend): Python 8/12, FastAPI 6/12, against 9/12 and 5/12 on Ollama. That is 14 of 24 on both, and 22 of 24 tasks have the same result. The answers are worded differently: Ollama runs the same engine with a plain ChatML template and a 32,768-token window, while krama uses the model's own template and 4,096 tokens.
+  - Tests: 70 pass (9 new: downloads, resume, wrong fingerprint, unsafe archive, setup records, wrong model file, the "run krama setup" message, `auto`, and an engine that will not start).
+  - Not yet verified: a clean Windows PC with no Ollama and no Python tools, and macOS and Linux at all.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle

@@ -115,11 +115,33 @@ def show(answer, result):
         print(f"[self-check skipped: {result.message}]")
 
 
+def setup_command(arguments):
+    from krama_cli import engine
+    parser = argparse.ArgumentParser(prog="krama setup",
+                                     description="Download the built-in engine and the Krama model, so krama runs without Ollama.")
+    parser.add_argument("--model-file", help="use a Krama .gguf file you already have instead of downloading it")
+    args = parser.parse_args(arguments)
+    print(f"Setting up krama in {engine.krama_home()}")
+    try:
+        engine.setup(args.model_file)
+    except engine.SetupError as error:
+        print(f"  {error}", file=sys.stderr)
+        sys.exit(1)
+    print('Done. Try:  krama "what is a list?"')
+
+
 def main():
-    parser = argparse.ArgumentParser(prog="krama", description="An offline Python and FastAPI tutor that checks its own code.")
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if sys.argv[1:2] == ["setup"]:
+        setup_command(sys.argv[2:])
+        return
+
+    parser = argparse.ArgumentParser(prog="krama", description="An offline Python and FastAPI tutor that checks its own code.",
+                                     epilog="First time? Run `krama setup` to install the built-in engine.")
     parser.add_argument("question", nargs="*", help="your question (leave out to keep asking)")
-    parser.add_argument("--backend", default="ollama", choices=list(BACKENDS),
-                        help="the engine that runs the model (default: ollama)")
+    parser.add_argument("--backend", default="auto", choices=["auto", *BACKENDS],
+                        help="the engine that runs the model: local (built-in, from `krama setup`), "
+                             "ollama, or auto = local if set up, else ollama (default)")
     parser.add_argument("--model", default=KRAMA_MODEL, help=f"model name (default: {KRAMA_MODEL})")
     parser.add_argument("--python", default=shutil.which("python") or sys.executable,
                         help="the Python program that runs the self-check (default: the one on your PATH)")
@@ -127,8 +149,6 @@ def main():
     parser.add_argument("--yes", action="store_true", help="run the self-check without asking first")
     args = parser.parse_args()
 
-    # Windows terminals may not print every character; never crash on one.
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     say = lambda text: print(text, file=sys.stderr, flush=True)  # noqa: E731
     approve = make_approver(args.yes, say)
 
@@ -139,6 +159,7 @@ def main():
             return
         show(*answer_with_check(question, backend, args.python, approve, say=say))
 
+    backend = None
     try:
         backend = make_backend(args.backend, args.model)
         if args.question:
@@ -161,6 +182,9 @@ def main():
     except BackendError as error:
         say(str(error))
         sys.exit(1)
+    finally:
+        if backend is not None:
+            backend.close()
 
 
 if __name__ == "__main__":
