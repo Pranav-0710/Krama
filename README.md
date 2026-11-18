@@ -72,7 +72,22 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
   - Asked "who made you", Krama gave a made-up answer. The 15 identity examples were not enough.
   - Blind grading of plan, explanation, clarity and length has not been done yet.
 
+- Round 2 training data, 2026-11-18:
+  - 81% of the FastAPI training answers used a Pydantic model, and 277 used one even though no data was sent in. `data/mix.py` now leaves out the 310 teacher answers that use a model with no POST, PUT or PATCH endpoint, or use `response_model=dict`.
+  - 42 new hand-written examples (`data/handwritten_round2.py`): 22 endpoints that need no model, 12 that use a body model correctly, 6 fixes of model mistakes, and 2 short answers on when a model is needed. All pass their tests, and none copies the exam.
+  - The system line now names the maker ("fine-tuned by CoBeDigger from Qwen2.5-Coder-1.5B-Instruct").
+  - Final set: 1,578 examples. That is 776 Python, 471 FastAPI, 316 short answers (20%) and 15 identity examples. It is further under the planned 2,000; we chose this over regenerating with the teacher, which needed more GPU time than was left this week.
+  - Standard benchmark: HumanEval (164 tasks, MIT licence), `eval/benchmark.py`. We never use it to choose fixes, so it is the fair check against teaching to the test.
+
+- Round 2 training, 2026-11-18 (same settings; `ROUND = 2` saves to `-r2` folders, so it cannot resume round 1):
+  - 1,518 examples were trained on and 60 held out. 190 steps took 11 min 24 s.
+  - Held-out loss went 0.522 → 0.484 → 0.476 → 0.474 (round 1 ended at 0.469 on a different held-out set, so the two are not directly comparable).
+  - Converted the same way as round 1 (986 MB Q4_K_M) and loaded in Ollama as `krama-r2`. Round 1 stays as `krama`.
+  - Exam, our 30 tasks: Python 10/12, FastAPI 6/12, quick answers 121 tokens on average. All 24 coding answers used Plan, Code, Why.
+  - The Pydantic habit halved: 5 of 12 FastAPI answers used a model (round 1: 10). It is not gone: `api-health` still planned a model and crashed on an unused, unimported `BaseModel`. One answer overcorrected the other way: a POST read its JSON body as a plain `text: str` parameter.
+  - Check answers: "who made you" now names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct. A FastAPI GET answer used no model, but it skipped Plan, Code and Why, left out `app = FastAPI()`, and mixed up `Planets` and `planets`.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
-- Licences of the benchmark and task datasets
+- Licences of the task datasets (HumanEval is MIT, checked 2026-11-18)
