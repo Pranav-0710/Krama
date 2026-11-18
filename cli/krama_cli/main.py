@@ -16,6 +16,7 @@ from pathlib import Path
 
 from krama_cli.backends import BACKENDS, KRAMA_MODEL, BackendError, make_backend
 from krama_cli.check import CheckResult, check, extract_code
+from krama_cli.selftest import evaluate, self_test
 
 TRIES = 3   # the first answer plus up to two fixes
 
@@ -78,36 +79,78 @@ def make_approver(yes_flag, say):
     return approve
 
 
-def answer_with_check(question, backend, python, approve, tries=TRIES, say=print):
-    """Ask, check the code, and ask for fixes. Return (answer, last check result).
+TEST_FIX_REQUEST = "{feedback}\nIf your code is wrong, fix it. Answer again with Plan, Code and Why."
 
-    `approve()` is asked once, before any code runs; one yes covers the fixes
-    for this question too.
+
+def answer_with_check(question, backend, python, approve, tries=TRIES, say=print, use_tests=True):
+    """Ask, check the code, test it, and ask for fixes.
+
+    Returns (answer, check result, test report or None).
+
+    1. The run check: does the code run? If not, the error goes back to Krama.
+    2. Once the code runs, Krama writes a few tests (once per question) and
+       krama runs them. If they clearly fail, the failures go back to Krama.
+       A fix made because of tests is only kept if it still runs AND passes
+       more of the same tests; otherwise the earlier answer is kept, so a
+       wrong test cannot make good code worse.
+    `approve()` is asked once, before any code runs, and covers the fixes too.
     """
     messages = start_conversation(question)
     answer = backend.chat(messages)
     code = extract_code(answer)
     if code.strip() and not approve():
-        return answer, CheckResult("skipped", "not run, because it needs your OK (answer y, or add --yes)")
+        return answer, CheckResult("skipped", "not run, because it needs your OK (answer y, or add --yes)"), None
     result = check(code, python)
+    report = None
 
     for attempt in range(2, tries + 1):
-        if result.status != "failed":
+        if result.status == "failed":
+            say(f"  self-check found an error: {result.message}")
+            request = FIX_REQUEST.format(error=result.error.strip())
+        elif result.status == "passed" and use_tests:
+            if report is None:
+                say("  writing and running tests...")
+                report = self_test(question, code, backend, python)
+            if report.status != "failed":
+                break
+            say(f"  tests: {report.message}")
+            request = TEST_FIX_REQUEST.format(feedback=report.feedback)
+        else:
             break
-        say(f"  self-check found an error: {result.message}")
+
         say(f"  asking Krama to fix it (try {attempt} of {tries})...")
-        messages += [{"role": "assistant", "content": answer},
-                     {"role": "user", "content": FIX_REQUEST.format(error=result.error.strip())}]
-        answer = backend.chat(messages)
-        result = check(extract_code(answer), python)
-    return answer, result
+        messages += [{"role": "assistant", "content": answer}, {"role": "user", "content": request}]
+        new_answer = backend.chat(messages)
+        new_code = extract_code(new_answer)
+        new_result = check(new_code, python)
+
+        if report is None:                           # a fix for code that did not run
+            answer, code, result = new_answer, new_code, new_result
+            continue
+        new_report = evaluate(new_code, report.source, python) if new_result.status == "passed" else None
+        if new_report is None or new_report.passed <= report.passed:
+            say("  the fix was not better, so krama kept the earlier answer")
+            break
+        answer, code, result, report = new_answer, new_code, new_result, new_report
+
+    if use_tests and result.status == "passed" and report is None:
+        say("  writing and running tests...")
+        report = self_test(question, code, backend, python)
+    return answer, result, report
 
 
-def show(answer, result):
+def show(answer, result, report=None):
     print(answer.strip())
     print()
-    if result.status == "passed":
-        print("[self-check passed: the code ran without errors. Try it with your own inputs too.]")
+    if result.status == "passed" and report is not None and report.status != "skipped":
+        print(f"[self-check: the code ran without errors, and {report.message}.]")
+        for test, status, detail in report.tests:
+            mark = "ok  " if status == "ok" else "FAIL"
+            print(f"  {mark} {test}" + (f"   ({detail})" if detail and status != "ok" else ""))
+        print("[Krama's tests are a start, not proof. Try your own inputs too.]")
+    elif result.status == "passed":
+        extra = f" ({report.message})" if report is not None else ""
+        print(f"[self-check passed: the code ran without errors{extra}. Try it with your own inputs too.]")
     elif result.status == "failed":
         print(f"[self-check FAILED: {result.message}]")
         print("[Krama could not fix this. Read the error before you use this code.]")
@@ -147,6 +190,8 @@ def main():
                         help="the Python program that runs the self-check (default: the one on your PATH)")
     parser.add_argument("--no-check", action="store_true", help="show the answer without running its code")
     parser.add_argument("--yes", action="store_true", help="run the self-check without asking first")
+    parser.add_argument("--no-tests", action="store_true",
+                        help="only check that the code runs; skip Krama's own tests (faster)")
     args = parser.parse_args()
 
     say = lambda text: print(text, file=sys.stderr, flush=True)  # noqa: E731
@@ -157,7 +202,7 @@ def main():
         if args.no_check:
             print(backend.chat(start_conversation(question)).strip())
             return
-        show(*answer_with_check(question, backend, args.python, approve, say=say))
+        show(*answer_with_check(question, backend, args.python, approve, say=say, use_tests=not args.no_tests))
 
     backend = None
     try:

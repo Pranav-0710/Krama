@@ -33,11 +33,22 @@ krama "write a function that returns the largest number in a list"
 
 Run `krama` on its own to keep asking questions; type `exit` to stop.
 
-Each answer ends with one line about the self-check:
+The self-check has two parts:
 
-- `self-check passed`: the code ran from top to bottom without an error. That does **not** prove it gives the right answer, so try it with your own inputs.
-- `self-check FAILED`: Krama could not fix the error in three tries. The error is shown.
-- `self-check skipped`: the code was not run, and the line says why. For example, FastAPI is not installed, or the code deletes files.
+1. **Does it run?** krama runs the code. If it crashes, Krama gets the error and tries again (up to two more times).
+2. **Does it do what you asked?** Krama writes 3 to 5 small tests from your question, seeing only the names of its functions and endpoints, not their code. krama runs each test on a fresh copy of the code and shows them under the answer:
+
+   ```
+   [self-check: the code ran without errors, and 1 of 3 of Krama's own tests failed ...]
+     ok   assert to_snake_case('abc') == 'abc'
+     FAIL assert to_snake_case('HelloWorld') == 'hello_world'   (got 'helloworld')
+   ```
+
+   If tests clearly fail (two or more, or a crash), Krama is asked to fix the code. A fix is only kept if it still runs and passes more of the same tests. One failed test on its own is only a warning, because a small model's test can be wrong too.
+
+Treat a failed test as "look here", not as proof, and a passed test as a start, not proof. `--no-tests` skips part 2 (faster).
+
+The last line can also say `self-check FAILED` (the code still crashes after three tries; the error is shown) or `self-check skipped` with the reason (for example FastAPI is not installed, or the code deletes files).
 
 Options: `--no-check` shows the answer without running it, `--yes` runs the self-check without asking, `--backend ollama` picks the engine (Ollama is the only one so far), `--model NAME` uses another model, and `--python PATH` picks the Python that runs the check (by default, the `python` on your PATH, so the libraries in your project are found).
 

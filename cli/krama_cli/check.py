@@ -214,12 +214,13 @@ def _posix_limits():
             pass  # macOS does not allow every limit
 
 
-def run_contained(folder, python):
-    """Import krama_answer.py from `folder` in a limited process.
+def run_contained(folder, python, entry="import krama_answer"):
+    """Run the Python line `entry` in `folder`, in a limited process.
 
-    Returns (exit code, error text). Raises subprocess.TimeoutExpired.
+    By default that imports krama_answer.py. Returns (exit code, error text).
+    Raises subprocess.TimeoutExpired.
     """
-    command = [python, "-c", "import krama_answer"]
+    command = [python, "-c", entry]
     options = {"cwd": folder, "stdin": subprocess.DEVNULL, "stdout": subprocess.DEVNULL,
                "stderr": subprocess.PIPE, "env": clean_env()}
 

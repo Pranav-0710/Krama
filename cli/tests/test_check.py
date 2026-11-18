@@ -185,7 +185,7 @@ def test_failed_code_is_sent_back_and_fixed():
     broken = "Code:\n```python\nclass Health(BaseModel):\n    status: str\n```"
     fixed = "Code:\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass Health:\n    status: str\n```"
     backend = FakeBackend(broken, fixed)
-    answer, result = main.answer_with_check("q", backend, PYTHON, approve=lambda: True, say=lambda text: None)
+    answer, result, _ = main.answer_with_check("q", backend, PYTHON, approve=lambda: True, say=lambda text: None, use_tests=False)
     assert result.status == "passed"
     assert answer == fixed
     # The second request carried the first answer and its error.
@@ -195,7 +195,7 @@ def test_failed_code_is_sent_back_and_fixed():
 
 def test_every_conversation_starts_with_kramas_system_line():
     backend = FakeBackend("A short answer.")
-    main.answer_with_check("what is a list?", backend, PYTHON, approve=lambda: True, say=lambda text: None)
+    main.answer_with_check("what is a list?", backend, PYTHON, approve=lambda: True, say=lambda text: None, use_tests=False)
     first = backend.sent[0]
     assert first[0] == {"role": "system", "content": main.KRAMA_SYSTEM}
     assert first[1] == {"role": "user", "content": "what is a list?"}
@@ -203,8 +203,8 @@ def test_every_conversation_starts_with_kramas_system_line():
 
 def test_gives_up_after_the_last_try():
     backend = FakeBackend("```python\nprint(undefined_name)\n```")
-    answer, result = main.answer_with_check("q", backend, PYTHON, approve=lambda: True,
-                                            tries=3, say=lambda text: None)
+    answer, result, _ = main.answer_with_check("q", backend, PYTHON, approve=lambda: True,
+                                               tries=3, say=lambda text: None, use_tests=False)
     assert result.status == "failed"
     assert len(backend.sent) == 3
 
@@ -212,6 +212,6 @@ def test_gives_up_after_the_last_try():
 def test_nothing_runs_without_the_users_ok(monkeypatch):
     monkeypatch.setattr(main, "check", lambda code, python: pytest.fail("code was run"))
     backend = FakeBackend("```python\nx = 1\n```")
-    answer, result = main.answer_with_check("q", backend, PYTHON, approve=lambda: False, say=lambda text: None)
+    answer, result, _ = main.answer_with_check("q", backend, PYTHON, approve=lambda: False, say=lambda text: None)
     assert result.status == "skipped"
     assert "needs your OK" in result.message
