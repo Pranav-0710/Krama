@@ -10,3 +10,6 @@ data/answers*.jsonl
 data/examples.jsonl
 data/train.jsonl
 data/leaks.txt
+
+# The 4-bit Krama weights file (about 1 GB); it goes to Hugging Face, not git.
+models/

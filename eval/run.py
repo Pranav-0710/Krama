@@ -4,11 +4,13 @@ Run from the project folder:
     uv run --no-project --with fastapi --with httpx --with uvicorn eval/run.py
 
 Add --check to test the answer keys, or --remark to mark saved answers again.
+Add --only krama to ask just one system (the others keep their saved answers).
 
-It tests two "systems" today:
+It tests three "systems":
     base          the untouched base model
     base+prompt   the same model, given written instructions to behave like Krama
-Later we add a third: the fine-tuned Krama.
+    krama         the fine-tuned Krama, with no extra instructions
+All three use the same 4-bit Q4_K_M file size, so the comparison is fair.
 """
 
 import json
@@ -21,7 +23,8 @@ from pathlib import Path
 
 from tasks import TASKS
 
-MODEL = "qwen2.5-coder:1.5b"
+BASE_MODEL = "qwen2.5-coder:1.5b"
+KRAMA_MODEL = "krama"   # made by: ollama create krama -f Modelfile
 OLLAMA_URL = "http://localhost:11434/api/chat"
 RESULTS_DIR = Path(__file__).parent / "results"
 
@@ -33,10 +36,15 @@ KRAMA_PROMPT = (
     "direct answer with no plan."
 )
 
-SYSTEMS = {"base": None, "base+prompt": KRAMA_PROMPT}
+# name -> (which model, which written instruction). None = no extra instruction.
+SYSTEMS = {
+    "base": (BASE_MODEL, None),
+    "base+prompt": (BASE_MODEL, KRAMA_PROMPT),
+    "krama": (KRAMA_MODEL, None),
+}
 
 
-def ask(prompt, system_prompt):
+def ask(model, prompt, system_prompt):
     """Send one prompt to the model. Return (answer text, tokens written)."""
     messages = []
     if system_prompt:
@@ -44,7 +52,7 @@ def ask(prompt, system_prompt):
     messages.append({"role": "user", "content": prompt})
 
     body = {
-        "model": MODEL,
+        "model": model,
         "messages": messages,
         "stream": False,
         # temperature 0 = always pick the most likely next token,
@@ -139,6 +147,8 @@ def remark():
     tasks_by_id = {task["id"]: task for task in TASKS}
     for system_name in SYSTEMS:
         out_file = RESULTS_DIR / f"{system_name}.json"
+        if not out_file.exists():
+            continue
         records = json.loads(out_file.read_text(encoding="utf-8"))
         for record in records:
             task = tasks_by_id[record["id"]]
@@ -167,13 +177,18 @@ def main():
         remark()
         return
 
+    chosen = SYSTEMS
+    if "--only" in sys.argv:
+        name = sys.argv[sys.argv.index("--only") + 1]
+        chosen = {name: SYSTEMS[name]}
+
     RESULTS_DIR.mkdir(exist_ok=True)
     print(f"{'task':28} {'system':12} {'passed':7} tokens")
 
-    for system_name, system_prompt in SYSTEMS.items():
+    for system_name, (model, system_prompt) in chosen.items():
         records = []
         for task in TASKS:
-            answer, tokens = ask(task["prompt"], system_prompt)
+            answer, tokens = ask(model, task["prompt"], system_prompt)
 
             if task["kind"] == "quick":
                 passed = None  # no tests; judged later by a blind grader
