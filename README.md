@@ -45,6 +45,33 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
 
   Blind grading of plan, explanation, clarity and length has not been done yet.
 
+- Training data, 2026-11-17 (`data/filter.py`, `data/leak_check.py`, `data/mix.py`):
+  - The teacher answered 3,800 requests. 2,134 answers passed their own tests: Python 850/1,200, FastAPI 730/2,000, short answers 554/600.
+  - The leak check removed 216 examples that copied the exam: 93 whose code passes an exam task's tests, and 123 short questions that ask an exam question.
+  - Final set: 1,915 examples. That is 776 Python, 741 FastAPI, 383 short answers (20%) and 15 identity examples, with the 50 hand-written examples included.
+  - This is a little under the planned 2,000. We accepted it because most removed rows were repeats of a few exam tasks.
+  - Only exact exam tasks and questions were removed, not their topics. Our own 30 tasks may therefore flatter the model a little, and the standard benchmark is the fairer measure.
+
+- Training, 2026-11-18 (`kaggle/train.py`, Kaggle T4, transformers 5.20.2):
+  - 1,855 examples were trained on and 60 held out. 18.5M LoRA parameters were trained (1.18% of 1.56B).
+  - 232 steps took 14 min 42 s.
+  - Held-out loss went 0.522 (step 50) → 0.490 → 0.485 → 0.470 → 0.469 (step 232). It kept falling to the end, with no sign of memorising.
+  - The merged model is saved in the Kaggle notebook's /kaggle/working/krama-coder-1.5b.
+
+- First three-way test, 2026-11-18 (`eval/run.py --only krama`, same 30 tasks, temperature 0):
+  - Krama was shrunk to 4-bit Q4_K_M with llama.cpp (`kaggle/to_gguf.py`), the same format and size (986 MB) as the base model's file. It runs in Ollama from the repo's `Modelfile`.
+
+  | System | Python passed | FastAPI passed | Quick answers, average length |
+  |---|---|---|---|
+  | Base model | 9/12 | 6/12 | 273 tokens |
+  | Base model + written instruction | 9/12 | 5/12 | 218 tokens |
+  | Krama | 9/12 | 5/12 | 106 tokens |
+
+  - Correctness is a tie. Krama's short answers are about half the length of the prompted base model's. It also uses Plan, Code, Why without being told.
+  - Krama's FastAPI failures share one pattern: it reaches for a Pydantic model when none is needed, and then misuses it. The examples are a class without `BaseModel`, a body model on a GET endpoint, and `response_model=dict`.
+  - Asked "who made you", Krama gave a made-up answer. The 15 identity examples were not enough.
+  - Blind grading of plan, explanation, clarity and length has not been done yet.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle

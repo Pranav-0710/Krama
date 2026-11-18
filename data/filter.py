@@ -6,7 +6,7 @@ Quick answers are kept only if they are short and have no plan.
 Run from the project folder:
     uv run --no-project --with fastapi --with httpx --with uvicorn data/filter.py
 
-Reads data/answers.jsonl (from Kaggle). Writes data/examples.jsonl.
+Reads every data/answers*.jsonl file (from Kaggle). Writes data/examples.jsonl.
 """
 
 import json
@@ -21,7 +21,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "eval"))
 from run import extract_code, run_tests
 
 DATA = Path(__file__).parent
-IN_FILE = DATA / "answers.jsonl"
 OUT_FILE = DATA / "examples.jsonl"
 
 QUICK_MAX_WORDS = 90
@@ -71,7 +70,16 @@ def judge(record):
 
 
 def main():
-    records = [json.loads(line) for line in IN_FILE.open(encoding="utf-8")]
+    # Read every answers*.jsonl file (one per Kaggle run). If the same
+    # request was answered twice, keep only the first answer.
+    records = []
+    seen_ids = set()
+    for answers_file in sorted(DATA.glob("answers*.jsonl")):
+        for line in answers_file.open(encoding="utf-8"):
+            record = json.loads(line)
+            if record["id"] not in seen_ids:
+                seen_ids.add(record["id"])
+                records.append(record)
     reasons = Counter()
     kept_by_kind = Counter()
     total_by_kind = Counter(record["kind"] for record in records)

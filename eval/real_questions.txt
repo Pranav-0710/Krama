@@ -1,0 +1,10 @@
+# Real beginner questions, in the learner's own words (2026-11-17).
+# Used only to CHECK Krama after training, never to train it.
+# One question per line. Typos and lowercase are kept on purpose.
+how do i make my fastapi return 404 if id not found
+my fastapi app says 422 unprocessable entity, what did i do wrong
+KeyError: 'name' what does this mean
+why does my function return None
+what is the difference between a list and a dict
+what does async def mean, do i need it
+what is pydantic and why does fastapi use it

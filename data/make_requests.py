@@ -30,6 +30,13 @@ OUT_FILE = Path(__file__).parent / "requests.jsonl"
 HOW_MANY = {"fastapi": 1200, "python": 1200, "quick": 600}
 SEED_SHARE = 0.4  # 4 in 10 coding requests carry a piece of real code
 
+# Top-up (added 2026-11-16): only 417 of 1,200 FastAPI answers passed the
+# filter, so 800 more FastAPI requests are added at the END of the file.
+# They use their own random chooser, so the first 3,000 keep the same ids
+# and topics. (Their seeds can differ if the repos changed since; the
+# answered file used on Kaggle kept the original 3,000 lines.)
+TOPUP_FASTAPI = 800
+
 # Topics lean towards what the exam showed the base model gets wrong.
 TOPICS = {
     "fastapi": [
@@ -166,6 +173,22 @@ def main():
             })
 
     chooser.shuffle(requests)
+
+    # The top-up: new ids carry on from fastapi-1201, so none clash.
+    topup_chooser = random.Random(1)
+    topics = TOPICS["fastapi"]
+    first = HOW_MANY["fastapi"]
+    for number in range(first, first + TOPUP_FASTAPI):
+        seed = ""
+        if seeds and topup_chooser.random() < SEED_SHARE:
+            seed = topup_chooser.choice(seeds)
+        requests.append({
+            "id": f"fastapi-{number + 1:04d}",
+            "kind": "fastapi",
+            "topic": topics[number % len(topics)],
+            "seed": seed,
+        })
+
     with OUT_FILE.open("w", encoding="utf-8") as out:
         for request in requests:
             out.write(json.dumps(request) + "\n")
@@ -173,7 +196,7 @@ def main():
     with_seed = sum(1 for request in requests if request["seed"])
     print(f"seeds cut from your code: {len(seeds)}")
     print(f"requests written: {len(requests)}  (with a seed: {with_seed})")
-    for kind in HOW_MANY:
+    for kind in ("fastapi", "python", "quick"):
         print(f"  {kind}: {sum(1 for r in requests if r['kind'] == kind)}")
 
 

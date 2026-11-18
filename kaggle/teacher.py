@@ -17,7 +17,7 @@ import time
 from pathlib import Path
 
 # ---------------- settings you may change ----------------
-LIMIT = 50          # how many requests to answer this run. Pilot = 50.
+LIMIT = 1500        # at most this many requests per run (1,500 is about 8 hours)
 BATCH_SIZE = 8      # how many requests the GPU works on at once
 MAX_NEW_TOKENS = 900
 TEACHER = "Qwen/Qwen2.5-Coder-7B-Instruct"   # Apache 2.0 licence
@@ -63,6 +63,16 @@ Rules:
 - The tests must pass when run after the code.
 - Use plain words. Explain any technical term the first time you use it.
 - Never copy the inspiration code. Borrow only its style of names and situations.
+- Import everything you use. Field and BaseModel come from pydantic, never from fastapi.
+
+FastAPI rules (the most common mistakes, avoid them):
+- Keep the app small: one to three endpoints. No middleware, no databases, no files.
+- Query parameters are plain function parameters, such as `q: str` or `limit: int = 10`. Never put query parameters or headers inside a class or a Pydantic model. Use a Pydantic model only for a JSON body in POST, PUT or PATCH.
+- To read a header that may be missing, write `token: str | None = Header(default=None)`, then raise HTTPException(status_code=401) when it is None. A header written as `Header()` with no default answers 422, not 401, when it is missing.
+- When a Field rule fails, such as min_length or gt, FastAPI answers 422 by itself. Test only the status code for these, never the error body, and never expect 400.
+- HTTPException always answers `{"detail": ...}`. Never expect `{"error": ...}`.
+- Tests must agree with each other. The same request gives the same answer, unless an earlier request in the tests changed the stored data.
+- Before writing the tests, check each one against your code line by line.
 
 Example of a complete reply:
 
@@ -155,9 +165,12 @@ if not found:
     raise SystemExit("requests.jsonl not found. Add your dataset with 'Add Input' first.")
 requests = [json.loads(line) for line in open(found[0], encoding="utf-8")]
 
+# Skip requests answered before: in this run, or in an earlier run whose
+# answers file was added to the notebook as an input.
 done = set()
-if OUT_FILE.exists():
-    done = {json.loads(line)["id"] for line in open(OUT_FILE, encoding="utf-8")}
+earlier = glob.glob("/kaggle/input/**/answers*.jsonl", recursive=True)
+for answers_file in earlier + ([str(OUT_FILE)] if OUT_FILE.exists() else []):
+    done |= {json.loads(line)["id"] for line in open(answers_file, encoding="utf-8")}
 todo = [(i, r) for i, r in enumerate(requests) if r["id"] not in done][:LIMIT]
 print(f"requests: {len(requests)}  already answered: {len(done)}  doing now: {len(todo)}")
 
@@ -217,7 +230,8 @@ with open(OUT_FILE, "a", encoding="utf-8") as out:
 
         answered += len(batch)
         minutes = (time.time() - start) / 60
-        print(f"answered {answered}/{len(todo)}  after {minutes:.1f} min")
+        overall = len(done) + answered
+        print(f"answered {answered}/{len(todo)} this run  ({overall:,}/{len(requests):,} overall)  after {minutes:.1f} min")
 
 seconds = time.time() - start
 if answered:
