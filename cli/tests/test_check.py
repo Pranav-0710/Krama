@@ -169,37 +169,49 @@ def test_extract_code_prefers_the_solution_block():
 
 # ------------------------------------------------------------ the fix loop
 
-def test_failed_code_is_sent_back_and_fixed(monkeypatch):
-    replies = [
-        "Code:\n```python\nclass Health(BaseModel):\n    status: str\n```",
-        "Code:\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass Health:\n    status: str\n```",
-    ]
-    sent = []
+class FakeBackend:
+    """Gives the replies it was handed, in order, and remembers what it was sent."""
 
-    def fake_ask(model, messages):
-        sent.append(list(messages))
-        return replies[len(sent) - 1]
+    def __init__(self, *replies):
+        self.replies = list(replies)
+        self.sent = []
 
-    monkeypatch.setattr(main, "ask", fake_ask)
-    answer, result = main.answer_with_check("q", "m", PYTHON, approve=lambda: True, say=lambda text: None)
+    def chat(self, messages, schema=None):
+        self.sent.append(list(messages))
+        return self.replies[min(len(self.sent), len(self.replies)) - 1]
+
+
+def test_failed_code_is_sent_back_and_fixed():
+    broken = "Code:\n```python\nclass Health(BaseModel):\n    status: str\n```"
+    fixed = "Code:\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass Health:\n    status: str\n```"
+    backend = FakeBackend(broken, fixed)
+    answer, result = main.answer_with_check("q", backend, PYTHON, approve=lambda: True, say=lambda text: None)
     assert result.status == "passed"
-    assert answer == replies[1]
+    assert answer == fixed
     # The second request carried the first answer and its error.
-    assert "NameError" in sent[1][-1]["content"]
-    assert sent[1][-2]["content"] == replies[0]
+    assert "NameError" in backend.sent[1][-1]["content"]
+    assert backend.sent[1][-2]["content"] == broken
 
 
-def test_gives_up_after_the_last_try(monkeypatch):
-    broken = "```python\nprint(undefined_name)\n```"
-    monkeypatch.setattr(main, "ask", lambda model, messages: broken)
-    answer, result = main.answer_with_check("q", "m", PYTHON, approve=lambda: True,
+def test_every_conversation_starts_with_kramas_system_line():
+    backend = FakeBackend("A short answer.")
+    main.answer_with_check("what is a list?", backend, PYTHON, approve=lambda: True, say=lambda text: None)
+    first = backend.sent[0]
+    assert first[0] == {"role": "system", "content": main.KRAMA_SYSTEM}
+    assert first[1] == {"role": "user", "content": "what is a list?"}
+
+
+def test_gives_up_after_the_last_try():
+    backend = FakeBackend("```python\nprint(undefined_name)\n```")
+    answer, result = main.answer_with_check("q", backend, PYTHON, approve=lambda: True,
                                             tries=3, say=lambda text: None)
     assert result.status == "failed"
+    assert len(backend.sent) == 3
 
 
 def test_nothing_runs_without_the_users_ok(monkeypatch):
-    monkeypatch.setattr(main, "ask", lambda model, messages: "```python\nx = 1\n```")
     monkeypatch.setattr(main, "check", lambda code, python: pytest.fail("code was run"))
-    answer, result = main.answer_with_check("q", "m", PYTHON, approve=lambda: False, say=lambda text: None)
+    backend = FakeBackend("```python\nx = 1\n```")
+    answer, result = main.answer_with_check("q", backend, PYTHON, approve=lambda: False, say=lambda text: None)
     assert result.status == "skipped"
     assert "needs your OK" in result.message

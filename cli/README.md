@@ -33,7 +33,7 @@ Each answer ends with one line about the self-check:
 - `self-check FAILED`: Krama could not fix the error in three tries. The error is shown.
 - `self-check skipped`: the code was not run, and the line says why. For example, FastAPI is not installed, or the code deletes files.
 
-Options: `--no-check` shows the answer without running it, `--model NAME` uses another Ollama model, and `--python PATH` picks the Python that runs the check (by default, the `python` on your PATH, so the libraries in your project are found).
+Options: `--no-check` shows the answer without running it, `--yes` runs the self-check without asking, `--backend ollama` picks the engine (Ollama is the only one so far), `--model NAME` uses another model, and `--python PATH` picks the Python that runs the check (by default, the `python` on your PATH, so the libraries in your project are found).
 
 ## Safety
 

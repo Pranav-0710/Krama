@@ -12,7 +12,8 @@ import json
 import sys
 from pathlib import Path
 
-from krama_cli.main import MODEL, answer_with_check
+from krama_cli.backends import OllamaBackend
+from krama_cli.main import answer_with_check
 from run import extract_code, run_tests
 from tasks import TASKS
 
@@ -22,12 +23,13 @@ RESULTS_DIR = Path(__file__).parent / "results"
 def main():
     run_name = sys.argv[1] if len(sys.argv) > 1 else "1"
     records = []
+    backend = OllamaBackend()
     for task in TASKS:
         if task["kind"] == "quick":
             continue
         notes = []
         # The check runs with this same Python, which has fastapi installed.
-        answer, result = answer_with_check(task["prompt"], MODEL, sys.executable,
+        answer, result = answer_with_check(task["prompt"], backend, sys.executable,
                                            approve=lambda: True, say=notes.append)
         passed = run_tests(task, extract_code(answer, task["kind"]))
         tries = 1 + sum("asking Krama to fix" in note for note in notes)

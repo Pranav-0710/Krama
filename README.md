@@ -145,6 +145,13 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - Tests: 48 pass, including 24 risky snippets that must be refused, 9 everyday snippets that must still run (`list.remove`, `str.replace`, reading files), and each limit shown working on its own. The macOS and Linux limits are written but untested.
   - Re-measured once (`selfcheck-run3.json`): Python 9/12, FastAPI 5/12. None of the 24 answers was wrongly blocked. Across three runs FastAPI was 7, 7 and 5, and every task that changed did so because Krama wrote a different answer, not because of the check. So the size of the self-check's benefit is not settled yet.
 
+- Step 2, one backend interface, 2026-11-18 (`cli/krama_cli/backends.py`):
+  - Everything that talks to a model now goes through `backend.chat(messages, schema=None)`. Ollama is the only backend so far, chosen with `--backend ollama`. A `schema` becomes Ollama's `format`, ready for the agent's tool calls.
+  - krama now sends Krama's system line itself, so a future backend without a Modelfile gives the model the same start. Asked "who made you?", it still names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct.
+  - Every engine problem (not running, model missing, timeout, unreadable reply) becomes one message saying what to do, and Ctrl+C stops cleanly with no traceback.
+  - Tests: 61 pass (12 new for the backend, with the network faked).
+  - Done check: `selfcheck-run4.json` matches run 3 on all 24 tasks (Python 9/12, FastAPI 5/12), and 22 of the 24 final answers are word for word the same.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
