@@ -105,7 +105,7 @@ class LlamaServerBackend(Backend):
     CONTEXT = 4096      # tokens the engine keeps in view, the same as Ollama's default
     MAX_REPLY = 2048    # tokens per reply, so a reply that loops cannot run forever
 
-    def __init__(self, model=KRAMA_MODEL, files=None):
+    def __init__(self, model=KRAMA_MODEL, files=None, context=None):
         from krama_cli import engine
         found = files or engine.installed()
         if not found:
@@ -113,6 +113,8 @@ class LlamaServerBackend(Backend):
         self.server, self.model_file = found
         if model.endswith(".gguf"):
             self.model_file = model            # a model file the user chose
+        if context:
+            self.CONTEXT = context             # the agent needs room for files and test output
         self.process = None
         self.job = None
         self.log_path = engine.krama_home() / "logs" / "llama-server.log"
@@ -197,11 +199,13 @@ class LlamaServerBackend(Backend):
 BACKENDS = {"local": LlamaServerBackend, "ollama": OllamaBackend}
 
 
-def make_backend(name, model=KRAMA_MODEL):
+def make_backend(name, model=KRAMA_MODEL, context=None):
     """`auto` picks the built-in engine if `krama setup` has run, else Ollama."""
     if name == "auto":
         from krama_cli import engine
         name = "local" if engine.installed() else "ollama"
     if name not in BACKENDS:
         raise BackendError(f"Unknown backend '{name}'. Choose one of: auto, {', '.join(BACKENDS)}")
+    if name == "local":
+        return LlamaServerBackend(model=model, context=context)
     return BACKENDS[name](model=model)
