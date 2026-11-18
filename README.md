@@ -121,10 +121,14 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   | Krama, round 1 | 1.79 | 1.12 | 1.17 | 1.79 | 5.88 | 1.08 | 1.17 | 0.67 | 1.83 |
   | Krama, round 2 | 1.92 | 1.17 | 1.21 | 1.96 | 6.25 | 0.96 | 1.50 | 0.50 | 2.00 |
 
-  - Win rule (`eval/RUBRIC.md`): round 2 is not less correct than the base on our tasks (10/12 and 6/12 against 9/12 and 6/12), and it scores higher than the instructed base on the graded rules. Task by task against the instructed base, it wins 7, ties 15 and loses 2 coding tasks, and wins 3 and ties 3 quick questions. The coding margin is small (6.25 against 5.96 out of 8); the quick-answer margin is clear.
+  - Win rule (`eval/RUBRIC.md`): round 2 is not less correct than the base on our tasks (9/12 and 6/12 for both on repeated runs; see the rerun note below), and it scores higher than the instructed base on the graded rules. Task by task against the instructed base, it wins 7, ties 15 and loses 2 coding tasks, and wins 3 and ties 3 quick questions. The coding margin is small (6.25 against 5.96 out of 8); the quick-answer margin is clear.
   - On HumanEval it is still 8 tasks below the base, so the win holds on our tasks only.
   - Change from the plan: the rubric said the grader sees all answers at once. Llama 3.1 8B mixed answers up that way (it gave one answer credit for another's plan), so each answer is graded alone, still unnamed and shuffled.
   - The grader is lenient. Checked against a simple test (numbered steps before the first code block), its plan score was right for all 72 answers from the three instructed or fine-tuned systems, but 23 of the plain base's 24 answers had no plan and it still gave 16 of those a plan score (it counted a numbered list after the code). This flatters the base, not Krama. "Why is true" was added after training and is not part of the win rule; it shows no clear difference.
+
+- Published v0.1 preview, 2026-11-18: `CoBeDigger/krama-coder-1.5b` on Hugging Face (public). It holds the round 2 Q4_K_M file as `krama-coder-1.5b-q4_k_m.gguf`, plus the model card and Ollama files from `release/`.
+  - `ollama pull hf.co/CoBeDigger/krama-coder-1.5b` works. The pulled model has the same weights file (sha256 f3b45d79…), template and system line as the local `krama-r2`. Asked "who made you?", it names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct.
+  - Reruns showed that answers on this CPU are not exactly repeatable at temperature 0: the local `krama-r2` gave different answers to most tasks than in its first run. On the 24 coding tasks, two runs of the published copy and two of the local `krama-r2` all passed Python 9/12 and FastAPI 6/12. Two reruns of the base gave 9/12 and 6/12 again. So round 2's first-run 10/12 was luck, and correctness is a tie with the base. The model card reports 9.
 
 ## Not yet verified
 
