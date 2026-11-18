@@ -22,6 +22,18 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
 | Release | Merged safetensors + GGUF files, dataset as a separate repo, free CPU demo Space, Apache 2.0 |
 | Use | Terminal chat and VS Code chat sidebar through Ollama. No autocomplete, no autonomous agent in version 1 |
 
+## Direction (agreed 2026-11-18, after the four-way test)
+
+Krama is an **offline coding tutor for beginners that checks its own code**. It is not a general coding model, and the model card says so.
+
+- What makes it unique: it plans, codes, then explains why, in about 120 tokens. It runs on any laptop CPU with no internet. Its tool runs the code it wrote against tests on the user's machine and only shows code that ran. That is the same execution filter that built the training data.
+- Interfaces: Ollama provides the terminal chat, the local API and editor use (for example VS Code through Continue) from day one. The project's own product is a `krama` CLI with the self-check built in.
+- Road:
+  1. Blind-grade the explanations, then publish Krama v0.1 as a preview, with the numbers and the base-model credit.
+  2. Build the `krama` CLI with self-checking.
+  3. Have real beginners use it, and train v0.2 on where it fails.
+  4. Later: a 3B or 7B version, and VS Code integration.
+
 ## Build order
 
 1. Run the base model on the laptop and measure its speed
@@ -99,6 +111,20 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
   - Asking the base model to plan and explain (the written instruction) cost it 22 HumanEval tasks. Fine-tuning won most of that back: round 2 beats the written instruction everywhere, so the fine-tune is worth having.
   - Round 2 is 8 HumanEval tasks below the untouched base model, which gives no plan or explanation. The two disagree on 38 tasks (base alone passes 23, round 2 alone passes 15), so this gap may partly be chance. Almost none of the failures come from a renamed function; they are real logic mistakes.
   - Honest summary: Krama gives the same correctness as its base on our tasks, with a plan and an explanation at about half the length of the prompted base. On the standard benchmark it is a little weaker than the plain base.
+
+- Blind grading, 2026-11-18 (`eval/grade.py`, Llama 3.1 8B in Ollama, temperature 0; average out of 2 per rule):
+
+  | System | Plan | Why | Clarity | Length | Fixed rules total (of 8) | Why is true (extra) | Quick: correct | Quick: length | Quick total (of 4) |
+  |---|---|---|---|---|---|---|---|---|---|
+  | Base model | 1.08 | 0.67 | 1.04 | 1.58 | 4.38 | 0.92 | 1.17 | 0.17 | 1.33 |
+  | Base model + written instruction | 1.83 | 1.17 | 1.17 | 1.79 | 5.96 | 0.92 | 1.00 | 0.33 | 1.33 |
+  | Krama, round 1 | 1.79 | 1.12 | 1.17 | 1.79 | 5.88 | 1.08 | 1.17 | 0.67 | 1.83 |
+  | Krama, round 2 | 1.92 | 1.17 | 1.21 | 1.96 | 6.25 | 0.96 | 1.50 | 0.50 | 2.00 |
+
+  - Win rule (`eval/RUBRIC.md`): round 2 is not less correct than the base on our tasks (10/12 and 6/12 against 9/12 and 6/12), and it scores higher than the instructed base on the graded rules. Task by task against the instructed base, it wins 7, ties 15 and loses 2 coding tasks, and wins 3 and ties 3 quick questions. The coding margin is small (6.25 against 5.96 out of 8); the quick-answer margin is clear.
+  - On HumanEval it is still 8 tasks below the base, so the win holds on our tasks only.
+  - Change from the plan: the rubric said the grader sees all answers at once. Llama 3.1 8B mixed answers up that way (it gave one answer credit for another's plan), so each answer is graded alone, still unnamed and shuffled.
+  - The grader is lenient. Checked against a simple test (numbered steps before the first code block), its plan score was right for all 72 answers from the three instructed or fine-tuned systems, but 23 of the plain base's 24 answers had no plan and it still gave 16 of those a plan score (it counted a numbered list after the code). This flatters the base, not Krama. "Why is true" was added after training and is not part of the win rule; it shows no clear difference.
 
 ## Not yet verified
 
