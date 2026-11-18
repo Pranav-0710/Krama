@@ -130,6 +130,11 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - `ollama pull hf.co/CoBeDigger/krama-coder-1.5b` works. The pulled model has the same weights file (sha256 f3b45d79…), template and system line as the local `krama-r2`. Asked "who made you?", it names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct.
   - Reruns showed that answers on this CPU are not exactly repeatable at temperature 0: the local `krama-r2` gave different answers to most tasks than in its first run. On the 24 coding tasks, two runs of the published copy and two of the local `krama-r2` all passed Python 9/12 and FastAPI 6/12. Two reruns of the base gave 9/12 and 6/12 again. So round 2's first-run 10/12 was luck, and correctness is a tie with the base. The model card reports 9.
 
+- `krama` command-line tutor, version 0.1, 2026-11-18 (`cli/`, see `cli/README.md`; 11 tests in `cli/tests`):
+  - It asks the published model through Ollama, then checks the code before showing it. The check parses it, refuses obviously risky code (deleting or writing files, other programs, the network), then imports it in a separate Python process with a 10-second limit. If the code crashes, the error goes back to Krama to fix, up to two more tries.
+  - Measured with `eval/selfcheck.py` on the 24 coding tasks, two runs: Python 10/12 and 9/12, FastAPI 7/12 both times, against 9/12 and 6/12 without the check. The one gain is `api-health`: both runs caught `NameError: BaseModel` and Krama fixed it in one try.
+  - The limit is clear: 23 of 24 answers passed the check on the first try, but 7 of those still failed the exam tests. "Runs without an error" catches crashes, not wrong answers. The tool says so after every answer. Catching wrong answers needs tests, which is the next step for the self-check.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
