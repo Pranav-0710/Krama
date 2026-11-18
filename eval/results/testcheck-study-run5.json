@@ -1,0 +1,445 @@
+[
+  {
+    "id": "py-group-by-first-letter",
+    "exam_passed": true,
+    "report_status": "warning",
+    "message": "1 of 3 of Krama's own tests failed (that test may be wrong; check it yourself)",
+    "tests": [
+      [
+        "assert group_by_first_letter(['apple', 'banana']) == {'a': ['apple'], 'b': ['banana']}",
+        "ok",
+        ""
+      ],
+      [
+        "assert group_by_first_letter([]) == {}",
+        "ok",
+        ""
+      ],
+      [
+        "assert group_by_first_letter(['zebra', '', 'ant']) == {'z': ['zebra'], 'a': ['', 'ant']}",
+        "fail",
+        "got {'z': ['zebra'], 'a': ['ant']}"
+      ]
+    ]
+  },
+  {
+    "id": "py-count-words",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert count_words('') == {}",
+        "ok",
+        ""
+      ],
+      [
+        "assert count_words('hello world hello') == {'hello': 2, 'world': 1}",
+        "ok",
+        ""
+      ],
+      [
+        "assert count_words('Hello World Hello') == {'hello': 2, 'world': 1}",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-safe-divide",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "2 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert safe_divide(10, 2) == 5",
+        "ok",
+        ""
+      ],
+      [
+        "assert safe_divide(10, 0) is None",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-flatten-one-level",
+    "exam_passed": false,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert flatten([[1], 2]) == [1, 2]",
+        "ok",
+        ""
+      ],
+      [
+        "assert flatten([[], [3]]) == [3]",
+        "ok",
+        ""
+      ],
+      [
+        "assert flatten([[4, 5], [6]]) == [4, 5, 6]",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-most-common",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert most_common([1]) == 1",
+        "ok",
+        ""
+      ],
+      [
+        "assert most_common([2, 3, 2]) == 2",
+        "ok",
+        ""
+      ],
+      [
+        "assert most_common([]) is None",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-parse-config",
+    "exam_passed": false,
+    "report_status": "passed",
+    "message": "1 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert parse_config('') == {}",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-chunk",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert chunk([], 1) == []",
+        "ok",
+        ""
+      ],
+      [
+        "assert chunk([1], 3) == [[1]]",
+        "ok",
+        ""
+      ],
+      [
+        "assert chunk([1, 2, 3], 2) == [[1, 2], [3]]",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-dedupe",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "4 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert dedupe([1, 2, 3]) == [1, 2, 3]",
+        "ok",
+        ""
+      ],
+      [
+        "assert dedupe([1, 2, 2, 3]) == [1, 2, 3]",
+        "ok",
+        ""
+      ],
+      [
+        "assert dedupe(['a', 'b', 'b']) == ['a', 'b']",
+        "ok",
+        ""
+      ],
+      [
+        "assert dedupe([]) == []",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-average-scores",
+    "exam_passed": false,
+    "report_status": "failed",
+    "message": "2 of 3 of Krama's own tests failed (the code or the tests may be wrong)",
+    "tests": [
+      [
+        "assert average_scores([]) == {}",
+        "ok",
+        ""
+      ],
+      [
+        "assert average_scores([{'name': 'Alice', 'score': 85}]) == {'Alice': 85}",
+        "fail",
+        "got {'Alice': {'total': 85, 'count': 1, 'average': 85.0}}"
+      ],
+      [
+        "assert average_scores([{'name': 'Bob', 'score': 90}, {'name': 'Alice', 'score': 85}]) == {'Bob': 90, 'Alice': 87.5}",
+        "fail",
+        "got {'Bob': {'total': 90, 'count': 1, 'average': 87.5}, 'Alice': {'total': 85, 'count': 1, 'average': 87.5}}"
+      ]
+    ]
+  },
+  {
+    "id": "py-merge-totals",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert merge_totals({}, {}) == {}",
+        "ok",
+        ""
+      ],
+      [
+        "assert merge_totals({1: 2}, {}) == {1: 2}",
+        "ok",
+        ""
+      ],
+      [
+        "assert merge_totals({1: 2}, {1: 3}) == {1: 5}",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "py-to-snake-case",
+    "exam_passed": false,
+    "report_status": "skipped",
+    "message": "Krama wrote no usable tests",
+    "tests": []
+  },
+  {
+    "id": "py-sum-numbers",
+    "exam_passed": true,
+    "report_status": "warning",
+    "message": "1 of 3 of Krama's own tests failed (that test may be wrong; check it yourself)",
+    "tests": [
+      [
+        "assert sum_numbers('') == 0",
+        "ok",
+        ""
+      ],
+      [
+        "assert sum_numbers('1,2,3') == 6",
+        "ok",
+        ""
+      ],
+      [
+        "assert sum_numbers('   ,5,6 ') == 17",
+        "fail",
+        "got 11"
+      ]
+    ]
+  },
+  {
+    "id": "api-create-item",
+    "exam_passed": false,
+    "report_status": "skipped",
+    "message": "Krama's tests did not match its own code",
+    "tests": []
+  },
+  {
+    "id": "api-health",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "1 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert HealthResponse.__name__ == 'HealthResponse'",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "api-hello-path",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "2 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert NameRequest.__init__ is not None",
+        "ok",
+        ""
+      ],
+      [
+        "assert client.get('/hello/Asha').json() == {'message': 'Hello, Asha'}",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "api-add-query",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert client.get('/add?a=2&b=3').json() == {'result': 5}",
+        "ok",
+        ""
+      ],
+      [
+        "assert client.get('/add?a=1&b=4').json() == {'result': 5}",
+        "ok",
+        ""
+      ],
+      [
+        "assert client.get('/add?a=0&b=0').json() == {'result': 0}",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "api-get-item-404",
+    "exam_passed": true,
+    "report_status": "passed",
+    "message": "3 of Krama's own tests passed",
+    "tests": [
+      [
+        "assert client.get('/items/1').json() == {'id': 1, 'name': 'pen'}",
+        "ok",
+        ""
+      ],
+      [
+        "assert client.get('/items/2').json() == {'id': 2, 'name': 'book'}",
+        "ok",
+        ""
+      ],
+      [
+        "assert client.get('/items/3').status_code == 404",
+        "ok",
+        ""
+      ]
+    ]
+  },
+  {
+    "id": "api-create-user-201",
+    "exam_passed": true,
+    "report_status": "failed",
+    "message": "1 of 1 of Krama's own tests failed (the code or the tests may be wrong)",
+    "tests": [
+      [
+        "assert User.__init__.__annotations__['username'] == str",
+        "error",
+        "KeyError: 'username'"
+      ]
+    ]
+  },
+  {
+    "id": "api-validate-price",
+    "exam_passed": false,
+    "report_status": "failed",
+    "message": "2 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+    "tests": [
+      [
+        "assert Product.__init__ == Product",
+        "fail",
+        "got <function BaseModel.__init__ at 0x0000019B84167A60>"
+      ],
+      [
+        "assert Product.__repr__ == repr(Product)",
+        "fail",
+        "got <function BaseModel.__repr__ at 0x0000019B84168EA0>"
+      ]
+    ]
+  },
+  {
+    "id": "api-search-default",
+    "exam_passed": false,
+    "report_status": "skipped",
+    "message": "the tests could not run (ImportError: cannot import name 'Field' from 'fastapi' (C:\\Users\\prana\\AppData\\Local\\uv\\cache\\archive-v0\\v5jwLlvQd3Z8vmGv3Hd5J\\Lib\\site-packages\\fastapi\\__init__.py))",
+    "tests": []
+  },
+  {
+    "id": "api-notes-delete",
+    "exam_passed": true,
+    "report_status": "skipped",
+    "message": "Krama wrote no usable tests",
+    "tests": []
+  },
+  {
+    "id": "api-tasks-filter",
+    "exam_passed": false,
+    "report_status": "failed",
+    "message": "2 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+    "tests": [
+      [
+        "assert client.get('/tasks').json() == [{'id': '1', 'title': 'write', 'done': True}, {'id': '2', 'title': 'test', 'done': False}, {'id': '3', 'title': 'ship', 'done': False}]",
+        "fail",
+        "got [{'id': 2, 'title': 'test', 'done': False}, {'id': 3, 'title': 'ship', 'done': False}]"
+      ],
+      [
+        "assert client.get('/tasks?done=true').json() == [{'id': '1', 'title': 'write', 'done': True}]",
+        "fail",
+        "got [{'id': 1, 'title': 'write', 'done': True}]"
+      ]
+    ]
+  },
+  {
+    "id": "api-counter-put",
+    "exam_passed": false,
+    "report_status": "failed",
+    "message": "4 of 4 of Krama's own tests failed (the code or the tests may be wrong)",
+    "tests": [
+      [
+        "assert client.put('/counter', json={'value': 4}).status_code == 200",
+        "fail",
+        "got 201"
+      ],
+      [
+        "assert client.get('/counter').json() == {'value': 4}",
+        "fail",
+        "got {'value': 0}"
+      ],
+      [
+        "assert client.put('/counter', json={'value': -1}).status_code == 200",
+        "fail",
+        "got 201"
+      ],
+      [
+        "assert client.get('/counter').json() == {'value': -1}",
+        "fail",
+        "got {'value': 0}"
+      ]
+    ]
+  },
+  {
+    "id": "api-whoami-header",
+    "exam_passed": false,
+    "report_status": "failed",
+    "message": "1 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+    "tests": [
+      [
+        "assert UserName.__name__ == 'UserName'",
+        "ok",
+        ""
+      ],
+      [
+        "assert client.get('/whoami').json() == {'user': 'asha'}",
+        "error",
+        "NameError: name 'request' is not defined"
+      ]
+    ]
+  }
+]

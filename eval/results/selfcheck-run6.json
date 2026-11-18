@@ -1,0 +1,340 @@
+[
+  {
+    "id": "py-group-by-first-letter",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Initialize an empty dictionary to store the results.\n2. Iterate over each word in the input list.\n3. If the word is not empty, extract its first character and convert it to lowercase.\n4. Add the word to the corresponding list in the dictionary.\n\nCode:\n```python\ndef group_by_first_letter(words):\n    result = {}\n    \n    for word in words:\n        if word:\n            letter = word[0].lower()\n            if letter not in result:\n                result[letter] = []\n            result[letter].append(word)\n            \n    return result\n```\n\nWhy:\n- We check if the word is empty before processing it to avoid errors.\n- Using `word[0].lower()` ensures we handle both uppercase and lowercase letters correctly.\n- The loop iterates through each word in the list, making sure all words are processed.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "warning",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-count-words",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Split the text into words using `split()`.\n2. Convert all words to lowercase.\n3. Count how many times each word appears using a dictionary.\n\nCode:\n```python\ndef count_words(text):\n    if not text:\n        return {}\n    \n    words = text.lower().split()\n    word_count = {}\n    \n    for word in words:\n        if word in word_count:\n            word_count[word] += 1\n        else:\n            word_count[word] = 1\n    \n    return word_count\n```\n\nWhy:\n- `lower()` converts all characters to lowercase, ensuring case insensitivity.\n- `split()` breaks the text into individual words based on spaces.\n- We iterate over each word and update our dictionary accordingly. If the word is already in the dictionary, we increment its count; otherwise, we add it with a count of 1.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-safe-divide",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Define the function `safe_divide`.\n2. Check if `b` is zero.\n3. Return `None` if `b` is zero, otherwise return the division result.\n\nCode:\n```python\ndef safe_divide(a, b):\n    if b == 0:\n        return None\n    return a / b\n```\n\nWhy:\n- The function checks if `b` is zero before performing the division to avoid division by zero errors.\n- If `b` is zero, the function returns `None`, which can be handled appropriately in the calling code.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-flatten-one-level",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Define the function `flatten`.\n2. Iterate over each element in the input list.\n3. If the element is a list, extend the result with that sublist; otherwise, append it directly.\n\nCode:\n```python\ndef flatten(lists):\n    result = []\n    for item in lists:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result\n```\n\nWhy:\n- `isinstance(item, list)` checks if the current element is a list.\n- `extend` adds all elements from the sublist to the result list.\n- This approach ensures that only one level of nesting is flattened.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-most-common",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Check if the list is empty and return `None` if it is.\n2. Count how many times each item appears using a dictionary.\n3. Find the item with the highest count.\n\nCode:\n```python\ndef most_common(items):\n    if not items:\n        return None\n    \n    counts = {}\n    for item in items:\n        if item in counts:\n            counts[item] += 1\n        else:\n            counts[item] = 1\n    \n    max_count = max(counts.values())\n    for item, count in counts.items():\n        if count == max_count:\n            return item\n```\n\nWhy:\n- An empty list has no items to compare, so we handle it early.\n- We use a dictionary to keep track of how many times each item appears.\n- By iterating through the dictionary again, we can find the item with the highest count efficiently.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-parse-config",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Split the input into lines.\n2. Filter out empty lines and comments.\n3. Split each key-value pair at the first equals sign.\n\nCode:\n```python\ndef parse_config(text):\n    result = {}\n    for line in text.splitlines():\n        if line.strip() and not line.startswith(\"#\"):\n            key, value = line.split(\"=\", 1)\n            result[key.strip()] = value.strip()\n    return result\n```\n\nWhy:\n- `line.strip()` removes leading and trailing whitespace.\n- `not line.startswith(\"#\")` skips comments.\n- `line.split(\"=\", 1)` splits the line at the first equals sign, ignoring subsequent ones.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-chunk",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Check if the input is empty; return it as is.\n2. Loop through the items and add them to a new list until we reach the desired size.\n3. Return the lists.\n\nCode:\n```python\ndef chunk(items, size):\n    result = []\n    for i in range(0, len(items), size):\n        result.append(items[i:i + size])\n    return result\n```\n\nWhy:\n- The loop uses `range(0, len(items), size)` to step through the items by chunks of the specified size.\n- Each chunk is appended to the result list using slicing (`items[i:i + size]`).\n- This approach ensures that all items are processed and each chunk has the correct size.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-dedupe",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Initialize an empty result list.\n2. Iterate over the items using `enumerate` to keep track of their positions.\n3. Add each item to the result if it's not already present.\n\nCode:\n```python\ndef dedupe(items):\n    seen = set()\n    result = []\n    \n    for index, item in enumerate(items):\n        if item not in seen:\n            seen.add(item)\n            result.append((index, item))\n            \n    return [item for _, item in sorted(result)]\n```\n\nWhy:\n- `enumerate` allows us to keep track of the original positions of items.\n- By sorting the results before returning them, we ensure they maintain their original order.\n- This approach ensures that each item appears only once in the final list while preserving their original indices.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-average-scores",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Check if the input is empty; return {} if it is.\n2. Sum up all the scores for each student.\n3. Count how many scores there were for each student.\n4. Divide the sum by the count to get the average.\n\nCode:\n```python\ndef average_scores(records):\n    if not records:\n        return {}\n    \n    averages = {}\n    total_score = 0\n    num_scores = 0\n    \n    for record in records:\n        name = record['name']\n        score = record['score']\n        \n        if name not in averages:\n            averages[name] = {'total': 0, 'count': 0}\n        \n        averages[name]['total'] += score\n        averages[name]['count'] += 1\n        \n        total_score += score\n        num_scores += 1\n    \n    for name in averages:\n        averages[name]['average'] = total_score / num_scores\n    \n    return averages\n```\n\nWhy:\n- The function checks if the input list is empty and returns an empty dictionary if it is.\n- It iterates over each record, updating the total score and count for each student.\n- After processing all records, it calculates the average by dividing the total score by the number of scores.\n- Finally, it updates the averages dictionary with the calculated averages.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 2 of 3 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  },
+  {
+    "id": "py-merge-totals",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Make a copy of the first dict.\n2. Add each value from the second dict to the corresponding key in the copied dict.\n\nCode:\n```python\ndef merge_totals(a, b):\n    result = a.copy()\n    for key, value in b.items():\n        if key in result:\n            result[key] += value\n        else:\n            result[key] = value\n    return result\n```\n\nWhy:\n- Using `copy()` ensures that the original dictionary is not modified.\n- Adding values to existing keys or creating new ones as needed.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-to-snake-case",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Check if the input is an empty string and return it as is.\n2. Split the name by uppercase letters to identify words.\n3. Join these words together with underscores.\n\nCode:\n```python\ndef to_snake_case(name):\n    if not name:\n        return \"\"\n    \n    parts = []\n    for word in name.split():\n        parts.append(word.lower())\n    \n    return \"_\".join(parts)\n```\n\nWhy:\n- Splitting by uppercase letters helps identify words.\n- Joining them with underscores ensures the result is in snake case.\n- The function handles both normal cases and edge cases like empty strings.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "skipped",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "py-sum-numbers",
+    "kind": "python",
+    "backend": "local",
+    "answer": "Plan:\n1. Split the input text into individual numbers using `split(',')`.\n2. Filter out any empty strings or leading/trailing spaces.\n3. Convert each non-empty string to an integer and sum them up.\n\nCode:\n```python\ndef sum_numbers(text):\n    # Remove spaces and filter out empty strings\n    numbers = [int(num.strip()) for num in text.split(',')]\n    \n    # Sum the numbers\n    return sum(numbers)\n```\n\nWhy:\n- `strip()` removes leading and trailing whitespace.\n- `[int(num) for ...]` converts each string to an integer.\n- `sum(...)` adds up all the integers.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 2 of 3 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  },
+  {
+    "id": "api-create-item",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model for the request body.\n2. Create a dictionary to keep track of items by their IDs.\n3. Implement the POST endpoint to add new items and assign them unique IDs.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    price: float\n\nitems = {}\n\n@app.post(\"/items\", status_code=201)\nasync def create_item(item: Item):\n    if item.name in items:\n        raise HTTPException(status_code=409, detail=\"Item already exists\")\n    \n    items[item.name] = {\"id\": len(items) + 1, \"name\": item.name, \"price\": item.price}\n    return items[item.name]\n```\n\nWhy:\n- The Pydantic model ensures the incoming JSON has the correct structure.\n- We use a dictionary to keep track of items by their names. Each new item gets an ID based on its position in the dictionary.\n- If an attempt is made to create an item with a name already used, FastAPI automatically returns a 409 Conflict response without needing additional code.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "skipped",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "api-health",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Ensure that `BaseModel` is imported correctly.\n2. Fix the typo in the class definition.\n\nCode:\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass HealthResponse(BaseModel):\n    status: str = \"ok\"\n\n@app.get(\"/health\")\ndef health_check():\n    return {\"status\": \"ok\"}\n```\n\nWhy:\n- The error indicates that `BaseModel` was not imported. By adding `from pydantic import BaseModel`, we ensure that the class is available for use.\n- The typo in `class HealthResponse(BaseModel):` has been corrected to `class HealthResponse(BaseModel):`.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 2,
+    "notes": [
+      "  self-check found an error: NameError: name 'BaseModel' is not defined",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "api-hello-path",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model to validate the `name` parameter.\n2. Create a GET endpoint `/hello/{name}` that uses this model.\n3. Return a JSON response with the greeting.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass NameRequest(BaseModel):\n    name: str\n\n@app.get(\"/hello/{name}\")\nasync def greet(name: str):\n    if not name:\n        raise HTTPException(status_code=422, detail=\"Name cannot be empty\")\n    \n    return {\"message\": f\"Hello, {name}\"}\n```\n\nWhy:\n- The `NameRequest` model ensures that the `name` parameter is provided and non-empty.\n- If the `name` is empty, an HTTP 422 error is raised with a custom message.\n- The endpoint returns a JSON object containing the greeting.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "api-add-query",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model to validate the input.\n2. Create a GET endpoint that uses this model.\n3. Return the sum of the two numbers in JSON.\n\nCode:\n```python\nfrom fastapi import FastAPI, Query\n\napp = FastAPI()\n\n@app.get(\"/add\")\nasync def add_numbers(a: int = Query(...), b: int = Query(...)):\n    return {\"result\": a + b}\n```\n\nWhy:\n- `Query(...)` ensures that both `a` and `b` are required. If they're missing, FastAPI will automatically respond with 422.\n- The function takes two whole numbers as input and returns their sum in JSON format.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "api-get-item-404",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model for the item.\n2. Create a dictionary to store items.\n3. Implement the GET endpoint to retrieve an item by its ID.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\nitems = {\n    1: {\"id\": 1, \"name\": \"pen\"},\n    2: {\"id\": 2, \"name\": \"book\"}\n}\n\n@app.get(\"/items/{item_id}\")\nasync def get_item(item_id: int):\n    if item_id in items:\n        return items[item_id]\n    else:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n```\n\nWhy:\n- The Pydantic model ensures the returned JSON has the correct structure.\n- Using a dictionary allows easy lookup by ID.\n- `HTTPException` is used to handle cases where the item does not exist, returning a 404 status code.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "passed",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "api-create-user-201",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model for the request body.\n2. Create a POST endpoint `/users` that uses this model.\n3. Ensure the endpoint returns a status code of 201.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass User(BaseModel):\n    username: str\n\n@app.post(\"/users\", status_code=201)\nasync def create_user(user: User):\n    return {\"username\": user.username}\n```\n\nWhy:\n- The `User` model ensures that the incoming JSON has a valid `username`.\n- Using `status_code=201` explicitly tells FastAPI to respond with a 201 Created status.\n- If the username is missing or empty, FastAPI will automatically return a 422 Unprocessable Entity response.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 2 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  },
+  {
+    "id": "api-validate-price",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model for the product with fields `name` and `price`.\n2. Create a POST endpoint that uses this model.\n3. Add a validator to ensure the price is greater than zero.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel, Field\n\napp = FastAPI()\n\nclass Product(BaseModel):\n    name: str\n    price: float = Field(..., gt=0)\n\n@app.post(\"/products\", status_code=201)\nasync def create_product(product: Product):\n    return product.dict()\n```\n\nWhy:\n- The `Field(..., gt=0)` ensures that the `price` field must be greater than zero. If not, FastAPI will automatically reject the request with a 422 error.\n- The `Product` model uses Pydantic's built-in validation to ensure both fields are present and correctly typed before processing further.\n- The `create_product` function simply returns the validated product as JSON, ensuring all required fields are included in the response.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 2 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  },
+  {
+    "id": "api-search-default",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Fix the typo in `Field(...)` to `Field()`.\n2. Make sure the model is imported correctly.\n\nCode:\n```python\nfrom fastapi import FastAPI, Field\n\napp = FastAPI()\n\n@app.get(\"/search\")\nasync def search(q: str = Field(...), limit: int = Field(10)):\n    return {\"q\": q, \"limit\": limit}\n```\n\nWhy:\n- `Field(...)` should be `Field()`.\n- The model is imported correctly at the top of the file.",
+    "passed": false,
+    "check": "failed",
+    "krama_tests": "-",
+    "tries": 3,
+    "notes": [
+      "  self-check found an error: ImportError: cannot import name 'Field' from 'fastapi' (C:\\Users\\prana\\AppData\\Local\\uv\\cache\\archive-v0\\v5jwLlvQd3Z8vmGv3Hd5J\\Lib\\site-packages\\fastapi\\__init__.py). Did you mean: 'File'?",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  self-check found an error: ImportError: cannot import name 'Field' from 'fastapi' (C:\\Users\\prana\\AppData\\Local\\uv\\cache\\archive-v0\\v5jwLlvQd3Z8vmGv3Hd5J\\Lib\\site-packages\\fastapi\\__init__.py). Did you mean: 'File'?",
+      "  asking Krama to fix it (try 3 of 3)..."
+    ]
+  },
+  {
+    "id": "api-notes-delete",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Keep notes in memory as a list of dictionaries.\n2. Add a new note by appending it to the list and returning its id.\n3. Delete a note by removing it from the list using its id.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\nnotes = []\n\n@app.post(\"/notes\", status_code=201)\ndef create_note(note: dict):\n    notes.append({\"id\": len(notes) + 1, **note})\n    return {\"id\": len(notes), **note}\n\n@app.delete(\"/notes/{note_id}\", status_code=204)\nasync def delete_note(note_id: int):\n    global notes\n    try:\n        del notes[note_id - 1]\n    except IndexError:\n        raise HTTPException(status_code=404, detail=\"Note not found\")\n```\n\nWhy:\n- The `notes` list stores all the notes in memory.\n- Each note is a dictionary with an `id` and other fields like `text`.\n- POST /notes adds a new note to the list and returns its id.\n- DELETE /notes/{note_id} removes the note at the specified index and responds accordingly.",
+    "passed": true,
+    "check": "passed",
+    "krama_tests": "skipped",
+    "tries": 1,
+    "notes": [
+      "  writing and running tests..."
+    ]
+  },
+  {
+    "id": "api-tasks-filter",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model for the task.\n2. Create a dictionary to store the tasks.\n3. Implement the GET endpoint to return all tasks or filtered ones based on the `done` query parameter.\n\nCode:\n```python\nfrom fastapi import FastAPI, Query\n\napp = FastAPI()\n\ntasks = [\n    {\"id\": 1, \"title\": \"write\", \"done\": True},\n    {\"id\": 2, \"title\": \"test\", \"done\": False},\n    {\"id\": 3, \"title\": \"ship\", \"done\": False}\n]\n\n\n@app.get(\"/tasks\")\nasync def get_tasks(done: bool = Query(False)):\n    if done is None:\n        return tasks\n    else:\n        return [task for task in tasks if task[\"done\"] == done]\n```\n\nWhy:\n- The `Query` parameter allows us to specify a default value (`False`) for the `done` query parameter.\n- If `done` is not provided, all tasks are returned. Otherwise, only tasks where `done` matches the specified value are returned.\n- This approach avoids using global variables and makes the code more modular and easier to understand.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 2 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  },
+  {
+    "id": "api-counter-put",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a global variable to keep track of the counter.\n2. Create a GET endpoint `/counter` that returns the current value.\n3. Create a PUT endpoint `/counter` that updates the value based on the provided JSON body.\n\nCode:\n```python\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n# Global variable to store the counter value\ncounter_value = 0\n\n\n@app.get(\"/counter\")\ndef get_counter():\n    return {\"value\": counter_value}\n\n\n@app.put(\"/counter\", status_code=201)\nasync def update_counter(body: dict):\n    global counter_value\n    if \"value\" in body:\n        try:\n            new_value = int(body[\"value\"])\n            counter_value = new_value\n            return {\"value\": new_value}\n        except ValueError:\n            return {\"error\": \"Invalid value. Please provide a whole number.\"}, 422\n    else:\n        return {\"error\": \"Missing 'value' field in request body\"}, 422\n```\n\nWhy:\n- Using a global variable allows us to keep track of the counter across different requests.\n- The GET endpoint simply returns the current value stored in `counter_value`.\n- The PUT endpoint checks if the provided JSON contains a valid integer and updates the counter accordingly. If not, it returns an error response with status code 422.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 4 of 4 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  },
+  {
+    "id": "api-whoami-header",
+    "kind": "fastapi",
+    "backend": "local",
+    "answer": "Plan:\n1. Define a Pydantic model to validate the user name.\n2. Create an endpoint `/whoami` that checks if the `X-User` header exists and returns the appropriate JSON or error.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass UserName(BaseModel):\n    user: str\n\n@app.get(\"/whoami\")\nasync def who_am_i():\n    x_user_header = request.headers.get(\"X-User\")\n    \n    if not x_user_header:\n        raise HTTPException(status_code=401, detail=\"Missing X-User header\")\n    \n    return {\"user\": x_user_header}\n```\n\nWhy:\n- The `UserName` model ensures that the user name is provided correctly.\n- If the `X-User` header is missing, FastAPI automatically returns a 401 Unauthorized response without needing additional code.\n- This approach keeps the logic clear and avoids manual error checking.",
+    "passed": false,
+    "check": "passed",
+    "krama_tests": "failed",
+    "tries": 2,
+    "notes": [
+      "  writing and running tests...",
+      "  tests: 1 of 2 of Krama's own tests failed (the code or the tests may be wrong)",
+      "  asking Krama to fix it (try 2 of 3)...",
+      "  the fix was not better, so krama kept the earlier answer"
+    ]
+  }
+]

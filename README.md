@@ -135,6 +135,61 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - Measured with `eval/selfcheck.py` on the 24 coding tasks, two runs: Python 10/12 and 9/12, FastAPI 7/12 both times, against 9/12 and 6/12 without the check. The one gain is `api-health`: both runs caught `NameError: BaseModel` and Krama fixed it in one try.
   - The limit is clear: 23 of 24 answers passed the check on the first try, but 7 of those still failed the exam tests. "Runs without an error" catches crashes, not wrong answers. The tool says so after every answer. Catching wrong answers needs tests, which is the next step for the self-check.
 
+- Long-term goal (agreed 2026-11-18): a production-ready local coding agent that runs on a CPU in cmd or PowerShell, with or without Ollama. Order: 1) make the self-check safe, 2) one backend interface, 3) a built-in llama.cpp engine (`krama setup`), 4) a test-based self-check, 5) a guided agent tried with Qwen2.5-Coder-7B first, 6) agent training data and a fine-tune. A design review and a production-readiness review (both by helper agents) shaped this order. The readiness review's verdict was "needs work".
+
+- Step 1, safety, 2026-11-18. The review found the old look-before-running list easy to dodge: 8 risky patterns I tried, such as `import os as o; o.system(...)`, all got through. Now:
+  - krama asks before running code (yes, no, or always), and runs nothing without a terminal to ask in unless given `--yes`.
+  - The look covers those tricks (aliases, `from os import`, `pathlib` deletes and writes, `importlib`, `getattr` with strings, `__subclasses__`).
+  - The code runs with no secret environment variables, 512 MB of memory and 10 seconds at most. On Windows a job object also stops it from starting programs (Windows refuses with error 1816) and kills anything left over.
+  - A missing module is only called "install X" if X is a well-known library; otherwise it is treated as a possibly made-up name and sent back to Krama.
+  - Tests: 48 pass, including 24 risky snippets that must be refused, 9 everyday snippets that must still run (`list.remove`, `str.replace`, reading files), and each limit shown working on its own. The macOS and Linux limits are written but untested.
+  - Re-measured once (`selfcheck-run3.json`): Python 9/12, FastAPI 5/12. None of the 24 answers was wrongly blocked. Across three runs FastAPI was 7, 7 and 5, and every task that changed did so because Krama wrote a different answer, not because of the check. So the size of the self-check's benefit is not settled yet.
+
+- Step 2, one backend interface, 2026-11-18 (`cli/krama_cli/backends.py`):
+  - Everything that talks to a model now goes through `backend.chat(messages, schema=None)`. Ollama is the only backend so far, chosen with `--backend ollama`. A `schema` becomes Ollama's `format`, ready for the agent's tool calls.
+  - krama now sends Krama's system line itself, so a future backend without a Modelfile gives the model the same start. Asked "who made you?", it still names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct.
+  - Every engine problem (not running, model missing, timeout, unreadable reply) becomes one message saying what to do, and Ctrl+C stops cleanly with no traceback.
+  - Tests: 61 pass (12 new for the backend, with the network faked).
+  - Done check: `selfcheck-run4.json` matches run 3 on all 24 tasks (Python 9/12, FastAPI 5/12), and 22 of the 24 final answers are word for word the same.
+
+- Step 3, the built-in engine (no Ollama), 2026-11-18 (`cli/krama_cli/engine.py`, `LlamaServerBackend` in `backends.py`):
+  - `krama setup` downloads llama.cpp's ready-made CPU build, pinned to release b12359 (Windows x64 25.1 MB; builds for Windows ARM, macOS Apple and Intel chips, and Linux x64 and ARM are listed). It also gets the Krama model (986 MB), or takes an existing file with `--model-file`. Both are checked against fixed SHA-256 fingerprints, broken downloads resume, and archives cannot unpack outside their folder.
+  - krama then starts `llama-server` on 127.0.0.1 on a free port, waits for `/health`, and stops it on exit. On Windows a job object makes sure it dies even if krama crashes. `--backend auto` (the default) uses the built-in engine once it is set up, else Ollama.
+  - Done checks on this laptop:
+    - With Ollama's address pointed at a dead port, krama answered, ran its self-check and named its maker. A full one-question run took 9.1 seconds, including starting the engine, and no engine process was left behind.
+    - Speed after warm-up, same prompts: built-in about 33 tokens per second, Ollama about 32, so within 10%.
+    - Exam (`selfcheck-run5.json`, `local` backend): Python 8/12, FastAPI 6/12, against 9/12 and 5/12 on Ollama. That is 14 of 24 on both, and 22 of 24 tasks have the same result. The answers are worded differently: Ollama runs the same engine with a plain ChatML template and a 32,768-token window, while krama uses the model's own template and 4,096 tokens.
+  - Tests: 70 pass (9 new: downloads, resume, wrong fingerprint, unsafe archive, setup records, wrong model file, the "run krama setup" message, `auto`, and an engine that will not start).
+  - Not yet verified: a clean Windows PC with no Ollama and no Python tools, and macOS and Linux at all.
+
+- Step 4, Krama tests its own code, 2026-11-18 (`cli/krama_cli/selftest.py`):
+  - Once the code runs, Krama writes 3 to 5 one-line tests. It sees the question and only the names of its functions and endpoints, not their code. The reply is forced into JSON with a schema.
+  - Tests are dropped if they are risky, broken, call a name the code lacks, or call an endpoint the code does not define. Each test runs on a fresh copy of the code in the limited process, and may set things up first with `;`. A failure shows what the code gave.
+  - Two or more failed tests, or a crash, count as "failed" and go back to Krama for a fix. A fix is kept only if it still runs and passes more of the same tests. One failed test is only a warning. The tool lists the tests under the answer.
+  - Tuning study on our 24 tasks (`eval/testcheck_study.py`, `testcheck-study-run4.json` and `-run5.json`):
+    - The first version caught 6 of 9 "ran but wrong" answers, but one catch was luck: tests shared memory.
+    - Fresh copies, a ban on invented rules, the endpoint filter and the two-failure rule came out of reading the failures. Final: 5 caught, 1 false alarm and 2 warnings on 14 correct answers, in both runs.
+    - These rules were tuned on these tasks, so HumanEval below is the fair check.
+  - Full loop on our 24 tasks (built-in engine, `selfcheck-run6.json` and `-run7.json`, identical: this engine with a fixed seed repeats itself exactly):
+    - Still 14 of 24 (Python 8/12, FastAPI 6/12), the same as without tests.
+    - Krama's tests flagged 6 of the 8 wrong answers as failed, but its fixes were never better: krama kept the earlier answer 7 times. The 1.5B model can see that its code is wrong but cannot repair it.
+  - HumanEval through the loop (164 tasks, never used for tuning; `humaneval-loop-*-local.json`):
+
+    | Mode (built-in engine) | Passed |
+    |---|---|
+    | One answer, no checking | 106 (64.6%) |
+    | Run check and its fixes | 106 (no answer crashed) |
+    | Run check plus Krama's own tests and their fixes | 110 (67.1%) |
+
+    - The tests gave 6 newly passing tasks and 2 newly failing ones (a test-driven fix that a wrong test approved). A net 4 on numbers this small is not yet proven.
+    - As a warning, the tests are strong:
+      - 45 of the 54 wrong final answers were flagged (28 "failed", 17 "warning").
+      - When krama said its tests passed, the code was right 93% of the time (95 of 102).
+      - When it said failed, the code was wrong 82% of the time (28 of 34).
+      - 13 of 110 right answers were flagged wrongly (6 failed, 7 warnings).
+    - The built-in engine's plain score (106) is below Krama's 112 on Ollama. The same weights run with a different chat template and context setting, so compare modes on one engine, not across engines.
+  - Tests: 82 pass (12 new for the test-based check and its fix loop).
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle

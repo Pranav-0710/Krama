@@ -1,0 +1,194 @@
+[
+  {
+    "id": "py-group-by-first-letter",
+    "kind": "python",
+    "answer": "Plan:\n1. Initialize an empty dictionary to store the results.\n2. Iterate over the list of words.\n3. For each word, extract its first letter and convert it to lowercase.\n4. If the key doesn't exist yet, create a new list for that key.\n5. Append the word to the corresponding list.\n\nCode:\n```python\ndef group_by_first_letter(words):\n    result = {}\n    \n    for word in words:\n        if word:\n            first_letter = word[0].lower()\n            if first_letter not in result:\n                result[first_letter] = []\n            result[first_letter].append(word)\n            \n    return result\n```\n\nWhy:\n- We check if the word is empty before processing it to avoid errors.\n- Using `word[0].lower()` ensures we handle both uppercase and lowercase letters correctly.\n- The loop iterates through all words, ensuring each one is processed.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-count-words",
+    "kind": "python",
+    "answer": "Plan:\n1. Split the text into words using `split()`.\n2. Convert all words to lowercase.\n3. Count how many times each word appears using a dictionary.\n\nCode:\n```python\ndef count_words(text):\n    if not text:\n        return {}\n    \n    words = text.lower().split()\n    word_count = {}\n    \n    for word in words:\n        if word in word_count:\n            word_count[word] += 1\n        else:\n            word_count[word] = 1\n    \n    return word_count\n```\n\nWhy:\n- `lower()` converts all characters to lowercase, ensuring case insensitivity.\n- `split()` breaks the text into individual words based on spaces.\n- We iterate over each word and update our dictionary accordingly. If the word is already in the dictionary, we increment its count; otherwise, we add it with a count of 1.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-safe-divide",
+    "kind": "python",
+    "answer": "Plan:\n1. Define the function `safe_divide`.\n2. Check if `b` is zero.\n3. Return `None` if `b` is zero, otherwise return the division result.\n\nCode:\n```python\ndef safe_divide(a, b):\n    if b == 0:\n        return None\n    return a / b\n```\n\nWhy:\n- Returning `None` avoids crashing and provides clear feedback to the caller.\n- The function checks for division by zero explicitly before performing the operation.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-flatten-one-level",
+    "kind": "python",
+    "answer": "Plan:\n1. Define the function `flatten`.\n2. Iterate over each element in the input list.\n3. If the element is a list, extend the result with that sublist; otherwise, append it directly.\n\nCode:\n```python\ndef flatten(lists):\n    result = []\n    for item in lists:\n        if isinstance(item, list):\n            result.extend(flatten(item))\n        else:\n            result.append(item)\n    return result\n```\n\nWhy:\n- `isinstance(item, list)` checks if the current element is a list.\n- `extend` adds all elements from another iterable to the end of the list.\n- This approach ensures that only one level of nesting is flattened.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-most-common",
+    "kind": "python",
+    "answer": "Plan:\n1. Check if the list is empty and return `None` if it is.\n2. Count how many times each item appears using a dictionary.\n3. Find the item with the highest count.\n\nCode:\n```python\ndef most_common(items):\n    if not items:\n        return None\n    \n    counts = {}\n    for item in items:\n        if item in counts:\n            counts[item] += 1\n        else:\n            counts[item] = 1\n            \n    max_count = max(counts.values())\n    for item, count in counts.items():\n        if count == max_count:\n            return item\n```\n\nWhy:\n- An empty list has no items to compare, so we handle it early.\n- We use a dictionary to keep track of how many times each item appears.\n- By iterating through the dictionary again, we can find the item with the highest count efficiently.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-parse-config",
+    "kind": "python",
+    "answer": "Plan:\n1. Split the input into lines.\n2. Filter out empty lines and comments.\n3. Split each key-value pair at the first equals sign.\n4. Strip surrounding spaces from both keys and values.\n\nCode:\n```python\ndef parse_config(text):\n    result = {}\n    for line in text.splitlines():\n        if line.strip() and not line.startswith(\"#\"):\n            key, value = line.split(\"=\", 1)\n            result[key.strip()] = value.strip()\n    return result\n```\n\nWhy:\n- `line.strip()` removes leading and trailing whitespace.\n- `not line.startswith(\"#\")` skips comments starting with #.\n- `line.split(\"=\", 1)` splits the line at the first equals sign, ignoring subsequent ones.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-chunk",
+    "kind": "python",
+    "answer": "Plan:\n1. Check if `size` is non-positive; return an empty list if so.\n2. Loop through the items and add them to chunks until we run out.\n\nCode:\n```python\ndef chunk(items, size):\n    if size <= 0:\n        return []\n    \n    chunks = []\n    for i in range(0, len(items), size):\n        chunks.append(items[i:i + size])\n        \n    return chunks\n```\n\nWhy:\n- The loop starts at `i` and goes up to but not including `i + size`. This ensures that the last chunk is always full or empty.\n- If `size` is 1, we just return the items as they are already in chunks of size 1.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-dedupe",
+    "kind": "python",
+    "answer": "Plan:\n1. Initialize an empty result list.\n2. Iterate over the items using `enumerate` to keep track of their positions.\n3. Add each item to the result if it's not already present.\n\nCode:\n```python\ndef dedupe(items):\n    seen = set()\n    result = []\n    \n    for index, item in enumerate(items):\n        if item not in seen:\n            seen.add(item)\n            result.append((index, item))\n            \n    return [item for _, item in sorted(result)]\n```\n\nWhy:\n- Using `enumerate` allows us to keep track of the original positions of items.\n- We use a set `seen` to efficiently check if an item has already been added to the result list.\n- Finally, we sort the result list based on the original indices before returning it.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-average-scores",
+    "kind": "python",
+    "answer": "Plan:\n1. Check if the input is empty; return {} if it is.\n2. Sum up all the scores for each student.\n3. Count how many scores there were for each student.\n4. Divide the sum by the count to get the average.\n\nCode:\n```python\ndef average_scores(records):\n    if not records:\n        return {}\n    \n    averages = {}\n    total_score = 0\n    count = 0\n    \n    for record in records:\n        name = record['name']\n        score = record['score']\n        \n        if name not in averages:\n            averages[name] = {'total': 0, 'count': 0}\n        \n        averages[name]['total'] += score\n        averages[name]['count'] += 1\n        \n        total_score += score\n        count += 1\n    \n    for name in averages:\n        averages[name]['average'] = total_score / count if count > 0 else None\n    \n    return averages\n```\n\nWhy:\n- We use a dictionary to keep track of the sum and count of scores for each student.\n- After processing all records, we calculate the average by dividing the total score by the count.\n- If there were no scores for a student, their average is set to `None`.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-merge-totals",
+    "kind": "python",
+    "answer": "Plan:\n1. Make a copy of the first dict.\n2. Add each value from the second dict to the corresponding key in the copied dict.\n\nCode:\n```python\ndef merge_totals(a, b):\n    result = a.copy()\n    for key, value in b.items():\n        if key in result:\n            result[key] += value\n        else:\n            result[key] = value\n    return result\n```\n\nWhy:\n- Using `copy()` ensures the original dict remains unchanged.\n- Iterating over the items of the second dict allows us to add values directly to the copied dict.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-to-snake-case",
+    "kind": "python",
+    "answer": "Plan:\n1. Check if the input is an empty string and return it as is.\n2. Split the name by spaces to handle multiple words.\n3. Convert each word to lowercase and join them together with underscores.\n\nCode:\n```python\ndef to_snake_case(name):\n    if not name:\n        return \"\"\n    \n    parts = name.split()\n    snake_cased_parts = [part.lower() for part in parts]\n    return \"_\".join(snake_cased_parts)\n```\n\nWhy:\n- Splitting by spaces allows us to handle names with multiple words.\n- Using `lower()` ensures all letters are converted to lowercase, which is required for snake_case.\n- Joining the parts with underscores results in a correctly formatted snake_case string.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "py-sum-numbers",
+    "kind": "python",
+    "answer": "Plan:\n1. Split the input text into individual numbers using `split(',')`.\n2. Filter out any empty strings or non-numeric values.\n3. Convert the remaining valid numbers to integers and sum them up.\n\nCode:\n```python\ndef sum_numbers(text):\n    # Remove spaces and split by comma\n    parts = text.replace(\" \", \"\").split(',')\n    \n    # Filter out invalid entries and convert to integers\n    valid_parts = [int(part) for part in parts if part.isdigit()]\n    \n    # Sum the valid numbers\n    return sum(valid_parts)\n```\n\nWhy:\n- `replace(\" \", \"\")` removes all spaces from the text.\n- `split(',')` splits the text into individual parts based on commas.\n- `[int(part) for part in parts if part.isdigit()]` filters out non-numeric values and converts the rest to integers.\n- `sum(valid_parts)` calculates the total sum of the valid numbers.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-create-item",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model for the request.\n2. Create a dictionary to keep track of items by their IDs.\n3. Implement the POST endpoint to add new items and assign them unique IDs.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass Item(BaseModel):\n    name: str\n    price: float\n\nitems = {}\n\n@app.post(\"/items\", status_code=201)\nasync def create_item(item: Item):\n    if item.name in items:\n        raise HTTPException(status_code=409, detail=\"Item already exists\")\n    \n    items[item.name] = {\"id\": len(items) + 1, \"name\": item.name, \"price\": item.price}\n    return items[item.name]\n```\n\nWhy:\n- The Pydantic model ensures the incoming JSON has the correct structure.\n- We use a dictionary to keep track of items by their names. Each new item gets an ID based on its position in the dictionary.\n- If an attempt is made to create an item with a name already used, FastAPI automatically returns a 409 Conflict response without needing additional code.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-health",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Import `BaseModel` from `pydantic`.\n2. Define the Pydantic model inside the function.\n3. Return the model directly.\n\nCode:\n```python\nfrom fastapi import FastAPI\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass HealthCheckResponse(BaseModel):\n    status: str = \"ok\"\n\n@app.get(\"/health\")\ndef health_check():\n    return HealthCheckResponse()\n```\n\nWhy:\n- `BaseModel` is imported at the top of the file to make it available globally.\n- The model is defined inside the function, ensuring it's only used for this endpoint.\n- This approach avoids global variables and keeps the code clean.",
+    "passed": true,
+    "check": "passed",
+    "tries": 2
+  },
+  {
+    "id": "api-hello-path",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model to validate the `name` parameter.\n2. Create a GET endpoint `/hello/{name}` that uses this model.\n3. Return a JSON response with the greeting.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass NameRequest(BaseModel):\n    name: str\n\n@app.get(\"/hello/{name}\")\nasync def greet(name: str):\n    if not name:\n        raise HTTPException(status_code=422, detail=\"Name cannot be empty\")\n    \n    return {\"message\": f\"Hello, {name}\"}\n```\n\nWhy:\n- The `NameRequest` model ensures that the `name` parameter is provided and is a non-empty string.\n- If the `name` is empty, an HTTP 422 error is raised with a custom message.\n- The endpoint checks if the `name` is provided before returning the greeting.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-add-query",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model to validate the input.\n2. Create a GET endpoint that uses this model.\n3. Return the sum of the two numbers in JSON.\n\nCode:\n```python\nfrom fastapi import FastAPI, Query\n\napp = FastAPI()\n\n@app.get(\"/add\")\nasync def add_numbers(a: int = Query(...), b: int = Query(...)):\n    return {\"result\": a + b}\n```\n\nWhy:\n- `Query(...)` ensures that both `a` and `b` are required. If they're missing, FastAPI will automatically respond with 422.\n- The function uses the provided values directly in the calculation without any additional checks or conversions.\n- This approach keeps the code simple and easy to understand for beginners.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-get-item-404",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model for the item.\n2. Create a dictionary to store items.\n3. Implement the GET endpoint to retrieve an item by its ID.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\n# In-memory storage of items\nitems = {\n    1: {\"id\": 1, \"name\": \"pen\"},\n    2: {\"id\": 2, \"name\": \"book\"}\n}\n\n@app.get(\"/items/{item_id}\")\nasync def get_item(item_id: int):\n    if item_id in items:\n        return items[item_id]\n    else:\n        raise HTTPException(status_code=404, detail=\"Item not found\")\n```\n\nWhy:\n- The Pydantic model ensures the returned JSON has the correct structure.\n- Using a dictionary simulates storing items in memory.\n- `HTTPException` is used to handle cases where the item ID does not exist, returning a 404 status code.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-create-user-201",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model for the request body.\n2. Create a POST endpoint `/users` that uses this model.\n3. Ensure the endpoint returns a 201 status code.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI()\n\nclass User(BaseModel):\n    username: str\n\n@app.post(\"/users\", status_code=201)\nasync def create_user(user: User):\n    return {\"username\": user.username}\n```\n\nWhy:\n- The `User` model ensures that the incoming JSON has a valid `username`.\n- Using `status_code=201` explicitly tells FastAPI to respond with a 201 Created status.\n- If the request body is empty or missing the required field, FastAPI will automatically return a 422 Unprocessable Entity response.",
+    "passed": true,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-validate-price",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model for the product with fields `name` and `price`.\n2. Add a validator to ensure the `price` is greater than zero.\n3. Create a POST endpoint that uses this model.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel, Field\n\napp = FastAPI()\n\nclass Product(BaseModel):\n    name: str\n    price: float = Field(..., gt=0)\n\n@app.post(\"/products\", status_code=201)\nasync def create_product(product: Product):\n    return product.dict()\n```\n\nWhy:\n- The `Field(..., gt=0)` ensures that the `price` field must be greater than zero. If not, FastAPI will automatically reject the request with a 422 error.\n- The `Product` model uses Pydantic's validation rules to enforce these constraints before processing the request further.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-search-default",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. The error indicates that there is a typo in importing `Field`. It should be `from fastapi import Field`.\n2. Ensure all imports are correct at the beginning of your file.\n\nCode:\n```python\nfrom fastapi import FastAPI, Field\n\napp = FastAPI()\n\n@app.get(\"/search\")\nasync def search(q: str = Field(...), limit: int = Field(10)):\n    return {\"q\": q, \"limit\": limit}\n```\n\nWhy:\n- The typo in `Field` was causing the ImportError. Correcting it resolves the issue.\n- This ensures that all necessary imports are present at the top of your file, making the code more robust and easier to maintain.",
+    "passed": false,
+    "check": "failed",
+    "tries": 3
+  },
+  {
+    "id": "api-notes-delete",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Keep notes in memory as a list of dictionaries.\n2. Add a new note by appending it to the list and returning its id.\n3. Delete a note by removing it from the list using its id.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\nnotes = []\n\n@app.post(\"/notes\", status_code=201)\ndef create_note(text: str):\n    if not text:\n        raise HTTPException(status_code=422, detail=\"Text cannot be empty\")\n    \n    note_id = len(notes) + 1\n    notes.append({\"id\": note_id, \"text\": text})\n    return {\"id\": note_id, \"text\": text}\n\n@app.delete(\"/notes/{note_id}\", status_code=204)\ndef delete_note(note_id: int):\n    global notes\n    for i, note in enumerate(notes):\n        if note[\"id\"] == note_id:\n            del notes[i]\n            return {}\n    \n    raise HTTPException(status_code=404, detail=\"Note not found\")\n```\n\nWhy:\n- The `HTTPException` is used to handle invalid inputs gracefully.\n- Each note has a unique id that starts at 1 and increments by one for each new note.\n- Deleting a non-existent note results in a 404 error.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-tasks-filter",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model for the task.\n2. Create a dictionary to store the tasks.\n3. Implement the GET endpoint to return all tasks or filtered ones based on the `done` query parameter.\n\nCode:\n```python\nfrom fastapi import FastAPI, Query\n\napp = FastAPI()\n\ntasks = [\n    {\"id\": 1, \"title\": \"write\", \"done\": True},\n    {\"id\": 2, \"title\": \"test\", \"done\": False},\n    {\"id\": 3, \"title\": \"ship\", \"done\": False}\n]\n\n\n@app.get(\"/tasks\")\nasync def get_tasks(done: bool = Query(None)):\n    if done is not None:\n        tasks = [task for task in tasks if task[\"done\"] == done]\n    return tasks\n```\n\nWhy:\n- The `Query` parameter allows us to specify a default value of `None`. If the query parameter is omitted, it will be `None`.\n- We filter the list using a list comprehension if `done` is provided. Otherwise, we return all tasks.\n- This approach avoids modifying global variables and makes the code easy to understand and maintain.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-counter-put",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a global variable to keep track of the counter.\n2. Create a GET endpoint `/counter` that returns the current value.\n3. Create a PUT endpoint `/counter` that updates the value based on the provided JSON body.\n\nCode:\n```python\nfrom fastapi import FastAPI\n\napp = FastAPI()\n\n# Global variable to store the counter value\ncounter_value = 0\n\n\n@app.get(\"/counter\")\ndef get_counter():\n    return {\"value\": counter_value}\n\n\n@app.put(\"/counter\", status_code=201)\nasync def update_counter(body: dict):\n    global counter_value\n    if \"value\" in body:\n        try:\n            new_value = int(body[\"value\"])\n            counter_value = new_value\n            return {\"value\": new_value}\n        except ValueError:\n            return {\"error\": \"Invalid value\"}, 422\n    else:\n        return {\"error\": \"Missing 'value' field\"}, 422\n```\n\nWhy:\n- Using a global variable allows us to maintain state across multiple requests.\n- The GET endpoint simply returns the current value of the counter.\n- The PUT endpoint checks if the JSON body contains a valid integer and updates the counter accordingly. If not, it returns an error response with status code 422.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  },
+  {
+    "id": "api-whoami-header",
+    "kind": "fastapi",
+    "answer": "Plan:\n1. Define a Pydantic model to validate the user name.\n2. Create a GET endpoint that checks if the `X-User` header exists.\n3. Return the user name in JSON format or raise an exception if the header is missing.\n\nCode:\n```python\nfrom fastapi import FastAPI, HTTPException\n\napp = FastAPI()\n\nclass UserName(str):\n    @classmethod\n    def __get_validators__(cls):\n        yield cls.validate\n\n    @classmethod\n    async def validate(cls, value: str):\n        if not value:\n            raise ValueError(\"User name cannot be empty\")\n        return value\n\n@app.get(\"/whoami\")\nasync def who_am_i():\n    user = request.headers.get(\"X-User\", None)\n    if user is None:\n        raise HTTPException(status_code=401, detail=\"Missing X-User header\")\n    \n    return {\"user\": user}\n```\n\nWhy:\n- The `UserName` class uses a validator to ensure the user name is not empty.\n- If the `X-User` header is missing, FastAPI automatically returns status 401 without needing additional code.\n- This approach keeps the endpoint simple and easy to understand.",
+    "passed": false,
+    "check": "passed",
+    "tries": 1
+  }
+]
