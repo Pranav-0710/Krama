@@ -87,6 +87,19 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
   - The Pydantic habit halved: 5 of 12 FastAPI answers used a model (round 1: 10). It is not gone: `api-health` still planned a model and crashed on an unused, unimported `BaseModel`. One answer overcorrected the other way: a POST read its JSON body as a plain `text: str` parameter.
   - Check answers: "who made you" now names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct. A FastAPI GET answer used no model, but it skipped Plan, Code and Why, left out `app = FastAPI()`, and mixed up `Planets` and `planets`.
 
+- Four-way comparison, 2026-11-18 (all four are 986 MB Q4_K_M files in Ollama, temperature 0):
+
+  | System | Our tasks: Python | Our tasks: FastAPI | Quick answers, average length | HumanEval (164 tasks) |
+  |---|---|---|---|---|
+  | Base model | 9/12 | 6/12 | 273 tokens | 120 (73.2%) |
+  | Base model + written instruction | 9/12 | 5/12 | 218 tokens | 98 (59.8%) |
+  | Krama, round 1 | 9/12 | 5/12 | 106 tokens | 106 (64.6%) |
+  | Krama, round 2 | 10/12 | 6/12 | 121 tokens | 112 (68.3%) |
+
+  - Asking the base model to plan and explain (the written instruction) cost it 22 HumanEval tasks. Fine-tuning won most of that back: round 2 beats the written instruction everywhere, so the fine-tune is worth having.
+  - Round 2 is 8 HumanEval tasks below the untouched base model, which gives no plan or explanation. The two disagree on 38 tasks (base alone passes 23, round 2 alone passes 15), so this gap may partly be chance. Almost none of the failures come from a renamed function; they are real logic mistakes.
+  - Honest summary: Krama gives the same correctness as its base on our tasks, with a plan and an explanation at about half the length of the prompted base. On the standard benchmark it is a little weaker than the plain base.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
