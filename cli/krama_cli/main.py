@@ -14,8 +14,9 @@ import shutil
 import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
 
-from krama_cli.check import check, extract_code
+from krama_cli.check import CheckResult, check, extract_code
 
 MODEL = "hf.co/CoBeDigger/krama-coder-1.5b"
 TRIES = 3   # the first answer plus up to two fixes
@@ -60,11 +61,60 @@ def ask(model, messages):
         raise OllamaError("Could not reach Ollama. Start the Ollama app, then try again.") from error
 
 
-def answer_with_check(question, model, python, tries=TRIES, say=print):
-    """Ask, check the code, and ask for fixes. Return (answer, last check result)."""
+def settings_file():
+    if sys.platform == "win32":
+        base = Path(os.environ.get("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
+    else:
+        base = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+    return base / "krama" / "settings.json"
+
+
+def load_settings():
+    try:
+        return json.loads(settings_file().read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def save_settings(settings):
+    path = settings_file()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(settings, indent=2), encoding="utf-8")
+
+
+def make_approver(yes_flag, say):
+    """Return a function that asks the user before Krama's code is run."""
+    settings = load_settings()
+
+    def approve():
+        if yes_flag or settings.get("run_checks_without_asking"):
+            return True
+        if not sys.stdin.isatty():
+            say("  self-check needs your OK; add --yes to allow it without asking")
+            return False
+        reply = input("  Krama wrote code. Run it in a limited process on this computer to "
+                      "check it? [y]es / [n]o / [a]lways: ").strip().lower()
+        if reply in ("a", "always"):
+            settings["run_checks_without_asking"] = True
+            save_settings(settings)
+            say(f"  saved: krama will not ask again (undo by deleting {settings_file()})")
+            return True
+        return reply in ("y", "yes")
+    return approve
+
+
+def answer_with_check(question, model, python, approve, tries=TRIES, say=print):
+    """Ask, check the code, and ask for fixes. Return (answer, last check result).
+
+    `approve()` is asked once, before any code runs; one yes covers the fixes
+    for this question too.
+    """
     messages = [{"role": "user", "content": question}]
     answer = ask(model, messages)
-    result = check(extract_code(answer), python)
+    code = extract_code(answer)
+    if code.strip() and not approve():
+        return answer, CheckResult("skipped", "not run, because it needs your OK (answer y, or add --yes)")
+    result = check(code, python)
 
     for attempt in range(2, tries + 1):
         if result.status != "failed":
@@ -97,18 +147,20 @@ def main():
     parser.add_argument("--python", default=shutil.which("python") or sys.executable,
                         help="the Python program that runs the self-check (default: the one on your PATH)")
     parser.add_argument("--no-check", action="store_true", help="show the answer without running its code")
+    parser.add_argument("--yes", action="store_true", help="run the self-check without asking first")
     args = parser.parse_args()
 
     # Windows terminals may not print every character; never crash on one.
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     say = lambda text: print(text, file=sys.stderr, flush=True)  # noqa: E731
+    approve = make_approver(args.yes, say)
 
     def one(question):
         say("  thinking...")
         if args.no_check:
             print(ask(args.model, [{"role": "user", "content": question}]).strip())
             return
-        show(*answer_with_check(question, args.model, args.python, say=say))
+        show(*answer_with_check(question, args.model, args.python, approve, say=say))
 
     try:
         if args.question:

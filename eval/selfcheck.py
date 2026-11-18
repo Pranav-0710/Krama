@@ -27,7 +27,8 @@ def main():
             continue
         notes = []
         # The check runs with this same Python, which has fastapi installed.
-        answer, result = answer_with_check(task["prompt"], MODEL, sys.executable, say=notes.append)
+        answer, result = answer_with_check(task["prompt"], MODEL, sys.executable,
+                                           approve=lambda: True, say=notes.append)
         passed = run_tests(task, extract_code(answer, task["kind"]))
         tries = 1 + sum("asking Krama to fix" in note for note in notes)
         records.append({"id": task["id"], "kind": task["kind"], "answer": answer,

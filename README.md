@@ -135,6 +135,16 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - Measured with `eval/selfcheck.py` on the 24 coding tasks, two runs: Python 10/12 and 9/12, FastAPI 7/12 both times, against 9/12 and 6/12 without the check. The one gain is `api-health`: both runs caught `NameError: BaseModel` and Krama fixed it in one try.
   - The limit is clear: 23 of 24 answers passed the check on the first try, but 7 of those still failed the exam tests. "Runs without an error" catches crashes, not wrong answers. The tool says so after every answer. Catching wrong answers needs tests, which is the next step for the self-check.
 
+- Long-term goal (agreed 2026-11-18): a production-ready local coding agent that runs on a CPU in cmd or PowerShell, with or without Ollama. Order: 1) make the self-check safe, 2) one backend interface, 3) a built-in llama.cpp engine (`krama setup`), 4) a test-based self-check, 5) a guided agent tried with Qwen2.5-Coder-7B first, 6) agent training data and a fine-tune. A design review and a production-readiness review (both by helper agents) shaped this order. The readiness review's verdict was "needs work".
+
+- Step 1, safety, 2026-11-18. The review found the old look-before-running list easy to dodge: 8 risky patterns I tried, such as `import os as o; o.system(...)`, all got through. Now:
+  - krama asks before running code (yes, no, or always), and runs nothing without a terminal to ask in unless given `--yes`.
+  - The look covers those tricks (aliases, `from os import`, `pathlib` deletes and writes, `importlib`, `getattr` with strings, `__subclasses__`).
+  - The code runs with no secret environment variables, 512 MB of memory and 10 seconds at most. On Windows a job object also stops it from starting programs (Windows refuses with error 1816) and kills anything left over.
+  - A missing module is only called "install X" if X is a well-known library; otherwise it is treated as a possibly made-up name and sent back to Krama.
+  - Tests: 48 pass, including 24 risky snippets that must be refused, 9 everyday snippets that must still run (`list.remove`, `str.replace`, reading files), and each limit shown working on its own. The macOS and Linux limits are written but untested.
+  - Re-measured once (`selfcheck-run3.json`): Python 9/12, FastAPI 5/12. None of the 24 answers was wrongly blocked. Across three runs FastAPI was 7, 7 and 5, and every task that changed did so because Krama wrote a different answer, not because of the check. So the size of the self-check's benefit is not settled yet.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle

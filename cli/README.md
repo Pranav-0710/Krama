@@ -37,6 +37,11 @@ Options: `--no-check` shows the answer without running it, `--model NAME` uses a
 
 ## Safety
 
-The self-check runs model-written code on your computer, in a new empty folder, with a 10-second limit.
-Before running, it refuses code that deletes or writes files, starts other programs, or uses the network.
-This is a simple guard, not a full sandbox. Read code before running it yourself.
+The self-check runs model-written code on your computer, so it is careful in layers:
+
+1. **It asks you first.** Answer `y` (yes), `n` (no) or `a` (always; saved in `%LOCALAPPDATA%\krama\settings.json` on Windows, `~/.config/krama/settings.json` elsewhere). `--yes` allows it for one run. With no terminal to ask in, it does not run the code.
+2. **It looks before running.** Code that deletes or writes files, starts programs, uses the network, or tries tricks to get around this look is not run.
+3. **It runs the code in a limited process:** a new empty folder, none of your secret settings (environment variables such as tokens), 10 seconds and 512 MB at most. On Windows the code also cannot start other programs, and it is killed together with anything it started.
+4. **It only suggests installing well-known libraries.** If the code imports a module that is not on its list, krama treats the name as a possible mistake. It does not tell you to install it, because a made-up name could match a fake package.
+
+This is a guard, not a full sandbox: the code could still read your files or reach the network in ways step 2 does not spot. Read code before you run it yourself. The Windows limits are tested; the macOS and Linux limits are written but not yet tested on those systems.
