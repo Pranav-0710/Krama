@@ -162,6 +162,34 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - Tests: 70 pass (9 new: downloads, resume, wrong fingerprint, unsafe archive, setup records, wrong model file, the "run krama setup" message, `auto`, and an engine that will not start).
   - Not yet verified: a clean Windows PC with no Ollama and no Python tools, and macOS and Linux at all.
 
+- Step 4, Krama tests its own code, 2026-11-18 (`cli/krama_cli/selftest.py`):
+  - Once the code runs, Krama writes 3 to 5 one-line tests. It sees the question and only the names of its functions and endpoints, not their code. The reply is forced into JSON with a schema.
+  - Tests are dropped if they are risky, broken, call a name the code lacks, or call an endpoint the code does not define. Each test runs on a fresh copy of the code in the limited process, and may set things up first with `;`. A failure shows what the code gave.
+  - Two or more failed tests, or a crash, count as "failed" and go back to Krama for a fix. A fix is kept only if it still runs and passes more of the same tests. One failed test is only a warning. The tool lists the tests under the answer.
+  - Tuning study on our 24 tasks (`eval/testcheck_study.py`, `testcheck-study-run4.json` and `-run5.json`):
+    - The first version caught 6 of 9 "ran but wrong" answers, but one catch was luck: tests shared memory.
+    - Fresh copies, a ban on invented rules, the endpoint filter and the two-failure rule came out of reading the failures. Final: 5 caught, 1 false alarm and 2 warnings on 14 correct answers, in both runs.
+    - These rules were tuned on these tasks, so HumanEval below is the fair check.
+  - Full loop on our 24 tasks (built-in engine, `selfcheck-run6.json` and `-run7.json`, identical: this engine with a fixed seed repeats itself exactly):
+    - Still 14 of 24 (Python 8/12, FastAPI 6/12), the same as without tests.
+    - Krama's tests flagged 6 of the 8 wrong answers as failed, but its fixes were never better: krama kept the earlier answer 7 times. The 1.5B model can see that its code is wrong but cannot repair it.
+  - HumanEval through the loop (164 tasks, never used for tuning; `humaneval-loop-*-local.json`):
+
+    | Mode (built-in engine) | Passed |
+    |---|---|
+    | One answer, no checking | 106 (64.6%) |
+    | Run check and its fixes | 106 (no answer crashed) |
+    | Run check plus Krama's own tests and their fixes | 110 (67.1%) |
+
+    - The tests gave 6 newly passing tasks and 2 newly failing ones (a test-driven fix that a wrong test approved). A net 4 on numbers this small is not yet proven.
+    - As a warning, the tests are strong:
+      - 45 of the 54 wrong final answers were flagged (28 "failed", 17 "warning").
+      - When krama said its tests passed, the code was right 93% of the time (95 of 102).
+      - When it said failed, the code was wrong 82% of the time (28 of 34).
+      - 13 of 110 right answers were flagged wrongly (6 failed, 7 warnings).
+    - The built-in engine's plain score (106) is below Krama's 112 on Ollama. The same weights run with a different chat template and context setting, so compare modes on one engine, not across engines.
+  - Tests: 82 pass (12 new for the test-based check and its fix loop).
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
