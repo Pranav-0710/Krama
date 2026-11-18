@@ -13,6 +13,7 @@ Writes data/train.jsonl.
 
 import json
 import random
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -29,6 +30,22 @@ LEAKS_FILE = DATA / "leaks.txt"
 OUT_FILE = DATA / "train.jsonl"
 
 QUICK_SHARE = 0.20  # the design: about 20% plain short answers
+
+
+def needless_model(example):
+    """True for a teacher FastAPI answer that teaches the "always use a model" habit.
+
+    Round 1's Krama learned to define a Pydantic model for every endpoint,
+    because most teacher answers did. A model is only needed for a request
+    body, which comes with POST, PUT or PATCH. So we leave out answers that
+    define a model but have no such endpoint, and answers using
+    response_model=dict, which checks nothing.
+    """
+    if example["kind"] != "fastapi":
+        return False
+    answer = example["answer"]
+    has_body_endpoint = re.search(r"@app\.(post|put|patch)\(", answer)
+    return ("BaseModel" in answer and not has_body_endpoint) or "response_model=dict" in answer
 
 
 def check_handwritten():
@@ -58,6 +75,11 @@ def main():
     teacher = [json.loads(line) for line in IN_FILE.open(encoding="utf-8")]
     teacher = [example for example in teacher if example["id"] not in leaks]
     print(f"left out because they copy the exam: {len(leaks)}")
+
+    # Round 2: leave out teacher FastAPI answers that use a model needlessly.
+    needless = [example for example in teacher if needless_model(example)]
+    teacher = [example for example in teacher if not needless_model(example)]
+    print(f"left out because they use a model with no body: {len(needless)}")
     teacher_quick = [example for example in teacher if example["kind"] == "quick"]
     hand_quick = [example for example in HANDWRITTEN if example["kind"] == "quick"]
 

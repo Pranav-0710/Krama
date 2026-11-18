@@ -25,7 +25,10 @@ from pathlib import Path
 
 # ---------------- settings (from README.md) ----------------
 BASE = "Qwen/Qwen2.5-Coder-1.5B-Instruct"   # Apache 2.0 licence
-SYSTEM = "You are Krama, a Python and FastAPI coding assistant for beginners."
+# Round 2 names the maker here: round 1's 15 identity examples alone did not
+# teach Krama who made it. The Modelfile's SYSTEM line must match this one.
+SYSTEM = ("You are Krama, a Python and FastAPI coding assistant for beginners, "
+          "fine-tuned by CoBeDigger from Qwen2.5-Coder-1.5B-Instruct.")
 MAX_LENGTH = 1024      # longer examples are left out, never cut short
 EPOCHS = 2             # each example is seen twice
 LEARNING_RATE = 2e-4
@@ -37,6 +40,8 @@ LORA_ALPHA = 32
 LORA_DROPOUT = 0.05
 HELD_OUT = 60          # examples kept aside to check the model is not just memorising
 WORK = Path("/kaggle/working")
+ROUND = 2              # each round saves to its own folders, so it never resumes an older round
+SUFFIX = "" if ROUND == 1 else f"-r{ROUND}"   # round 1 used the plain names
 # ------------------------------------------------------------
 
 # Qwen's own default instruction. The finished model gets Krama's instead.
@@ -120,7 +125,7 @@ def main():
 
     # ---------- training ----------
     steps = math.ceil(len(train) / (BATCH * ACCUMULATE)) * EPOCHS
-    checkpoints = WORK / "checkpoints"
+    checkpoints = WORK / f"checkpoints{SUFFIX}"
     trainer = Trainer(
         model=model,
         args=TrainingArguments(
@@ -153,12 +158,12 @@ def main():
     trainer.train(resume_from_checkpoint=resume)
 
     # ---------- save: the small adapter, then the merged model ----------
-    model.save_pretrained(str(WORK / "krama-lora"))
+    model.save_pretrained(str(WORK / f"krama-lora{SUFFIX}"))
     model = model.merge_and_unload()
     tokenizer.chat_template = tokenizer.chat_template.replace(QWEN_DEFAULT, SYSTEM)
     if SYSTEM not in tokenizer.chat_template:
         print("WARNING: could not set Krama's default instruction in the chat template.")
-    out_dir = WORK / "krama-coder-1.5b"
+    out_dir = WORK / f"krama-coder-1.5b{SUFFIX}"
     model.save_pretrained(str(out_dir), safe_serialization=True)
     tokenizer.save_pretrained(str(out_dir))
     print(f"saved the finished model to {out_dir}")
@@ -166,7 +171,9 @@ def main():
     # ---------- two new questions, to see Krama work ----------
     model.eval()
     for question in ["write a function that returns the initials of a full name, like 'Asha Rao' -> 'AR'",
-                     "what does the len function do"]:
+                     "what does the len function do",
+                     "who made you",
+                     "fastapi endpoint GET /planets that returns a list of planet names"]:
         text = tokenizer.apply_chat_template([{"role": "user", "content": question}],
                                              tokenize=False, add_generation_prompt=True)
         inputs = tokenizer(text, return_tensors="pt").to(model.device)

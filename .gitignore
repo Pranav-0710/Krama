@@ -13,3 +13,6 @@ data/leaks.txt
 
 # The 4-bit Krama weights file (about 1 GB); it goes to Hugging Face, not git.
 models/
+
+# HumanEval tasks; eval/benchmark.py downloads them when needed.
+eval/benchmark/

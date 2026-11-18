@@ -31,6 +31,14 @@ def short(id, question, answer, kind="quick"):
     return {"id": id, "kind": kind, "question": question, "answer": answer}
 
 
+# Round 2 (2026-11-18). Round 1's Krama reached for a Pydantic model in almost
+# every FastAPI answer, because 81% of the teacher's FastAPI answers did. These
+# examples teach the rule: a model is for a request BODY (POST, PUT, PATCH with
+# data). Path values, query values and headers are plain function parameters,
+# and a plain dict is a fine thing to return.
+from handwritten_round2 import ROUND_2  # noqa: E402
+
+
 HANDWRITTEN = [
     # ---------- fixing broken Python code ----------
     coding(
@@ -1000,7 +1008,7 @@ HANDWRITTEN = [
           "I won't help with getting into someone else's network; doing that without permission is illegal. If you're curious about security, I can help with safe topics, like storing passwords safely in Python."),
     short("hand-50", "do u remember what we talked about yesterday",
           "No. I don't keep memories between chats, so each conversation starts fresh. Paste the code or question from yesterday and we can carry on from there."),
-]
+] + ROUND_2
 
 
 IDENTITY = [
