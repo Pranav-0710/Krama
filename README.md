@@ -52,6 +52,12 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
   - This is a little under the planned 2,000. We accepted it because most removed rows were repeats of a few exam tasks.
   - Only exact exam tasks and questions were removed, not their topics. Our own 30 tasks may therefore flatter the model a little, and the standard benchmark is the fairer measure.
 
+- Training, 2026-11-18 (`kaggle/train.py`, Kaggle T4, transformers 5.20.2):
+  - 1,855 examples were trained on and 60 held out. 18.5M LoRA parameters were trained (1.18% of 1.56B).
+  - 232 steps took 14 min 42 s.
+  - Held-out loss went 0.522 (step 50) → 0.490 → 0.485 → 0.470 → 0.469 (step 232). It kept falling to the end, with no sign of memorising.
+  - The merged model is saved in the Kaggle notebook's /kaggle/working/krama-coder-1.5b.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
