@@ -22,6 +22,18 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
 | Release | Merged safetensors + GGUF files, dataset as a separate repo, free CPU demo Space, Apache 2.0 |
 | Use | Terminal chat and VS Code chat sidebar through Ollama. No autocomplete, no autonomous agent in version 1 |
 
+## Direction (agreed 2026-11-18, after the four-way test)
+
+Krama is an **offline coding tutor for beginners that checks its own code**. It is not a general coding model, and the model card says so.
+
+- What makes it unique: it plans, codes, then explains why, in about 120 tokens. It runs on any laptop CPU with no internet. Its tool runs the code it wrote against tests on the user's machine and only shows code that ran. That is the same execution filter that built the training data.
+- Interfaces: Ollama provides the terminal chat, the local API and editor use (for example VS Code through Continue) from day one. The project's own product is a `krama` CLI with the self-check built in.
+- Road:
+  1. Blind-grade the explanations, then publish Krama v0.1 as a preview, with the numbers and the base-model credit.
+  2. Build the `krama` CLI with self-checking.
+  3. Have real beginners use it, and train v0.2 on where it fails.
+  4. Later: a 3B or 7B version, and VS Code integration.
+
 ## Build order
 
 1. Run the base model on the laptop and measure its speed
@@ -72,7 +84,58 @@ Planned Hugging Face address: `CoBeDigger/krama-coder-1.5b`
   - Asked "who made you", Krama gave a made-up answer. The 15 identity examples were not enough.
   - Blind grading of plan, explanation, clarity and length has not been done yet.
 
+- Round 2 training data, 2026-11-18:
+  - 81% of the FastAPI training answers used a Pydantic model, and 277 used one even though no data was sent in. `data/mix.py` now leaves out the 310 teacher answers that use a model with no POST, PUT or PATCH endpoint, or use `response_model=dict`.
+  - 42 new hand-written examples (`data/handwritten_round2.py`): 22 endpoints that need no model, 12 that use a body model correctly, 6 fixes of model mistakes, and 2 short answers on when a model is needed. All pass their tests, and none copies the exam.
+  - The system line now names the maker ("fine-tuned by CoBeDigger from Qwen2.5-Coder-1.5B-Instruct").
+  - Final set: 1,578 examples. That is 776 Python, 471 FastAPI, 316 short answers (20%) and 15 identity examples. It is further under the planned 2,000; we chose this over regenerating with the teacher, which needed more GPU time than was left this week.
+  - Standard benchmark: HumanEval (164 tasks, MIT licence), `eval/benchmark.py`. We never use it to choose fixes, so it is the fair check against teaching to the test.
+
+- Round 2 training, 2026-11-18 (same settings; `ROUND = 2` saves to `-r2` folders, so it cannot resume round 1):
+  - 1,518 examples were trained on and 60 held out. 190 steps took 11 min 24 s.
+  - Held-out loss went 0.522 → 0.484 → 0.476 → 0.474 (round 1 ended at 0.469 on a different held-out set, so the two are not directly comparable).
+  - Converted the same way as round 1 (986 MB Q4_K_M) and loaded in Ollama as `krama-r2`. Round 1 stays as `krama`.
+  - Exam, our 30 tasks: Python 10/12, FastAPI 6/12, quick answers 121 tokens on average. All 24 coding answers used Plan, Code, Why.
+  - The Pydantic habit halved: 5 of 12 FastAPI answers used a model (round 1: 10). It is not gone: `api-health` still planned a model and crashed on an unused, unimported `BaseModel`. One answer overcorrected the other way: a POST read its JSON body as a plain `text: str` parameter.
+  - Check answers: "who made you" now names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct. A FastAPI GET answer used no model, but it skipped Plan, Code and Why, left out `app = FastAPI()`, and mixed up `Planets` and `planets`.
+
+- Four-way comparison, 2026-11-18 (all four are 986 MB Q4_K_M files in Ollama, temperature 0):
+
+  | System | Our tasks: Python | Our tasks: FastAPI | Quick answers, average length | HumanEval (164 tasks) |
+  |---|---|---|---|---|
+  | Base model | 9/12 | 6/12 | 273 tokens | 120 (73.2%) |
+  | Base model + written instruction | 9/12 | 5/12 | 218 tokens | 98 (59.8%) |
+  | Krama, round 1 | 9/12 | 5/12 | 106 tokens | 106 (64.6%) |
+  | Krama, round 2 | 10/12 | 6/12 | 121 tokens | 112 (68.3%) |
+
+  - Asking the base model to plan and explain (the written instruction) cost it 22 HumanEval tasks. Fine-tuning won most of that back: round 2 beats the written instruction everywhere, so the fine-tune is worth having.
+  - Round 2 is 8 HumanEval tasks below the untouched base model, which gives no plan or explanation. The two disagree on 38 tasks (base alone passes 23, round 2 alone passes 15), so this gap may partly be chance. Almost none of the failures come from a renamed function; they are real logic mistakes.
+  - Honest summary: Krama gives the same correctness as its base on our tasks, with a plan and an explanation at about half the length of the prompted base. On the standard benchmark it is a little weaker than the plain base.
+
+- Blind grading, 2026-11-18 (`eval/grade.py`, Llama 3.1 8B in Ollama, temperature 0; average out of 2 per rule):
+
+  | System | Plan | Why | Clarity | Length | Fixed rules total (of 8) | Why is true (extra) | Quick: correct | Quick: length | Quick total (of 4) |
+  |---|---|---|---|---|---|---|---|---|---|
+  | Base model | 1.08 | 0.67 | 1.04 | 1.58 | 4.38 | 0.92 | 1.17 | 0.17 | 1.33 |
+  | Base model + written instruction | 1.83 | 1.17 | 1.17 | 1.79 | 5.96 | 0.92 | 1.00 | 0.33 | 1.33 |
+  | Krama, round 1 | 1.79 | 1.12 | 1.17 | 1.79 | 5.88 | 1.08 | 1.17 | 0.67 | 1.83 |
+  | Krama, round 2 | 1.92 | 1.17 | 1.21 | 1.96 | 6.25 | 0.96 | 1.50 | 0.50 | 2.00 |
+
+  - Win rule (`eval/RUBRIC.md`): round 2 is not less correct than the base on our tasks (9/12 and 6/12 for both on repeated runs; see the rerun note below), and it scores higher than the instructed base on the graded rules. Task by task against the instructed base, it wins 7, ties 15 and loses 2 coding tasks, and wins 3 and ties 3 quick questions. The coding margin is small (6.25 against 5.96 out of 8); the quick-answer margin is clear.
+  - On HumanEval it is still 8 tasks below the base, so the win holds on our tasks only.
+  - Change from the plan: the rubric said the grader sees all answers at once. Llama 3.1 8B mixed answers up that way (it gave one answer credit for another's plan), so each answer is graded alone, still unnamed and shuffled.
+  - The grader is lenient. Checked against a simple test (numbered steps before the first code block), its plan score was right for all 72 answers from the three instructed or fine-tuned systems, but 23 of the plain base's 24 answers had no plan and it still gave 16 of those a plan score (it counted a numbered list after the code). This flatters the base, not Krama. "Why is true" was added after training and is not part of the win rule; it shows no clear difference.
+
+- Published v0.1 preview, 2026-11-18: `CoBeDigger/krama-coder-1.5b` on Hugging Face (public). It holds the round 2 Q4_K_M file as `krama-coder-1.5b-q4_k_m.gguf`, plus the model card and Ollama files from `release/`.
+  - `ollama pull hf.co/CoBeDigger/krama-coder-1.5b` works. The pulled model has the same weights file (sha256 f3b45d79…), template and system line as the local `krama-r2`. Asked "who made you?", it names CoBeDigger and Qwen2.5-Coder-1.5B-Instruct.
+  - Reruns showed that answers on this CPU are not exactly repeatable at temperature 0: the local `krama-r2` gave different answers to most tasks than in its first run. On the 24 coding tasks, two runs of the published copy and two of the local `krama-r2` all passed Python 9/12 and FastAPI 6/12. Two reruns of the base gave 9/12 and 6/12 again. So round 2's first-run 10/12 was luck, and correctness is a tie with the base. The model card reports 9.
+
+- `krama` command-line tutor, version 0.1, 2026-11-18 (`cli/`, see `cli/README.md`; 11 tests in `cli/tests`):
+  - It asks the published model through Ollama, then checks the code before showing it. The check parses it, refuses obviously risky code (deleting or writing files, other programs, the network), then imports it in a separate Python process with a 10-second limit. If the code crashes, the error goes back to Krama to fix, up to two more tries.
+  - Measured with `eval/selfcheck.py` on the 24 coding tasks, two runs: Python 10/12 and 9/12, FastAPI 7/12 both times, against 9/12 and 6/12 without the check. The one gain is `api-health`: both runs caught `NameError: BaseModel` and Krama fixed it in one try.
+  - The limit is clear: 23 of 24 answers passed the check on the first try, but 7 of those still failed the exam tests. "Runs without an error" catches crashes, not wrong answers. The tool says so after every answer. Catching wrong answers needs tests, which is the next step for the self-check.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
-- Licences of the benchmark and task datasets
+- Licences of the task datasets (HumanEval is MIT, checked 2026-11-18)

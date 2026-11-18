@@ -24,7 +24,8 @@ from pathlib import Path
 from tasks import TASKS
 
 BASE_MODEL = "qwen2.5-coder:1.5b"
-KRAMA_MODEL = "krama"   # made by: ollama create krama -f Modelfile
+KRAMA_MODEL = "krama"        # round 1 (made from models/krama-coder-1.5b-q4_k_m.gguf)
+KRAMA_R2_MODEL = "krama-r2"  # round 2, made by: ollama create krama-r2 -f Modelfile
 OLLAMA_URL = "http://localhost:11434/api/chat"
 RESULTS_DIR = Path(__file__).parent / "results"
 
@@ -41,6 +42,7 @@ SYSTEMS = {
     "base": (BASE_MODEL, None),
     "base+prompt": (BASE_MODEL, KRAMA_PROMPT),
     "krama": (KRAMA_MODEL, None),
+    "krama-r2": (KRAMA_R2_MODEL, None),
 }
 
 

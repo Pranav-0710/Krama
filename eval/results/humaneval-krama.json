@@ -1,0 +1,1150 @@
+[
+  {
+    "id": "HumanEval/0",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate through the list using two indices.\n2. Calculate the absolute difference between each pair of numbers.\n3. Check if this difference is less than the given threshold.\n\nCode:\n```python\nfrom typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    n = len(numbers)\n    for i in range(n):\n        for j in range(i + 1, n):\n            if abs(numbers[i] - numbers[j]) < threshold:\n                return True\n    return False\n```\n\nWhy:\n- The outer loop runs from the start to the second-to-last element.\n- The inner loop starts one position ahead of the current element to avoid comparing a number with itself.\n- The `abs` function ensures we compare distances without considering direction.",
+    "tokens": 163,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/1",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string by spaces to remove any extra characters.\n2. Iterate through each group of parentheses.\n3. Check if the group is balanced and add it to the result list.\n\nCode:\n```python\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    groups = []\n    current_group = \"\"\n    \n    for char in paren_string.replace(\" \", \"\"):\n        if char == \"(\":\n            current_group += char\n        elif char == \")\" and current_group:\n            groups.append(current_group)\n            current_group = \"\"\n    \n    return groups\n```\n\nWhy:\n- `replace(\" \", \"\")` removes all spaces from the input string, ensuring we only process valid groups.\n- The loop checks if the current group is balanced by ensuring there are no unmatched closing parentheses.\n- If a group starts with an opening parenthesis but ends without one, it's ignored.",
+    "tokens": 187,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/2",
+    "system": "krama",
+    "answer": "Plan:\n1. Extract the integer part using floor division (`//`).\n2. Subtract the integer part from the original number to get the decimal part.\n\nCode:\n```python\ndef truncate_number(number: float) -> float:\n    \"\"\" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \"\"\"\n    return number - int(number)\n```\n\nWhy:\n- Floor division (`//`) gives the largest integer less than or equal to the given number.\n- Subtracting this integer from the original number leaves only the fractional part, which is the decimal part we want to return.",
+    "tokens": 171,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/3",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize the balance to zero.\n2. Iterate through each operation in the list.\n3. Update the balance by adding or subtracting the operation value.\n4. Check if the balance falls below zero at any point.\n\nCode:\n```python\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    balance = 0\n    \n    for op in operations:\n        balance += op\n        \n        if balance < 0:\n            return True\n    \n    return False\n```\n\nWhy:\n- The function iterates through each operation, updating the balance accordingly.\n- If at any point the balance drops below zero, it immediately returns `True`.\n- If all operations are processed without the balance falling below zero, it returns `False`.",
+    "tokens": 155,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/4",
+    "system": "krama",
+    "answer": "Plan:\n1. Calculate the mean of the list.\n2. Compute the absolute differences between each number and the mean.\n3. Find the average of these absolute differences.\n\nCode:\n```python\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    if not numbers:\n        return 0\n    \n    mean = sum(numbers) / len(numbers)\n    \n    deviations = [abs(x - mean) for x in numbers]\n    mad = sum(deviations) / len(deviations)\n    \n    return mad\n```\n\nWhy:\n- The function checks if the list is empty and returns 0 immediately if it is, avoiding division by zero.\n- The mean is calculated using `sum(numbers) / len(numbers)`.\n- Absolute differences are computed using a list comprehension.\n- Finally, the average of these deviations gives the Mean Absolute Deviation.",
+    "tokens": 177,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/5",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is empty and return it as is.\n2. Initialize an empty result list.\n3. Loop through the input list using `enumerate` to get both index and value.\n4. Insert the delimiter between each pair of elements.\n\nCode:\n```python\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    if not numbers:\n        return []\n    \n    result = [numbers[0]]\n    \n    for i, num in enumerate(numbers):\n        if i < len(numbers) - 1:\n            result.append(delimiter)\n            result.append(num)\n        else:\n            result.append(num)\n            \n    return result\n```\n\nWhy:\n- The function checks if the input list is empty and returns it immediately if true.\n- It initializes a result list with the first element of the input list.\n- Using `enumerate` allows accessing both the index and value during iteration, making it easy to insert the delimiter between elements.\n- The loop handles all cases including the last element separately.",
+    "tokens": 216,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/6",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into individual groups using spaces.\n2. For each group, count the depth of nesting by iterating through the characters.\n3. Keep track of the maximum depth found.\n\nCode:\n```python\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    def max_depth(group):\n        current_depth = 0\n        max_depth = 0\n        for char in group:\n            if char == '(':\n                current_depth += 1\n                if current_depth > max_depth:\n                    max_depth = current_depth\n            elif char == ')':\n                current_depth -= 1\n        return max_depth\n\n    groups = paren_string.split()\n    depths = [max_depth(group) for group in groups]\n    return depths\n```\n\nWhy:\n- The `split()` method breaks the input string into individual groups based on spaces.\n- The nested loops inside `max_depth` function iterate through each character of the group and keep track of the current depth and maximum depth found.\n- Finally, we apply this logic to each group using a list comprehension.",
+    "tokens": 228,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/7",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `filter_by_substring`.\n2. Use a list comprehension to iterate over each string in the input list.\n3. Add a condition inside the list comprehension to check if the substring is present in the string.\n4. Return the filtered list.\n\nCode:\n```python\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    return [s for s in strings if substring in s]\n```\n\nWhy:\n- The function uses a list comprehension to iterate through each string and checks if the substring is present.\n- The condition `substring in s` ensures that only strings containing the substring are included in the result.\n- An empty input list results in an empty output list, as expected.",
+    "tokens": 158,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/8",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize `sum_result` to 0 and `product_result` to 1.\n2. Iterate through each number in the list.\n3. Add the current number to `sum_result`.\n4. Multiply the current number by `product_result`.\n\nCode:\n```python\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    sum_result = 0\n    product_result = 1\n    \n    for num in numbers:\n        sum_result += num\n        product_result *= num\n    \n    return sum_result, product_result\n```\n\nWhy:\n- The initial values of `sum_result` and `product_result` are set to handle the edge case where the list is empty.\n- By iterating through each number in the list, we can accumulate both the sum and the product correctly.\n- This approach ensures that the function works correctly for both non-empty and empty lists.",
+    "tokens": 189,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/9",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize an empty list to store the rolling maximums.\n2. Iterate through the list using `enumerate` to keep track of the current index.\n3. For each element, compare it with the previous maximum and update accordingly.\n\nCode:\n```python\nfrom typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    if not numbers:\n        return []\n\n    max_so_far = numbers[0]\n    result = [max_so_far]\n\n    for i in range(1, len(numbers)):\n        if numbers[i] > max_so_far:\n            max_so_far = numbers[i]\n        result.append(max_so_far)\n\n    return result\n```\n\nWhy:\n- Using `enumerate` allows us to access both the index and value during iteration.\n- We initialize `max_so_far` with the first element of the list.\n- For each subsequent element, we compare it with `max_so_far` and update accordingly.\n- This approach ensures that we correctly track the rolling maximum as we iterate through the list.",
+    "tokens": 213,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/10",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the input is empty and return it as is if true.\n2. Find the longest palindromic prefix of the string.\n3. Reverse the non-palindromic suffix and append it to the end.\n\nCode:\n```python\ndef is_palindrome(string: str) -> bool:\n    \"\"\" Test if given string is a palindrome \"\"\"\n    return string == string[::-1]\n\n\ndef make_palindrome(string: str) -> str:\n    \"\"\" Find the shortest palindrome that begins with a supplied string.\n    Algorithm idea is simple:\n    - Find the longest postfix of supplied string that is a palindrome.\n    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n    >>> make_palindrome('')\n    ''\n    >>> make_palindrome('cat')\n    'catac'\n    >>> make_palindrome('cata')\n    'catac'\n    \"\"\"\n    if not string:\n        return \"\"\n    \n    for i in range(len(string), 0, -1):\n        if string[:i] == string[:i][::-1]:\n            return string + string[i:][::-1]\n```\n\nWhy:\n- `is_palindrome` checks if a given string is a palindrome by comparing it with its reverse.\n- `make_palindrome` finds the shortest palindrome that starts with the input string. It does this by checking prefixes of the string from right to left and reversing non-palindromic suffixes.",
+    "tokens": 306,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/11",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the input strings to lists of integers.\n2. Perform element-wise XOR operation.\n3. Convert the result back to a string.\n\nCode:\n```python\nfrom typing import List\n\n\ndef string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\n    # Convert strings to lists of integers\n    list_a = [int(x) for x in a]\n    list_b = [int(y) for y in b]\n    \n    # Perform element-wise XOR operation\n    result_list = [x ^ y for x, y in zip(list_a, list_b)]\n    \n    # Convert the result back to a string\n    return ''.join(str(bit) for bit in result_list)\n```\n\nWhy:\n- Using `zip` allows us to iterate over both lists simultaneously.\n- The XOR operation (`^`) is applied element-wise between corresponding bits of the two strings.\n- Converting back to a string using `''.join(...)` ensures the final output is in the correct format.",
+    "tokens": 261,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/12",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is empty and return `None` if it is.\n2. Initialize variables to keep track of the longest string found so far.\n3. Iterate through each string in the list, updating the longest string as needed.\n\nCode:\n```python\nfrom typing import List, Optional\n\n\ndef longest(strings: List[str]) -> Optional[str]:\n    if not strings:\n        return None\n    \n    max_length = 0\n    longest_string = \"\"\n    \n    for s in strings:\n        if len(s) > max_length:\n            max_length = len(s)\n            longest_string = s\n            \n    return longest_string\n```\n\nWhy:\n- The function checks if the list is empty at the beginning to handle the edge case where the input might be `[]`.\n- It initializes `max_length` and `longest_string` outside the loop to avoid re-computing them inside.\n- The loop iterates through each string, updating `max_length` and `longest_string` whenever it finds a longer string than previously encountered.",
+    "tokens": 214,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/13",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand the Euclidean algorithm for finding GCD.\n2. Implement the function using the algorithm.\n\nCode:\n```python\ndef greatest_common_divisor(a: int, b: int) -> int:\n    while b != 0:\n        a, b = b, a % b\n    return a\n```\n\nWhy:\n- The Euclidean algorithm is efficient and works well for large numbers.\n- The loop continues until `b` becomes zero, at which point `a` contains the GCD.\n- The test cases cover different scenarios including edge cases like negative numbers.",
+    "tokens": 121,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/14",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize an empty list to store the prefixes.\n2. Loop through each character in the string, adding them one by one to the prefix list.\n\nCode:\n```python\nfrom typing import List\n\n\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\" Return list of all prefixes from shortest to longest of the input string \"\"\"\n    prefixes = []\n    for i in range(len(string)):\n        prefixes.append(string[:i + 1])\n    return prefixes\n```\n\nWhy:\n- The loop runs `len(string)` times, creating a prefix for each character.\n- Using slicing (`string[:i + 1]`) extracts substrings from the start of the string up to the current index `i`.\n- This approach ensures all possible prefixes are collected in order.",
+    "tokens": 160,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/15",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize an empty string to build the result.\n2. Loop through numbers from 0 to n (inclusive).\n3. Append each number followed by a space to the result string.\n\nCode:\n```python\ndef string_sequence(n: int) -> str:\n    result = \"\"\n    for i in range(n + 1):\n        result += str(i)\n        if i < n:\n            result += \" \"\n    return result\n```\n\nWhy:\n- Using `range(n + 1)` ensures we include the number `n` in our sequence.\n- The loop iterates over each number from 0 to `n`, appending them to the result string with spaces between them.\n- If `n` is 0, the loop will only run once, resulting in a single \"0\".",
+    "tokens": 165,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/16",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the string to lowercase to ignore case differences.\n2. Use a set to store unique characters.\n3. Return the size of the set.\n\nCode:\n```python\ndef count_distinct_characters(string: str) -> int:\n    \"\"\" Given a string, find out how many distinct characters (regardless of case) does it consist of\n    >>> count_distinct_characters('xyzXYZ')\n    3\n    >>> count_distinct_characters('Jerry')\n    4\n    \"\"\"\n    lower_string = string.lower()\n    unique_chars = set(lower_string)\n    return len(unique_chars)\n```\n\nWhy:\n- Converting to lowercase ensures that 'A' and 'a' are counted as the same character.\n- Using a set automatically removes duplicates, so we just need to count how many there are.",
+    "tokens": 168,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/17",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into individual notes.\n2. Iterate over each note and convert it to its corresponding beat duration.\n3. Return a list of these durations.\n\nCode:\n```python\nfrom typing import List\n\n\ndef parse_music(music_string: str) -> List[int]:\n    beats = []\n    for note in music_string.split():\n        if note == 'o':\n            beats.append(4)\n        elif note == 'o|':\n            beats.append(2)\n        elif note == '.|':\n            beats.append(1)\n    return beats\n```\n\nWhy:\n- `split()` breaks the string into individual notes based on spaces.\n- Each condition checks if the current note matches one of the specified patterns and appends the corresponding beat duration to the list.\n- This approach ensures that all notes are correctly parsed and converted into their respective durations.",
+    "tokens": 176,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/18",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a counter to keep track of the occurrences.\n2. Loop through the string using slicing to check for each occurrence of the substring.\n3. Increment the counter each time the substring is found.\n\nCode:\n```python\ndef how_many_times(string: str, substring: str) -> int:\n    count = 0\n    start = 0\n    \n    while True:\n        pos = string.find(substring, start)\n        if pos == -1:\n            break\n        count += 1\n        start = pos + 1\n    \n    return count\n```\n\nWhy:\n- `find` returns the lowest index of the substring in the string. If not found, it returns `-1`.\n- We use a loop to keep searching for the substring starting from each position.\n- The counter keeps track of how many times the substring appears.",
+    "tokens": 175,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/19",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into a list of words.\n2. Convert each word to its corresponding number.\n3. Sort the list of numbers.\n4. Join the sorted list back into a single string.\n\nCode:\n```python\nfrom typing import List\n\n\ndef sort_numbers(numbers: str) -> str:\n    \"\"\" Input is a space-delimited string of numberals from 'zero' to 'nine'.\n    Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.\n    Return the string with numbers sorted from smallest to largest\n    >>> sort_numbers('three one five')\n    'one three five'\n    \"\"\"\n    number_map = {\n        \"zero\": 0, \"one\": 1, \"two\": 2, \"three\": 3,\n        \"four\": 4, \"five\": 5, \"six\": 6, \"seven\": 7,\n        \"eight\": 8, \"nine\": 9\n    }\n    \n    words = numbers.split()\n    sorted_words = sorted(words, key=lambda word: number_map[word])\n    \n    return ' '.join(sorted_words)\n```\n\nWhy:\n- The `number_map` dictionary allows us to easily convert word representations of numbers into their numeric values.\n- Using `sorted()` with a lambda function as the key ensures that the list is sorted based on these numeric values.\n- This approach avoids manual comparison and indexing, making the code concise and easy to understand.",
+    "tokens": 317,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/20",
+    "system": "krama",
+    "answer": "Plan:\n1. Sort the list to easily compare adjacent elements.\n2. Iterate through the sorted list and keep track of the closest pair found.\n\nCode:\n```python\nfrom typing import List, Tuple\n\n\ndef find_closest_elements(numbers: List[float]) -> Tuple[float, float]:\n    numbers.sort()\n    smallest_diff = float('inf')\n    closest_pair = (None, None)\n\n    for i in range(len(numbers) - 1):\n        current_diff = numbers[i + 1] - numbers[i]\n        if current_diff < smallest_diff:\n            smallest_diff = current_diff\n            closest_pair = (numbers[i], numbers[i + 1])\n\n    return closest_pair\n```\n\nWhy:\n- Sorting the list allows us to compare each element with its successor easily.\n- We keep track of the smallest difference found so far and update our result accordingly.\n- The function handles both positive and negative numbers correctly.",
+    "tokens": 186,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/21",
+    "system": "krama",
+    "answer": "Plan:\n1. Find the minimum and maximum values in the list.\n2. Subtract the minimum from each number to shift them down to 0.\n3. Divide by the range (max - min) to stretch them between 0 and 1.\n\nCode:\n```python\nfrom typing import List\n\n\ndef rescale_to_unit(numbers: List[float]) -> List[float]:\n    if len(numbers) < 2:\n        raise ValueError(\"List must contain at least two elements\")\n    \n    min_val = min(numbers)\n    max_val = max(numbers)\n    \n    return [(x - min_val) / (max_val - min_val) for x in numbers]\n```\n\nWhy:\n- The function checks if the list has at least two elements before proceeding to avoid division by zero.\n- It uses list comprehension to apply the transformation efficiently.",
+    "tokens": 169,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/22",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `filter_integers`.\n2. Use a list comprehension to iterate over the input list and check if each element is an integer.\n3. Return the filtered list of integers.\n\nCode:\n```python\nfrom typing import List, Any\n\n\ndef filter_integers(values: List[Any]) -> List[int]:\n    return [item for item in values if isinstance(item, int)]\n```\n\nWhy:\n- The function uses `isinstance` to check if each element is an integer. This ensures that only integers are included in the result.\n- A list comprehension provides a concise way to create a new list by iterating over an existing list and applying a condition.\n- The tests cover various cases, including non-integer values and empty lists, to ensure the function works correctly under different conditions.",
+    "tokens": 164,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/23",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand that the `len()` function returns the number of characters in a string.\n2. Write the function using `len()`.\n3. Add tests to ensure it works correctly.\n\nCode:\n```python\ndef strlen(string: str) -> int:\n    \"\"\" Return length of given string \"\"\"\n    return len(string)\n```\n\nWhy:\n- Using `len()` is straightforward and efficient for counting characters in a string.\n- The tests cover empty strings, single character strings, and multiple character strings to ensure the function works as expected.",
+    "tokens": 111,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/24",
+    "system": "krama",
+    "answer": "Plan:\n1. Start with `divisor = n - 1`.\n2. Loop downwards until you find a divisor.\n3. Return the divisor.\n\nCode:\n```python\ndef largest_divisor(n: int) -> int:\n    \"\"\" For a given number n, find the largest number that divides n evenly, smaller than n\n    >>> largest_divisor(15)\n    5\n    \"\"\"\n    for divisor in range(n - 1, 0, -1):\n        if n % divisor == 0:\n            return divisor\n```\n\nWhy:\n- Starting from `n - 1` ensures we check all possible divisors before reaching 1.\n- Looping downwards avoids unnecessary checks and makes the code more efficient.",
+    "tokens": 152,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/25",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize an empty list to store the factors.\n2. Divide `n` by 2 until it's odd, adding each division as a factor.\n3. Check for odd factors starting from 3 and divide `n` accordingly.\n4. Return the list of factors.\n\nCode:\n```python\nfrom typing import List\n\n\ndef factorize(n: int) -> List[int]:\n    \"\"\" Return list of prime factors of given integer in the order from smallest to largest.\n    Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.\n    Input number should be equal to the product of all factors\n    >>> factorize(8)\n    [2, 2, 2]\n    >>> factorize(25)\n    [5, 5]\n    >>> factorize(70)\n    [2, 5, 7]\n    \"\"\"\n    factors = []\n    \n    # Divide by 2 until n is odd\n    while n % 2 == 0:\n        factors.append(2)\n        n //= 2\n    \n    # Check for odd factors starting from 3\n    i = 3\n    while i * i <= n:\n        while n % i == 0:\n            factors.append(i)\n            n //= i\n        i += 2\n    \n    # If n is a prime number greater than 2\n    if n > 2:\n        factors.append(n)\n    \n    return factors\n```\n\nWhy:\n- The loop `while n % 2 == 0` ensures all even factors are removed before moving on to odd numbers.\n- The inner loop checks for odd factors starting from 3, skipping even ones.\n- This approach ensures the factors are returned in ascending order.",
+    "tokens": 364,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/26",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the list to a set to remove duplicates while preserving order.\n2. Convert the set back to a list.\n\nCode:\n```python\nfrom typing import List\n\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\" From a list of integers, remove all elements that occur more than once.\n    Keep order of elements left the same as in the input.\n    >>> remove_duplicates([1, 2, 3, 2, 4])\n    [1, 3, 4]\n    \"\"\"\n    return list(set(numbers))\n```\n\nWhy:\n- Converting to a set removes duplicates because sets only allow unique items. The order is preserved by converting back to a list.\n- This approach ensures that the function works correctly even if there are multiple occurrences of the same element in the input list.",
+    "tokens": 171,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/27",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate over each character in the input string.\n2. Check if the character is lowercase or uppercase.\n3. Flip its case accordingly.\n\nCode:\n```python\ndef flip_case(string: str) -> str:\n    result = []\n    for char in string:\n        if char.islower():\n            result.append(char.upper())\n        elif char.isupper():\n            result.append(char.lower())\n        else:\n            result.append(char)\n    return ''.join(result)\n```\n\nWhy:\n- `char.islower()` checks if a character is lowercase.\n- `char.isupper()` checks if a character is uppercase.\n- Using `.append()` adds each transformed character to the result list.\n- Finally, `''.join(result)` combines all characters in the list into a single string.",
+    "tokens": 158,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/28",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `concatenate`.\n2. Initialize an empty string to store the result.\n3. Iterate over each string in the list and append it to the result.\n\nCode:\n```python\nfrom typing import List\n\n\ndef concatenate(strings: List[str]) -> str:\n    \"\"\" Concatenate list of strings into a single string \"\"\"\n    result = \"\"\n    for s in strings:\n        result += s\n    return result\n```\n\nWhy:\n- The function initializes an empty string `result` before starting the loop.\n- It iterates over each string in the list using a `for` loop and concatenates them to the `result`.\n- This approach ensures that all strings are combined into one single string.",
+    "tokens": 148,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/29",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `filter_by_prefix`.\n2. Use a list comprehension to iterate over the input list and check if each string starts with the given prefix.\n3. Return the filtered list.\n\nCode:\n```python\nfrom typing import List\n\n\ndef filter_by_prefix(strings: List[str], prefix: str) -> List[str]:\n    return [s for s in strings if s.startswith(prefix)]\n```\n\nWhy:\n- The function uses a list comprehension to iterate through each string in the input list.\n- `startswith(prefix)` checks if the current string starts with the specified prefix.\n- An empty list is handled gracefully by returning an empty list directly.",
+    "tokens": 134,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/30",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `get_positive`.\n2. Use a list comprehension to filter out negative numbers.\n3. Return the filtered list.\n\nCode:\n```python\ndef get_positive(l: list):\n    \"\"\"Return only positive numbers in the list.\"\"\"\n    return [x for x in l if x > 0]\n```\n\nWhy:\n- A list comprehension is concise and easy to understand.\n- The condition `if x > 0` filters out negative numbers.\n- The function handles both empty lists and lists with all negative numbers.",
+    "tokens": 111,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/31",
+    "system": "krama",
+    "answer": "Plan:\n1. A prime number is only divisible by 1 and itself.\n2. Check if `n` is less than 2, in which case it's not prime.\n3. Loop through numbers from 2 to the square root of `n`. If any divide evenly into `n`, it's not prime.\n\nCode:\n```python\nimport math\n\ndef is_prime(n):\n    \"\"\"Return true if a given number is prime, and false otherwise.\"\"\"\n    if n < 2:\n        return False\n    for i in range(2, int(math.sqrt(n)) + 1):\n        if n % i == 0:\n            return False\n    return True\n```\n\nWhy:\n- The loop goes up to the square root of `n` because any factor larger than that would have a corresponding smaller factor.\n- If we divide `n` by each number from 2 to the square root, and if none divides evenly, then `n` is prime.",
+    "tokens": 201,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/32",
+    "system": "krama",
+    "answer": "Plan:\n1. Write a helper function to compute the power of `x`.\n2. Use the helper function in the main polynomial evaluation function.\n3. Ensure the input list has an even number of elements and the largest non-zero coefficient is positive.\n\nCode:\n```python\nimport math\n\n\ndef poly(xs: list, x: float):\n    \"\"\"\n    Evaluates polynomial with coefficients xs at point x.\n    return xs[0] + xs[1] * x + xs[2] * x^2 + .... xs[n] * x^n\n    \"\"\"\n    def power(x, n):\n        result = 1\n        for _ in range(n):\n            result *= x\n        return result\n\n    return sum([coeff * power(x, i) for i, coeff in enumerate(xs)])\n\n\ndef find_zero(xs: list):\n    \"\"\" xs are coefficients of a polynomial.\n    find_zero finds x such that poly(x) = 0.\n    find_zero returns only only zero point, even if there are many.\n    Moreover, find_zero only takes list xs having even number of coefficients\n    and largest non-zero coefficient as it guarantees\n    a solution.\n    >>> round(find_zero([1, 2]), 2) # f(x) = 1 + 2x\n    -0.5\n    >>> round(find_zero([-6, 11, -6, 1]), 2) # (x - 1) * (x - 2) * (x - 3) = -6 + 11x - 6x^2 + x^3\n    1.0\n    \"\"\"\n    if len(xs) % 2 != 0:\n        raise ValueError(\"Polynomial must have an even number of coefficients.\")\n    \n    max_coeff = max(abs(coeff) for coeff in xs)\n    if max_coeff < 0:\n        raise ValueError(\"Largest non-zero coefficient must be positive.\")\n    \n    # Find the root using Newton-Raphson method\n    def newton_raphson(f, df, x0, tol=1e-6):\n        while abs(f(x0)) > tol:\n            x1 = x0 - f(x0) / df(x0)\n            if abs(x1 - x0) < tol:\n                break\n            x0 = x1\n        return x0\n    \n    def poly_func(x):\n        return sum([coeff * power(x, i) for i, coeff in enumerate(xs)])\n    \n    def derivative_poly_func(x):\n        return sum([i * coeff * power(x, i - 1) for i, coeff in enumerate(xs)][1:])\n    \n    root = newton_raphson(poly_func, derivative_poly_func, max_coeff)\n    return round(root, 2)\n```\n\nWhy:\n- The helper function `power` computes the value of \\( x^i \\).\n- The main polynomial evaluation function uses this helper to compute each term.\n- The `find_zero` function ensures the input list has an even number of elements and the largest non-zero coefficient is positive before proceeding with the root-finding algorithm.",
+    "tokens": 642,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/33",
+    "system": "krama",
+    "answer": "Plan:\n1. Identify the indices that are divisible by three.\n2. Extract those values and sort them.\n3. Replace the original values in the list with the sorted values.\n\nCode:\n```python\ndef sort_third(l: list):\n    \"\"\"This function takes a list l and returns a list l' such that\n    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal\n    to the values of the corresponding indicies of l, but sorted.\n    >>> sort_third([1, 2, 3])\n    [1, 2, 3]\n    >>> sort_third([5, 6, 3, 4, 8, 9, 2])\n    [2, 6, 3, 4, 8, 9, 5]\n    \"\"\"\n    indices = [i for i in range(len(l)) if i % 3 == 0]\n    values = [l[i] for i in indices]\n    values.sort()\n    \n    for i, v in zip(indices, values):\n        l[i] = v\n    \n    return l\n```\n\nWhy:\n- Using list comprehensions makes the code concise and easy to understand.\n- The `zip` function pairs up the original indices with their sorted values, ensuring they are placed correctly in the list.\n- This approach avoids modifying the original list directly, adhering to the problem's requirements.",
+    "tokens": 307,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/34",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the list to a set to remove duplicates.\n2. Convert the set back to a sorted list.\n\nCode:\n```python\ndef unique(l: list):\n    \"\"\"Return sorted unique elements in a list\"\"\"\n    return sorted(set(l))\n```\n\nWhy:\n- A set automatically removes duplicates because it only allows each element once.\n- Sorting is done by default when converting a set back to a list.",
+    "tokens": 86,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/35",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is empty and raise an error if it is.\n2. Iterate through the list to find the maximum element.\n\nCode:\n```python\ndef max_element(l: list):\n    \"\"\"Return maximum element in the list.\"\"\"\n    if not l:\n        raise ValueError(\"List cannot be empty\")\n    \n    max_val = l[0]\n    for item in l:\n        if item > max_val:\n            max_val = item\n            \n    return max_val\n```\n\nWhy:\n- Checking if the list is empty prevents errors when trying to access elements.\n- The loop iterates through each element, updating `max_val` whenever a larger value is found.",
+    "tokens": 139,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/36",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a counter to keep track of the number of times 7 appears.\n2. Loop through all numbers less than `n`.\n3. Check if the number is divisible by 11 or 13.\n4. Convert the number to a string and count how many times '7' appears.\n\nCode:\n```python\ndef fizz_buzz(n: int):\n    count = 0\n    for i in range(1, n):\n        if i % 11 == 0 or i % 13 == 0:\n            count += str(i).count('7')\n    return count\n```\n\nWhy:\n- Using `str(i).count('7')` converts the number to a string and counts how many times '7' appears.\n- The loop ensures we check all numbers less than `n`.\n- The condition checks if the number is divisible by 11 or 13 before counting.",
+    "tokens": 193,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/37",
+    "system": "krama",
+    "answer": "Plan:\n1. Separate the even and odd indices.\n2. Sort the values at the even indices.\n3. Merge them back into a single list.\n\nCode:\n```python\ndef sort_even(l: list):\n    \"\"\"This function takes a list l and returns a list l' such that\n    l' is identical to l in the odd indicies, while its values at the even indicies are equal\n    to the values of the even indicies of l, but sorted.\n    >>> sort_even([1, 2, 3])\n    [1, 2, 3]\n    >>> sort_even([5, 6, 3, 4])\n    [3, 6, 5, 4]\n    \"\"\"\n    evens = [l[i] for i in range(0, len(l), 2)]\n    evens.sort()\n    \n    result = []\n    even_index = 0\n    for i in range(len(l)):\n        if i % 2 == 0:\n            result.append(evens[even_index])\n            even_index += 1\n        else:\n            result.append(l[i])\n            \n    return result\n```\n\nWhy:\n- The `range(0, len(l), 2)` generates the indices of the even elements.\n- Sorting the list in-place (`evens.sort()`) modifies the original list without needing to copy it first.\n- Merging back into a single list ensures that all odd-indexed elements remain unchanged.",
+    "tokens": 306,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/38",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the string into groups of three characters, handling cases where there might be fewer than three characters left at the end.\n2. Cycle each group by moving the first character to the end.\n3. Join all the groups back together.\n\nCode:\n```python\ndef encode_cyclic(s: str):\n    \"\"\"\n    returns encoded string by cycling groups of three characters.\n    \"\"\"\n    # split string to groups. Each of length 3.\n    groups = [s[(3 * i):min((3 * i + 3), len(s))] for i in range((len(s) + 2) // 3)]\n    # cycle elements in each group. Unless group has fewer elements than 3.\n    groups = [(group[1:] + group[0]) if len(group) == 3 else group for group in groups]\n    return \"\".join(groups)\n\n\ndef decode_cyclic(s: str):\n    \"\"\"\n    takes as input string encoded with encode_cyclic function. Returns decoded string.\n    \"\"\"\n    # split string into groups of three characters, handling cases where there might be fewer than three characters left at the end.\n    groups = [s[(3 * i):min((3 * i + 3), len(s))] for i in range((len(s) + 2) // 3)]\n    # reverse the cycle by moving the last character to the front.\n    groups = [(group[-1:] + group[:-1]) if len(group) == 3 else group for group in groups]\n    return \"\".join(groups)\n```\n\nWhy:\n- The `split` method is used to divide the string into chunks of three characters. If there are fewer than three characters left at the end, it handles those gracefully.\n- Cycles occur by moving the first character to the end of each group. This ensures that each group is shifted cyclically.\n- Reversing the cycle involves moving the last character to the front of each group. This effectively undoes the previous shift.\n- The `join` method combines all the groups back into a single string, resulting in the decoded text.",
+    "tokens": 432,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/39",
+    "system": "krama",
+    "answer": "Plan:\n1. Write a helper function to check if a number is prime.\n2. Generate Fibonacci numbers using a loop.\n3. Check each Fibonacci number for primality and count how many primes are found.\n\nCode:\n```python\ndef is_prime(num):\n    \"\"\"Check if a number is prime.\"\"\"\n    if num <= 1:\n        return False\n    for i in range(2, int(num**0.5) + 1):\n        if num % i == 0:\n            return False\n    return True\n\n\ndef prime_fib(n: int):\n    \"\"\"\n    prime_fib returns n-th number that is a Fibonacci number and it's also prime.\n    >>> prime_fib(1)\n    2\n    >>> prime_fib(2)\n    3\n    >>> prime_fib(3)\n    5\n    >>> prime_fib(4)\n    13\n    >>> prime_fib(5)\n    89\n    \"\"\"\n    a, b = 0, 1\n    count = 0\n    \n    while True:\n        if is_prime(a):\n            count += 1\n            if count == n:\n                return a\n        a, b = b, a + b\n```\n\nWhy:\n- The `is_prime` function checks if a number is divisible by any integer from 2 up to its square root. This is efficient for determining primality.\n- The main loop generates Fibonacci numbers using the formula \\( F_n = F_{n-1} + F_{n-2} \\) with initial values \\( F_0 = 0 \\) and \\( F_1 = 1 \\).\n- We keep a counter to track how many prime Fibonacci numbers we have found. When it matches `n`, we return the current number.\n- This approach ensures that we efficiently find the required Fibonacci number by leveraging both recursion and iteration.",
+    "tokens": 391,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/40",
+    "system": "krama",
+    "answer": "Plan:\n1. Loop through the list using three nested loops to generate all possible triplets.\n2. Check if the sum of each triplet is zero.\n3. Return `True` as soon as we find such a triplet, otherwise return `False`.\n\nCode:\n```python\ndef triples_sum_to_zero(l: list):\n    for i in range(len(l)):\n        for j in range(i + 1, len(l)):\n            for k in range(j + 1, len(l)):\n                if l[i] + l[j] + l[k] == 0:\n                    return True\n    return False\n```\n\nWhy:\n- The outer loop runs from the first element to the second-to-last.\n- Each inner loop starts one position ahead of the previous loop to ensure we don't repeat elements.\n- This approach ensures all possible triplets are checked without duplicates.",
+    "tokens": 177,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/41",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand that each car from one direction will collide with each car from the other direction.\n2. Since there are `n` cars in each direction, the total number of collisions is `n * n`.\n\nCode:\n```python\ndef car_race_collision(n: int):\n    return n * n\n```\n\nWhy:\n- The function calculates the total number of possible pairs between the two sets of cars.\n- Each pair results in a collision, so multiplying gives the total count.",
+    "tokens": 101,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/42",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `incr_list`.\n2. Use a list comprehension to iterate over each element in the input list and add 1.\n3. Return the new list.\n\nCode:\n```python\ndef incr_list(l: list):\n    \"\"\"Return list with elements incremented by 1.\"\"\"\n    return [x + 1 for x in l]\n```\n\nWhy:\n- List comprehensions provide a concise way to create lists based on existing lists.\n- The function uses `+ 1` directly inside the list comprehension, which adds 1 to each element.\n- The tests cover both positive and negative integers, as well as zero.",
+    "tokens": 132,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/43",
+    "system": "krama",
+    "answer": "Plan:\n1. Loop through the list using `enumerate` to get both index and value.\n2. For each element, check if there's a complement that sums to zero.\n3. Avoid checking an element with itself by comparing indices.\n\nCode:\n```python\ndef pairs_sum_to_zero(l):\n    for i, x in enumerate(l):\n        complement = -x\n        if complement in l[i+1:]:\n            return True\n    return False\n```\n\nWhy:\n- `enumerate` allows us to loop through the list while keeping track of the index.\n- We check each element against all elements that come after it (excluding itself).\n- This way, we avoid counting pairs multiple times and ensure we only check distinct elements.",
+    "tokens": 149,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/44",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the number to a string using `str()`.\n2. Iterate over each digit in the string.\n3. Convert each digit back to an integer and multiply by the base raised to the power of its position.\n4. Sum up all these values to get the final result.\n\nCode:\n```python\ndef change_base(x: int, base: int):\n    \"\"\"Change numerical base of input number x to base.\n    return string representation after the conversion.\n    base numbers are less than 10.\n    >>> change_base(8, 3)\n    '22'\n    >>> change_base(8, 2)\n    '1000'\n    >>> change_base(7, 2)\n    '111'\n    \"\"\"\n    result = 0\n    power = 0\n    \n    for digit in str(x):\n        value = int(digit) * (base ** power)\n        result += value\n        power += 1\n        \n    return str(result)\n```\n\nWhy:\n- Converting the number to a string allows us to iterate over each digit.\n- Multiplying by `base ** power` gives us the correct position of each digit in the final result.\n- Summing up all these values gives us the final result.",
+    "tokens": 260,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/45",
+    "system": "krama",
+    "answer": "Plan:\n1. The formula for the area of a triangle is \\( \\frac{1}{2} \\times \\text{base} \\times \\text{height} \\).\n2. Multiply the base by the height.\n3. Divide the result by 2.\n\nCode:\n```python\ndef triangle_area(a, h):\n    \"\"\"Given length of a side and high return area for a triangle.\"\"\"\n    return 0.5 * a * h\n```\n\nWhy:\n- The formula \\( \\frac{1}{2} \\times \\text{base} \\times \\text{height} \\) is used to calculate the area.\n- Multiplying the base by the height gives the total area before dividing by 2.\n- Dividing by 2 converts the result from a fraction to a decimal.",
+    "tokens": 166,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/46",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to compute the sum of four previous Fibonacci numbers.\n2. Use this helper function in the main `fib4` function.\n\nCode:\n```python\ndef fib4(n: int):\n    \"\"\"The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:\n    fib4(0) -> 0\n    fib4(1) -> 0\n    fib4(2) -> 2\n    fib4(3) -> 0\n    fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).\n    Please write a function to efficiently compute the n-th element of the fib4 number sequence.  Do not use recursion.\n    >>> fib4(5)\n    4\n    >>> fib4(6)\n    8\n    >>> fib4(7)\n    14\n    \"\"\"\n    def sum_of_four_fibs(n):\n        if n == 0:\n            return 0\n        elif n == 1 or n == 2:\n            return 2\n        else:\n            a, b, c, d = 0, 0, 2, 0\n            for _ in range(4, n + 1):\n                a, b, c, d = b, c, d, a + b + c + d\n            return d\n\n    if n < 0:\n        raise ValueError(\"Input must be non-negative\")\n    elif n == 0 or n == 1:\n        return 0\n    else:\n        return sum_of_four_fibs(n)\n```\n\nWhy:\n- The helper function `sum_of_four_fibs` computes the sum of four previous Fibonacci numbers without using recursion.\n- The main function checks if the input is non-negative and raises a `ValueError` otherwise.\n- The test cases cover different values including edge cases like 0, 1, and large numbers.",
+    "tokens": 421,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/47",
+    "system": "krama",
+    "answer": "Plan:\n1. Sort the list.\n2. Find the middle index.\n3. Return the appropriate value based on whether the length is odd or even.\n\nCode:\n```python\ndef median(l: list):\n    \"\"\"Return median of elements in the list l.\n    >>> median([3, 1, 2, 4, 5])\n    3\n    >>> median([-10, 4, 6, 1000, 10, 20])\n    15.0\n    \"\"\"\n    n = len(l)\n    if n % 2 == 1:\n        return l[n // 2]\n    else:\n        return (l[n // 2 - 1] + l[n // 2]) / 2\n```\n\nWhy:\n- Sorting the list puts all elements in ascending order.\n- The middle index is calculated using `n // 2`.\n- If the length is odd, the median is the element at that index.\n- If the length is even, the median is the average of the two middle elements.",
+    "tokens": 224,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/48",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the text is empty, return `True` immediately.\n2. Compare characters from both ends moving towards the center.\n3. Return `False` as soon as a pair of characters doesn't match.\n\nCode:\n```python\ndef is_palindrome(text: str):\n    \"\"\"\n    Checks if given string is a palindrome\n    >>> is_palindrome('')\n    True\n    >>> is_palindrome('aba')\n    True\n    >>> is_palindrome('aaaaa')\n    True\n    >>> is_palindrome('zbcd')\n    False\n    \"\"\"\n    if text == \"\":\n        return True\n\n    for i in range(len(text) // 2):\n        if text[i] != text[-i - 1]:\n            return False\n\n    return True\n```\n\nWhy:\n- The loop runs only up to the middle of the string, so it's efficient.\n- If a pair of characters doesn't match, we can stop checking early and return `False`.\n- An empty string is considered a palindrome by definition.",
+    "tokens": 212,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/49",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand how modular exponentiation works.\n2. Implement the function using a loop or recursion.\n\nCode:\n```python\ndef modp(n: int, p: int):\n    result = 1\n    base = n % p\n    \n    while n > 0:\n        if n % 2 == 1:\n            result = (result * base) % p\n        n //= 2\n        base = (base * base) % p\n    \n    return result\n```\n\nWhy:\n- The loop ensures we process each bit of `n`.\n- The modulo operations keep the numbers within bounds.\n- The base case handles small values directly.",
+    "tokens": 136,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/50",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the `encode_shift` function using list comprehension and modulo operation to wrap around the alphabet.\n2. Define the `decode_shift` function by reversing the shift applied in `encode_shift`.\n\nCode:\n```python\ndef encode_shift(s: str):\n    return \"\".join([chr(((ord(ch) + 5 - ord(\"a\")) % 26) + ord(\"a\")) for ch in s])\n\n\ndef decode_shift(s: str):\n    return \"\".join([chr(((ord(ch) - 5 - ord(\"a\")) % 26) + ord(\"a\")) for ch in s])\n```\n\nWhy:\n- The modulo operation ensures that characters wrap around the alphabet correctly.\n- Reversing the shift by subtracting 5 from each character's ASCII value before applying the same encoding logic gives us the original string.",
+    "tokens": 174,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/51",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a set of vowels for easy lookup.\n2. Iterate over each character in the input string.\n3. Append non-vowel characters to a result string.\n4. Return the result string.\n\nCode:\n```python\ndef remove_vowels(text):\n    vowels = {'a', 'e', 'i', 'o', 'u'}\n    result = \"\"\n    \n    for char in text:\n        if char.lower() not in vowels:\n            result += char\n            \n    return result\n```\n\nWhy:\n- Using a set of vowels makes checking for vowels faster.\n- The loop iterates through each character, ensuring all characters are checked.\n- The `lower()` method ensures the check is case-insensitive.",
+    "tokens": 148,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/52",
+    "system": "krama",
+    "answer": "Plan:\n1. Loop through the list.\n2. Check if each number is less than the threshold.\n3. Return `False` as soon as we find one that's not below.\n\nCode:\n```python\ndef below_threshold(l: list, t: int):\n    for x in l:\n        if x >= t:\n            return False\n    return True\n```\n\nWhy:\n- The loop checks each element individually.\n- If any element is greater than or equal to the threshold, we immediately return `False`.\n- If we finish looping without finding any such element, we return `True`.",
+    "tokens": 122,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/53",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `add` that takes two arguments.\n2. Return their sum.\n\nCode:\n```python\ndef add(x: int, y: int):\n    \"\"\"Add two numbers x and y\"\"\"\n    return x + y\n```\n\nWhy:\n- The function uses type hints (`x: int`) to indicate the expected types of its parameters.\n- The docstring provides clear instructions on how to use the function.\n- The tests cover both positive and negative values, ensuring the function works correctly in different scenarios.",
+    "tokens": 109,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/54",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert both strings to sets to remove duplicates and compare sizes.\n2. Compare the lengths of the sets directly.\n\nCode:\n```python\ndef same_chars(s0: str, s1: str) -> bool:\n    return len(set(s0)) == len(set(s1))\n```\n\nWhy:\n- Converting strings to sets removes any duplicate characters within each word.\n- Comparing the sizes of these sets gives us whether both words have exactly the same unique characters.",
+    "tokens": 99,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/55",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the base cases for the first two Fibonacci numbers.\n2. Use a loop to calculate subsequent Fibonacci numbers up to the nth number.\n\nCode:\n```python\ndef fib(n: int):\n    \"\"\"Return n-th Fibonacci number.\"\"\"\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    \n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    \n    return b\n```\n\nWhy:\n- The base cases handle the first two Fibonacci numbers directly.\n- A loop is used to calculate the rest of the sequence iteratively.\n- This approach avoids recursion and keeps the code simple.",
+    "tokens": 156,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/56",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a counter to keep track of the balance between opening and closing brackets.\n2. Iterate through each character in the string.\n3. If an opening bracket is encountered, increment the counter.\n4. If a closing bracket is encountered, decrement the counter.\n5. If at any point the counter goes negative, return False because there's no matching opening bracket.\n6. After iterating through all characters, if the counter is zero, all brackets are correctly matched; otherwise, return False.\n\nCode:\n```python\ndef correct_bracketing(brackets: str):\n    balance = 0\n    \n    for char in brackets:\n        if char == \"<\":\n            balance += 1\n        elif char == \">\":\n            balance -= 1\n            \n        if balance < 0:\n            return False\n    \n    return balance == 0\n```\n\nWhy:\n- The counter keeps track of how many more opening brackets there are than closing ones. If it goes negative at any point, there's a closing bracket without a matching opening one.\n- After iterating through all characters, if the counter is zero, all brackets were correctly matched; otherwise, they weren't.",
+    "tokens": 236,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/57",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is empty or has one element.\n2. Compare each pair of adjacent elements to determine if they are in ascending order.\n\nCode:\n```python\ndef monotonic(l: list):\n    \"\"\"Return True is list elements are monotonically increasing or decreasing.\"\"\"\n    if len(l) <= 1:\n        return True\n    \n    for i in range(len(l) - 1):\n        if l[i] > l[i + 1]:\n            return False\n            \n    return True\n```\n\nWhy:\n- An empty list or a single-element list is considered monotonic.\n- By comparing each element with the next, we can detect if the list is strictly increasing or decreasing.",
+    "tokens": 144,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/58",
+    "system": "krama",
+    "answer": "Plan:\n1. Find the intersection of the two lists.\n2. Remove duplicates by converting to a set and back to a list.\n\nCode:\n```python\ndef common(l1: list, l2: list):\n    \"\"\"Return sorted unique common elements for two lists.\"\"\"\n    return sorted(set(l1) & set(l2))\n```\n\nWhy:\n- Using `set` allows us to find the intersection efficiently.\n- Converting back to a list ensures we have all elements in order and without duplicates.\n- The test cases cover typical scenarios including empty lists, single-element lists, and multiple common elements.",
+    "tokens": 123,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/59",
+    "system": "krama",
+    "answer": "Plan:\n1. Divide `n` by 2 until it's odd, because all primes are odd except 2.\n2. Check for factors starting from 3 and incrementing by 2.\n\nCode:\n```python\ndef largest_prime_factor(n: int):\n    \"\"\"Return the largest prime factor of n. Assume n > 1 and is not a prime.\"\"\"\n    while n % 2 == 0:\n        n //= 2\n    \n    for i in range(3, int(n**0.5) + 1, 2):\n        while n % i == 0:\n            n //= i\n    \n    if n > 2:\n        return n\n```\n\nWhy:\n- Dividing by 2 first ensures we only check odd numbers.\n- Checking from 3 up to the square root of `n` allows us to skip even factors.\n- If `n` is a prime number greater than 2 after this loop, it will be returned as the largest prime factor.",
+    "tokens": 205,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/60",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand the task: The function should calculate the sum of all integers from 1 to `n`.\n2. Write a loop or use a formula to compute the sum.\n3. Include tests to verify correctness.\n\nCode:\n```python\ndef sum_to_n(n: int):\n    \"\"\"Sum of numbers from 1 to n.\"\"\"\n    return n * (n + 1) // 2\n```\n\nWhy:\n- The formula `(n * (n + 1)) // 2` is derived from the arithmetic series sum formula.\n- This approach avoids explicit loops, making it efficient for large values of `n`.\n- The tests cover various cases including edge cases like `n = 1`.",
+    "tokens": 147,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/61",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a counter to keep track of the balance between opening and closing brackets.\n2. Iterate through each character in the string.\n3. If an opening bracket is encountered, increment the counter.\n4. If a closing bracket is encountered, decrement the counter.\n5. If at any point the counter goes negative, there's no matching opening bracket, so return False.\n6. After iterating through all characters, if the counter is zero, all brackets are correctly matched; otherwise, return False.\n\nCode:\n```python\ndef correct_bracketing(brackets: str):\n    balance = 0\n    \n    for char in brackets:\n        if char == \"(\":\n            balance += 1\n        elif char == \")\":\n            balance -= 1\n            \n        if balance < 0:\n            return False\n    \n    return balance == 0\n```\n\nWhy:\n- The counter keeps track of how many more opening brackets there are than closing ones. If it goes negative at any point, we know there's a closing bracket without a matching opening one.\n- After iterating through all characters, if the counter is zero, all brackets were correctly matched; otherwise, they weren't.",
+    "tokens": 239,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/62",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand how to compute the derivative of a polynomial.\n2. Write a loop to multiply each coefficient by its corresponding power of x.\n3. Adjust the list to reflect the new coefficients.\n\nCode:\n```python\ndef derivative(xs: list):\n    \"\"\" xs represent coefficients of a polynomial.\n    xs[0] + xs[1] * x + xs[2] * x^2 + ....\n     Return derivative of this polynomial in the same form.\n    >>> derivative([3, 1, 2, 4, 5])\n    [1, 4, 12, 20]\n    >>> derivative([1, 2, 3])\n    [2, 6]\n    \"\"\"\n    result = []\n    for i in range(1, len(xs)):\n        result.append(i * xs[i])\n    return result\n```\n\nWhy:\n- The loop starts at index 1 because the first coefficient (0th power) has no derivative.\n- We multiply each coefficient by its corresponding power of x (`i`) to get the new coefficients.\n- If the input list is empty, we return an empty list directly.",
+    "tokens": 238,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/63",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand the recursive nature of the problem.\n2. Implement a memoization technique to avoid redundant calculations.\n\nCode:\n```python\ndef fibfib(n: int, memo={0: 0, 1: 0, 2: 1}):\n    \"\"\"The FibFib number sequence is defined as follows:\n    fibfib(0) == 0\n    fibfib(1) == 0\n    fibfib(2) == 1\n    fibfib(n) == fibfib(n-1) + fibfib(n-2) + fibfib(n-3).\n    Please write a function to efficiently compute the n-th element of the fibfib number sequence.\n    >>> fibfib(1)\n    0\n    >>> fibfib(5)\n    4\n    >>> fibfib(8)\n    24\n    \"\"\"\n    if n not in memo:\n        memo[n] = fibfib(n - 1, memo) + fibfib(n - 2, memo) + fibfib(n - 3, memo)\n    return memo[n]\n```\n\nWhy:\n- Memoization stores previously computed results in a dictionary to avoid redundant calculations.\n- The base cases are handled directly within the function.\n- The recursive calls ensure that all necessary values are computed before returning.",
+    "tokens": 271,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/64",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the function `vowels_count`.\n2. Initialize a counter for vowels.\n3. Loop through each character in the string.\n4. Check if the character is a vowel and increment the counter accordingly.\n5. Handle the special case where 'y' is at the end of the word.\n\nCode:\n```python\ndef vowels_count(s):\n    \"\"\"Write a function vowels_count which takes a string representing\n    a word as input and returns the number of vowels in the string.\n    Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a\n    vowel, but only when it is at the end of the given word.\n\n    Example:\n    >>> vowels_count(\"abcde\")\n    2\n    >>> vowels_count(\"ACEDY\")\n    3\n    \"\"\"\n    count = 0\n    for char in s:\n        if char.lower() in \"aeiou\":\n            count += 1\n        elif char == \"y\" and len(s) > 1 and s[-1].lower() not in \"aeiou\":\n            count += 1\n    return count\n```\n\nWhy:\n- The function checks each character individually to ensure accuracy.\n- The special case where 'y' is at the end of the word is handled by checking if it's not followed by a vowel.\n- The test cases cover normal words, words with 'y' at the end, and an empty string.",
+    "tokens": 311,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/65",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the integer to a list of its digits.\n2. Handle cases where shift is greater than the number of digits.\n3. Perform the circular shift by slicing and concatenating.\n\nCode:\n```python\ndef circular_shift(x, shift):\n    digits = [int(d) for d in str(x)]\n    num_digits = len(digits)\n    \n    if shift >= num_digits:\n        return ''.join(str(d) for d in reversed(digits))\n    \n    shifted_digits = digits[-shift:] + digits[:-shift]\n    return ''.join(str(d) for d in shifted_digits)\n```\n\nWhy:\n- Converting the integer to a list of digits makes it easy to manipulate each digit individually.\n- Handling shifts greater than or equal to the number of digits ensures we reverse the digits correctly.\n- Slicing and concatenation allow us to perform the circular shift efficiently.",
+    "tokens": 178,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/66",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a sum variable to zero.\n2. Loop through each character in the string.\n3. Check if the character is uppercase using `isupper()`.\n4. If it is, add its ASCII value to the sum.\n\nCode:\n```python\ndef digitSum(s):\n    \"\"\"Task\n    Write a function that takes a string as input and returns the sum of the upper characters only'\n    ASCII codes.\n\n    Examples:\n        digitSum(\"\") => 0\n        digitSum(\"abAB\") => 131\n        digitSum(\"abcCd\") => 67\n        digitSum(\"helloE\") => 69\n        digitSum(\"woArBld\") => 131\n        digitSum(\"aAaaaXa\") => 153\n    \"\"\"\n    sum = 0\n    for c in s:\n        if c.isupper():\n            sum += ord(c)\n    return sum\n```\n\nWhy:\n- `ord(c)` gives the ASCII value of a character.\n- `c.isupper()` checks if a character is uppercase.",
+    "tokens": 227,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/67",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into parts using `split()`.\n2. Extract the number of apples and oranges from the first part.\n3. Subtract these numbers from the total number of fruits to find the number of mangoes.\n\nCode:\n```python\ndef fruit_distribution(s,n):\n    \"\"\"\n    In this task, you will be given a string that represents a number of apples and oranges \n    that are distributed in a basket of fruit this basket contains \n    apples, oranges, and mango fruits. Given the string that represents the total number of \n    the oranges and apples and an integer that represent the total number of the fruits \n    in the basket return the number of the mango fruits in the basket.\n    for examble:\n    fruit_distribution(\"5 apples and 6 oranges\", 19) ->19 - 5 - 6 = 8\n    fruit_distribution(\"0 apples and 1 oranges\",3) -> 3 - 0 - 1 = 2\n    fruit_distribution(\"2 apples and 3 oranges\", 100) -> 100 - 2 - 3 = 95\n    fruit_distribution(\"100 apples and 1 oranges\",120) -> 120 - 100 - 1 = 19\n    \"\"\"\n    parts = s.split()\n    apples = int(parts[0].split()[0])\n    oranges = int(parts[1].split()[0])\n    return n - apples - oranges\n```\n\nWhy:\n- `split()` breaks the string into words.\n- Extracting numbers using `int()` converts strings to integers.\n- Subtracting the number of apples and oranges from the total gives the number of mangoes.",
+    "tokens": 358,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/68",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize variables to keep track of the smallest even value and its index.\n2. Iterate through the array to find the smallest even value and its index.\n3. Return the result as a list.\n\nCode:\n```python\ndef pluck(arr):\n    if not arr:\n        return []\n    \n    min_even = float('inf')\n    min_index = -1\n    \n    for i, node in enumerate(arr):\n        if node % 2 == 0 and node < min_even:\n            min_even = node\n            min_index = i\n            \n    return [min_even, min_index]\n```\n\nWhy:\n- We initialize `min_even` to infinity and `min_index` to -1 because we want the first even number we find to be chosen.\n- We iterate through the array using `enumerate` to keep track of the index while checking each node.\n- If we find a smaller even value, we update `min_even` and `min_index`.\n- Finally, we return the result as requested.",
+    "tokens": 208,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/69",
+    "system": "krama",
+    "answer": "Plan:\n1. Count the frequency of each number in the list.\n2. Check if there's a number whose frequency is greater than or equal to its value.\n3. Return that number; otherwise return -1.\n\nCode:\n```python\ndef search(lst):\n    from collections import Counter\n    \n    counts = Counter(lst)\n    \n    for num, count in counts.items():\n        if num <= count:\n            return num\n    return -1\n```\n\nWhy:\n- `Counter` helps us easily count how many times each number appears.\n- We iterate through the items in the counter to find the first number where its frequency is greater than or equal to its value.\n- If we finish iterating without finding such a number, we return -1.",
+    "tokens": 152,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/70",
+    "system": "krama",
+    "answer": "Plan:\n1. Sort the list in ascending order.\n2. Reverse the sorted list.\n3. Return every other element.\n\nCode:\n```python\ndef strange_sort_list(lst):\n    return [lst[i] for i in range(len(lst)) if i % 2 == 0]\n```\n\nWhy:\n- Sorting the list first gives us the smallest and largest numbers in order.\n- Reversing it puts them back in reverse order, but we only need every other element.\n- The condition `if i % 2 == 0` ensures we pick the even-indexed elements.",
+    "tokens": 120,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/71",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the sides form a valid triangle using the triangle inequality theorem.\n2. If valid, calculate the area using Heron's formula and round it to 2 decimal points.\n3. Return the area; otherwise, return -1.\n\nCode:\n```python\nimport math\n\ndef triangle_area(a, b, c):\n    if a + b <= c or a + c <= b or b + c <= a:\n        return -1\n    \n    s = (a + b + c) / 2\n    area = math.sqrt(s * (s - a) * (s - b) * (s - c))\n    \n    return round(area, 2)\n```\n\nWhy:\n- The triangle inequality theorem ensures the sides can form a valid triangle.\n- Heron's formula calculates the area given the semi-perimeter and side lengths.\n- Rounding to 2 decimal points is straightforward using `round`.\n- Negative values are immediately rejected by the initial check.",
+    "tokens": 202,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/72",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is a palindrome using slicing.\n2. Sum up all elements in the list.\n3. Compare the sum with the maximum allowed weight `w`.\n\nCode:\n```python\ndef will_it_fly(q,w):\n    return q == q[::-1] and sum(q) <= w\n```\n\nWhy:\n- Checking if the list is a palindrome (`q == q[::-1]`) ensures that the object is balanced.\n- Summing up all elements in the list (`sum(q)`) gives us the total weight of the object.\n- Comparing the total weight with `w` determines whether the object will fly or not.",
+    "tokens": 135,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/73",
+    "system": "krama",
+    "answer": "Plan:\n1. Compare elements from the start and end moving towards the center.\n2. Count how many changes are needed to make them equal.\n\nCode:\n```python\ndef smallest_change(arr):\n    changes = 0\n    left, right = 0, len(arr) - 1\n    \n    while left < right:\n        if arr[left] != arr[right]:\n            changes += 1\n        left += 1\n        right -= 1\n    \n    return changes\n```\n\nWhy:\n- The loop runs until `left` is less than `right`.\n- If the elements at `left` and `right` are different, a change is needed.\n- Each change reduces the number of differences by one.",
+    "tokens": 147,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/74",
+    "system": "krama",
+    "answer": "Plan:\n1. Count the number of characters in each list.\n2. Compare these counts and return the appropriate list.\n\nCode:\n```python\ndef total_match(lst1, lst2):\n    def count_chars(lst):\n        return sum(len(s) for s in lst)\n    \n    len1 = count_chars(lst1)\n    len2 = count_chars(lst2)\n    \n    if len1 < len2:\n        return lst1\n    elif len1 > len2:\n        return lst2\n    else:\n        return lst1\n```\n\nWhy:\n- The `count_chars` function uses a generator expression to iterate over each string in the list and sum up their lengths.\n- By comparing the results of `count_chars(lst1)` and `count_chars(lst2)`, we can determine which list has fewer total characters.\n- If both lists have the same number of characters, the first list is returned by default.",
+    "tokens": 188,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/75",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is prime.\n2. Iterate through possible divisors and count how many primes are found.\n3. Return true if exactly three primes are found.\n\nCode:\n```python\ndef is_multiply_prime(a):\n    def is_prime(n):\n        \"\"\"Check if a number is prime.\"\"\"\n        if n <= 1:\n            return False\n        for i in range(2, int(n**0.5) + 1):\n            if n % i == 0:\n                return False\n        return True\n\n    count = 0\n    for i in range(2, a):\n        while a % i == 0 and is_prime(i):\n            count += 1\n            a //= i\n    \n    return count == 3\n```\n\nWhy:\n- The helper function `is_prime` checks if a number is prime by iterating up to its square root.\n- We iterate through possible divisors starting from 2 and divide the number as much as possible while checking if each divisor is prime.\n- If exactly three primes are found, we return True; otherwise, we return False.",
+    "tokens": 234,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/76",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if `n` is 1 and return True if so.\n2. Loop through possible integer values of `x`.\n3. For each value, check if `n**i == x`.\n4. Return True if a match is found.\n\nCode:\n```python\ndef is_simple_power(x, n):\n    \"\"\"Your task is to write a function that returns true if a number x is a simple\n    power of n and false in other cases.\n    x is a simple power of n if n**int=x\n    For example:\n    is_simple_power(1, 4) => true\n    is_simple_power(2, 2) => true\n    is_simple_power(8, 2) => true\n    is_simple_power(3, 2) => false\n    is_simple_power(3, 1) => false\n    is_simple_power(5, 3) => false\n    \"\"\"\n    if n == 1:\n        return x == 1\n    \n    i = 0\n    while True:\n        power = n ** i\n        if power > x:\n            break\n        elif power == x:\n            return True\n        i += 1\n```\n\nWhy:\n- The function checks if `n` is 1 first because any number raised to the power of 0 is 1, and we need a specific condition.\n- We loop through possible integer values of `x` using a while loop. This ensures we check all possibilities up to a reasonable limit.\n- If we find a match, we return True immediately. Otherwise, after checking all possibilities, we return False.",
+    "tokens": 340,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/77",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the number is zero, then return True.\n2. If not, check if the cube root of the number is an integer.\n\nCode:\n```python\ndef iscube(a):\n    if a == 0:\n        return True\n    elif round(a ** (1/3)) ** 3 == a:\n        return True\n    else:\n        return False\n```\n\nWhy:\n- Checking if the number is zero first avoids unnecessary calculations.\n- Using `round(a ** (1/3))` gives us the cube root of `a`.\n- Squaring this result and comparing it to `a` ensures we have the correct cube.",
+    "tokens": 137,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/78",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a set of prime hexadecimal digits.\n2. Count how many of these digits are in the input string.\n\nCode:\n```python\ndef hex_key(num):\n    primes_hex = {'2', '3', '5', '7', 'B', 'D'}\n    return sum(1 for digit in num if digit.upper() in primes_hex)\n```\n\nWhy:\n- Using a set (`primes_hex`) allows us to check membership efficiently.\n- The loop iterates over each character in the input string, converting it to uppercase before checking.\n- The `sum` function counts how many times the condition is true.",
+    "tokens": 131,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/79",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the decimal number to binary using Python's built-in `bin()` function.\n2. Remove the '0b' prefix that `bin()` adds by slicing the string.\n3. Add the extra characters 'db' at the beginning and end of the binary string.\n\nCode:\n```python\ndef decimal_to_binary(decimal):\n    \"\"\"Converts a decimal number to its binary representation.\"\"\"\n    binary_str = bin(decimal)[2:]\n    return f\"db{binary_str}db\"\n```\n\nWhy:\n- `bin(decimal)` converts the integer to a binary string prefixed with '0b'.\n- `[2:]` removes this prefix, leaving only the actual binary digits.\n- The extra characters 'db' are added at both ends of the resulting string.",
+    "tokens": 157,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/80",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the length of the string is less than 3. If so, return `False`.\n2. Iterate through the string using a loop and check every three consecutive characters.\n3. Return `True` if all checks pass; otherwise, return `False`.\n\nCode:\n```python\ndef is_happy(s):\n    if len(s) < 3:\n        return False\n    \n    for i in range(len(s) - 2):\n        if s[i] == s[i + 1] or s[i] == s[i + 2] or s[i + 1] == s[i + 2]:\n            return False\n            \n    return True\n```\n\nWhy:\n- The function checks the length first to avoid unnecessary iterations.\n- It uses a loop to compare every three consecutive characters, ensuring all conditions are met.\n- If any condition fails, it immediately returns `False`, avoiding further checks.",
+    "tokens": 189,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/81",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the grading scale as a dictionary.\n2. Iterate over each GPA in the input list.\n3. Look up the corresponding letter grade using the dictionary.\n4. Append the grade to the result list.\n\nCode:\n```python\ndef numerical_letter_grade(grades):\n    grading_scale = {\n        4.0: 'A+', 3.7: 'A', 3.3: 'A-', 3.0: 'B+', \n        2.7: 'B', 2.3: 'B-', 2.0: 'C+', 1.7: 'C', \n        1.3: 'C-', 1.0: 'D+', 0.7: 'D', 0.0: 'D-'\n    }\n    \n    result = []\n    for gpa in grades:\n        if gpa == 0.0:\n            result.append('E')\n        else:\n            result.append(grading_scale[gpa])\n            \n    return result\n```\n\nWhy:\n- The grading scale is stored as a dictionary to easily look up the correct grade.\n- We iterate over each GPA and append the corresponding letter grade to the result list.\n- If the GPA is 0.0, we add 'E' directly to the result list without looking it up in the dictionary.",
+    "tokens": 278,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/82",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is prime.\n2. Calculate the length of the input string.\n3. Use the helper function to determine if the length is prime.\n\nCode:\n```python\ndef is_prime(n):\n    \"\"\"Check if a number is prime.\"\"\"\n    if n <= 1:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n\ndef prime_length(string):\n    \"\"\"Determine if the length of a string is a prime number.\"\"\"\n    length = len(string)\n    return is_prime(length)\n```\n\nWhy:\n- The helper function `is_prime` checks if a given number is prime by testing divisibility up to its square root.\n- The main function uses this helper to determine if the length of the input string is prime.\n- The tests cover various cases, including edge cases like an empty string and strings with all characters the same.",
+    "tokens": 209,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/83",
+    "system": "krama",
+    "answer": "Plan:\n1. Understand that for an n-digit number to start or end with 1, it can be divided into two parts: the first digit (which must be 1) and the rest of the digits.\n2. Calculate the total number of n-digit numbers without restrictions.\n3. Subtract the cases where both the first and last digits are 1 to avoid double-counting.\n\nCode:\n```python\ndef starts_one_ends(n):\n    if n == 1:\n        return 1\n    else:\n        # Total count for n-digit numbers is 9 * 10^(n-2)\n        total_count = 9 * (10 ** (n - 2))\n        # Subtract the cases where both first and last digits are 1\n        special_cases = 10 ** (n - 3)\n        return total_count - special_cases\n```\n\nWhy:\n- If `n` is 1, there's only one way to have a number starting or ending with 1.\n- For larger values of `n`, we calculate the total possible combinations and subtract the cases where both ends are 1 to avoid double-counting.",
+    "tokens": 238,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/84",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the number to its digits as strings.\n2. Sum these digits.\n3. Convert the sum back to binary.\n\nCode:\n```python\ndef solve(N):\n    \"\"\"Given a positive integer N, return the total sum of its digits in binary.\"\"\"\n    digits = [int(digit) for digit in str(N)]\n    sum_of_digits = sum(digits)\n    return bin(sum_of_digits)[2:]\n```\n\nWhy:\n- `bin()` converts an integer to its binary representation as a string.\n- `[2:]` removes the '0b' prefix that Python adds to binary strings.",
+    "tokens": 125,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/85",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a variable to keep track of the sum.\n2. Loop through the list using `enumerate` to access both index and value.\n3. Check if the index is odd and the value is even.\n4. Add the even value at an odd index to the sum.\n\nCode:\n```python\ndef add(lst):\n    total = 0\n    for i, x in enumerate(lst):\n        if i % 2 != 0 and x % 2 == 0:\n            total += x\n    return total\n```\n\nWhy:\n- `enumerate` provides both the index (`i`) and the value (`x`) during iteration.\n- The condition `if i % 2 != 0` ensures we're checking odd indices.\n- `if x % 2 == 0` checks if the number is even.\n- We initialize `total` to zero before starting the loop.",
+    "tokens": 186,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/86",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into words.\n2. Sort each word alphabetically.\n3. Join the sorted words back together with spaces.\n\nCode:\n```python\ndef anti_shuffle(s):\n    return \" \".join(sorted(word) for word in s.split())\n```\n\nWhy:\n- `s.split()` splits the string into a list of words, preserving the original order.\n- `sorted(word)` sorts the characters within each word alphabetically.\n- `\" \".join(...)` combines the sorted words back into a single string with spaces between them.",
+    "tokens": 112,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/87",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate over each row in the list.\n2. Check if the element at position `x` is equal to `1`.\n3. If it is, add its coordinates to the result list.\n\nCode:\n```python\ndef get_row(lst, x):\n    result = []\n    \n    for i, row in enumerate(lst):\n        for j, value in enumerate(row):\n            if value == x:\n                result.append((i, len(row) - 1 - j))\n                \n    return result\n```\n\nWhy:\n- We use `enumerate` to loop through the list and get both index (`i`) and value (`value`) at each step.\n- The coordinates are calculated by subtracting the current column index from the total number of columns minus one, because we want them sorted in descending order.\n- If the element is not found, it's skipped without adding anything to the result.",
+    "tokens": 184,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/88",
+    "system": "krama",
+    "answer": "Plan:\n1. Copy the array to avoid modifying the original.\n2. Determine if the sum of the first and last elements is odd or even.\n3. Sort the copied array accordingly.\n\nCode:\n```python\ndef sort_array(array):\n    \"\"\"\n    Given an array of non-negative integers, return a copy of the given array after sorting,\n    you will sort the given array in ascending order if the sum( first index value, last index value) is odd,\n    or sort it in descending order if the sum( first index value, last index value) is even.\n\n    Note:\n    * don't change the given array.\n    \"\"\"\n    sorted_array = array.copy()\n    \n    if len(sorted_array) > 0:\n        if (sorted_array[0] + sorted_array[-1]) % 2 == 0:\n            sorted_array.sort(reverse=True)\n        else:\n            sorted_array.sort()\n\n    return sorted_array\n```\n\nWhy:\n- Using `array.copy()` ensures we don't modify the original list.\n- Checking if the sum is odd or even allows us to decide whether to sort in ascending or descending order.\n- Sorting in reverse for even sums ensures the array is ordered correctly.",
+    "tokens": 245,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/89",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the alphabet and its length.\n2. Rotate the alphabet by multiplying 2 and taking modulo 26.\n3. Encrypt each character in the string using the rotated alphabet.\n\nCode:\n```python\ndef encrypt(s):\n    alphabet = \"abcdefghijklmnopqrstuvwxyz\"\n    shifted_alphabet = alphabet[2:] + alphabet[:2]\n    \n    encrypted_string = \"\"\n    for char in s:\n        if char.isalpha():\n            index = alphabet.index(char.lower())\n            new_index = (index + 2) % len(shifted_alphabet)\n            encrypted_string += shifted_alphabet[new_index]\n        else:\n            encrypted_string += char\n    \n    return encrypted_string\n```\n\nWhy:\n- The `shifted_alphabet` is created by rotating the original alphabet by two positions.\n- Each character in the input string is checked if it's an alphabetic letter. If so, its position is shifted using the rotated alphabet; otherwise, it remains unchanged.\n- This approach ensures that the encryption maintains the original case and non-letter characters while shifting the letters according to the specified rules.",
+    "tokens": 220,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/90",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list has at least two elements.\n2. Sort the list and return the second element.\n\nCode:\n```python\ndef next_smallest(lst):\n    if len(lst) < 2:\n        return None\n    \n    lst.sort()\n    return lst[1]\n```\n\nWhy:\n- Sorting the list ensures that we can easily access the second smallest element.\n- Checking if the list has at least two elements prevents errors when trying to access an index that doesn't exist.",
+    "tokens": 102,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/91",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into sentences using punctuation marks.\n2. Count how many of those sentences start with \"I\".\n3. Return the count.\n\nCode:\n```python\ndef is_bored(S):\n    sentences = S.split('. ')\n    boredom_count = sum(1 for sentence in sentences if sentence.startswith(\"I \"))\n    return boredom_count\n```\n\nWhy:\n- `split('. ')` breaks the string into parts based on '.', '?' or '!'.\n- `startswith(\"I \")` checks if each part starts with \"I \".\n- The generator expression `(1 for ...)` counts how many times this condition is true.",
+    "tokens": 130,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/92",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if all numbers are integers using `all(isinstance(n, int) for n in [x, y, z])`.\n2. Check if the sum of any two numbers equals the third number.\n3. Return True if both conditions are met; otherwise return False.\n\nCode:\n```python\ndef any_int(x, y, z):\n    return all(isinstance(n, int) for n in [x, y, z]) and (x + y == z or x + z == y or y + z == x)\n```\n\nWhy:\n- `all(isinstance(n, int) for n in [x, y, z])` ensures that all inputs are integers.\n- The conditions check if any two numbers sum up to the third number. This covers both positive and negative sums.\n- If neither condition is met, the function returns False.",
+    "tokens": 176,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/93",
+    "system": "krama",
+    "answer": "Plan:\n1. Define vowels and their corresponding shifted letters.\n2. Iterate over each character in the message.\n3. Swap case if necessary.\n4. Replace vowels with shifted letters if they exist.\n\nCode:\n```python\ndef encode(message):\n    vowels = {'a': 'c', 'e': 'g', 'i': 'k', 'o': 'q', 'u': 'w'}\n    \n    def shift_vowel(vowel):\n        return vowels.get(vowel, vowel)\n    \n    encoded_message = []\n    \n    for char in message:\n        if char.isalpha():\n            if char.islower():\n                new_char = shift_vowel(char.upper())\n            else:\n                new_char = shift_vowel(char.lower())\n            \n            if char.isupper():\n                encoded_message.append(new_char.upper())\n            else:\n                encoded_message.append(new_char)\n        else:\n            encoded_message.append(char)\n    \n    return ''.join(encoded_message)\n```\n\nWhy:\n- The `shift_vowel` function handles the shifting logic for vowels.\n- We check if each character is an alphabet letter before processing it to avoid errors.\n- The final step joins all characters into a single string and returns it.",
+    "tokens": 242,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/94",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is prime.\n2. Iterate through the list and keep track of the largest prime found.\n3. Sum the digits of the largest prime.\n\nCode:\n```python\ndef skjkasdkd(lst):\n    def is_prime(n):\n        \"\"\"Check if a number is prime.\"\"\"\n        if n <= 1:\n            return False\n        for i in range(2, int(n**0.5) + 1):\n            if n % i == 0:\n                return False\n        return True\n\n    largest_prime = None\n    for num in lst:\n        if num > 1 and is_prime(num):\n            if largest_prime is None or num > largest_prime:\n                largest_prime = num\n\n    if largest_prime is not None:\n        return sum(int(digit) for digit in str(largest_prime))\n    else:\n        return 0\n```\n\nWhy:\n- The helper function `is_prime` checks if a number is prime by iterating up to its square root.\n- We iterate through the list and keep track of the largest prime found using a variable `largest_prime`.\n- If we find a larger prime, we update `largest_prime`. If not, we move on.\n- Finally, we sum the digits of the largest prime if it exists, otherwise return 0.",
+    "tokens": 279,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/95",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the dictionary is empty. If it is, return False immediately.\n2. Iterate over the keys of the dictionary.\n3. For each key, check if it is a string and either all keys are lowercase or all keys are uppercase.\n\nCode:\n```python\ndef check_dict_case(dict):\n    if not dict:\n        return False\n    \n    lower_count = 0\n    upper_count = 0\n    \n    for key in dict.keys():\n        if isinstance(key, str):\n            if key.islower():\n                lower_count += 1\n            elif key.isupper():\n                upper_count += 1\n                \n    return lower_count == len(dict) or upper_count == len(dict)\n```\n\nWhy:\n- The function checks if the dictionary is empty at the beginning to handle edge cases.\n- It uses `isinstance(key, str)` to ensure we're working with string keys.\n- `key.islower()` and `key.isupper()` help determine if the key is entirely lowercase or uppercase.\n- By comparing the counts of lower and upper case keys, we can determine if all keys are consistently formatted.",
+    "tokens": 228,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/96",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is prime.\n2. Iterate through numbers starting from 2 up to `n-1`, checking each one with the helper function.\n3. Collect and return the first `n` primes found.\n\nCode:\n```python\ndef count_up_to(n):\n    def is_prime(num):\n        \"\"\"Check if a number is prime.\"\"\"\n        if num <= 1:\n            return False\n        for i in range(2, int(math.sqrt(num)) + 1):\n            if num % i == 0:\n                return False\n        return True\n\n    primes = []\n    current_num = 2\n    while len(primes) < n:\n        if is_prime(current_num):\n            primes.append(current_num)\n        current_num += 1\n\n    return primes\n```\n\nWhy:\n- The helper function `is_prime` checks if a number is prime by testing divisibility up to its square root.\n- We use a loop to find the first `n` primes, stopping early if we have enough.\n- This approach ensures that we efficiently find the required list of primes without unnecessary checks.",
+    "tokens": 235,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/97",
+    "system": "krama",
+    "answer": "Plan:\n1. Extract the unit digits of both numbers using modulo (`%`).\n2. Multiply these two unit digits together.\n\nCode:\n```python\ndef multiply(a, b):\n    \"\"\"Complete the function that takes two integers and returns \n    the product of their unit digits.\n    Assume the input is always valid.\n    Examples:\n    multiply(148, 412) should return 16.\n    multiply(19, 28) should return 72.\n    multiply(2020, 1851) should return 0.\n    multiply(14,-15) should return 20.\n    \"\"\"\n    unit_a = a % 10\n    unit_b = b % 10\n    return unit_a * unit_b\n```\n\nWhy:\n- Modulo (`%`) gives the remainder when dividing by another number. For example, `148 % 10` is `8`.\n- Multiplying these two results gives us the product of their unit digits.\n- The examples cover various cases including negative numbers and zero.",
+    "tokens": 229,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/98",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a set of uppercase vowels.\n2. Initialize a counter for the number of uppercase vowels at even indices.\n3. Iterate over the string, checking characters at even indices.\n4. Increment the counter if the character is an uppercase vowel.\n\nCode:\n```python\ndef count_upper(s):\n    vowels = {'A', 'E', 'I', 'O', 'U'}\n    count = 0\n    \n    for i in range(0, len(s), 2):\n        if s[i] in vowels:\n            count += 1\n            \n    return count\n```\n\nWhy:\n- Using a set (`vowels`) allows us to check membership quickly.\n- The loop starts at index 0 and increments by 2 each iteration to ensure we only check even indices.\n- This approach ensures that we correctly count the number of uppercase vowels at even positions in the string.",
+    "tokens": 182,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/99",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the string to a float.\n2. Check if the number is positive or negative.\n3. Determine which integer is closer by comparing the fractional part.\n4. Return the appropriate integer.\n\nCode:\n```python\ndef closest_integer(value):\n    num = float(value)\n    \n    if num > 0:\n        return int(num + 0.5)\n    elif num < 0:\n        return int(num - 0.5)\n    else:\n        return 0\n```\n\nWhy:\n- Using `int(num + 0.5)` ensures rounding away from zero for positive numbers.\n- Using `int(num - 0.5)` ensures rounding away from zero for negative numbers.\n- The base case handles the special case where the number is exactly zero.",
+    "tokens": 161,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/100",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize an empty list to store the number of stones in each level.\n2. Loop from 0 to n-1 to add the correct number of stones for each level.\n3. Append the current number of stones to the list.\n\nCode:\n```python\ndef make_a_pile(n):\n    pile = []\n    current_stones = n\n    for i in range(n):\n        pile.append(current_stones)\n        if current_stones % 2 == 0:\n            current_stones += 2\n        else:\n            current_stones += 2 - (current_stones % 2)\n    return pile\n```\n\nWhy:\n- The loop runs n times because we need to add one stone per level.\n- We check if the current number of stones is even or odd and adjust accordingly.\n- This ensures that each level has the correct number of stones based on whether n is odd or even.",
+    "tokens": 190,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/101",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string using `split()` method.\n2. Return the resulting list of words.\n\nCode:\n```python\ndef words_string(s):\n    return s.split()\n```\n\nWhy:\n- The `split()` method splits a string into a list where each word is a list item.\n- An empty string will result in an empty list, which is handled correctly by returning it directly.",
+    "tokens": 83,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/102",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if both numbers are even.\n2. If they are, check if the difference between them is even.\n3. Return the larger of the two numbers if they meet the criteria; otherwise return -1.\n\nCode:\n```python\ndef choose_num(x, y):\n    if x % 2 == 0 and y % 2 == 0:\n        if (y - x) % 2 == 0:\n            return max(x, y)\n        else:\n            return -1\n    else:\n        return -1\n```\n\nWhy:\n- The function checks if both numbers are even before proceeding.\n- If they are, it then checks if the difference between them is even. This ensures that we're looking at an even number within the range.\n- Finally, it returns the larger of the two numbers if they meet the criteria; otherwise, it returns -1.",
+    "tokens": 184,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/103",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if `n` is greater than `m`. If so, return -1.\n2. Calculate the sum of all integers from `n` to `m`.\n3. Divide the sum by the count of numbers to get the average.\n4. Round the average to the nearest integer.\n5. Convert the rounded integer to binary.\n\nCode:\n```python\ndef rounded_avg(n, m):\n    if n > m:\n        return -1\n    \n    total_sum = 0\n    for i in range(n, m + 1):\n        total_sum += i\n    \n    count = m - n + 1\n    average = total_sum // count\n    \n    return bin(average)[2:]\n```\n\nWhy:\n- The loop calculates the sum of all integers from `n` to `m`.\n- Dividing by the count gives the average.\n- Rounding ensures we get an integer result.\n- Converting to binary uses Python's built-in `bin()` function, which returns a string prefixed with '0b'. We slice off the prefix using `[2:]`.",
+    "tokens": 223,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/104",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if all digits in a number are odd.\n2. Filter the input list using the helper function.\n3. Return the filtered list sorted in ascending order.\n\nCode:\n```python\ndef unique_digits(x):\n    def has_only_odd_digits(n):\n        return all(int(digit) % 2 != 0 for digit in str(n))\n    \n    return sorted([num for num in x if has_only_odd_digits(num)])\n```\n\nWhy:\n- The helper function `has_only_odd_digits` checks each digit of the number to ensure it is odd.\n- We use a list comprehension to filter out numbers that have at least one even digit.\n- Finally, we sort the resulting list before returning it.",
+    "tokens": 152,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/105",
+    "system": "krama",
+    "answer": "Plan:\n1. Filter the array to keep only numbers between 1 and 9.\n2. Sort these filtered numbers in ascending order.\n3. Reverse the sorted list.\n4. Convert each number back to its word representation.\n\nCode:\n```python\ndef by_length(arr):\n    def num_to_word(n):\n        return [\"One\", \"Two\", \"Three\", \"Four\", \"Five\", \"Six\", \"Seven\", \"Eight\", \"Nine\"][n - 1]\n\n    filtered = [x for x in arr if 1 <= x <= 9]\n    sorted_desc = sorted(filtered, reverse=True)\n    result = [num_to_word(n) for n in sorted_desc]\n    \n    return result\n```\n\nWhy:\n- The `num_to_word` function converts numbers back to their word equivalents.\n- We use a list comprehension to filter out numbers outside the range 1 to 9.\n- Sorting and reversing are straightforward operations on lists.\n- The test cases cover normal cases, edge cases like an empty array, and unexpected inputs.",
+    "tokens": 214,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/106",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function `factorial` to compute the factorial of a number.\n2. Iterate through the range from 1 to n (inclusive).\n3. For each index i, append either the factorial or the sum to the result list.\n\nCode:\n```python\ndef f(n):\n    def factorial(i):\n        return 1 if i == 0 else i * factorial(i - 1)\n    \n    result = []\n    for i in range(1, n + 1):\n        if i % 2 == 0:\n            result.append(factorial(i))\n        else:\n            result.append(sum(range(1, i + 1)))\n    return result\n```\n\nWhy:\n- The helper function `factorial` uses recursion to compute the factorial.\n- We iterate through the range using `range(1, n + 1)` because we need to include the last index.\n- For even indices, we use the `factorial` function; for odd indices, we sum up the numbers from 1 to i.",
+    "tokens": 215,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/107",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is a palindrome.\n2. Iterate through all numbers from 1 to n, count how many are even and how many are odd.\n\nCode:\n```python\ndef even_odd_palindrome(n):\n    def is_palindrome(x):\n        return str(x) == str(x)[::-1]\n\n    even_count = 0\n    odd_count = 0\n\n    for i in range(1, n + 1):\n        if is_palindrome(i):\n            if i % 2 == 0:\n                even_count += 1\n            else:\n                odd_count += 1\n\n    return (even_count, odd_count)\n```\n\nWhy:\n- The helper function `is_palindrome` checks if a number reads the same backward.\n- We iterate through each number from 1 to n and use the helper function to determine if it's a palindrome.\n- If the number is even, we increment the even count; otherwise, we increment the odd count.\n- Finally, we return the counts as a tuple.",
+    "tokens": 220,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/108",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to calculate the sum of digits of a number.\n2. Iterate through the array and use the helper function to check if the sum is positive.\n3. Count how many numbers meet the criteria.\n\nCode:\n```python\ndef count_nums(arr):\n    def digit_sum(n):\n        return sum(int(digit) for digit in str(abs(n)))\n    \n    return sum(1 for num in arr if digit_sum(num) > 0)\n```\n\nWhy:\n- The helper function `digit_sum` converts the number to a string, splits it into digits, and sums them up.\n- We use `abs(n)` inside the loop because we want to consider negative numbers as well.\n- The list comprehension `[1 for num in arr if digit_sum(num) > 0]` generates a list of booleans indicating whether each number has a positive sum of digits. The `sum` function then counts how many times this condition is true.",
+    "tokens": 198,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/109",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is empty. If it is, return True because an empty list is always sorted.\n2. Sort the original list and compare it with the rotated version of the list.\n3. Return True if they are equal, otherwise False.\n\nCode:\n```python\ndef move_one_ball(arr):\n    if not arr:\n        return True\n    \n    # Rotate the array to simulate right shifts\n    rotated_arr = arr[len(arr) - 1:] + arr[:len(arr) - 1]\n    \n    # Check if the original list is equal to the rotated list\n    return sorted(arr) == rotated_arr\n```\n\nWhy:\n- Checking if the list is empty ensures that we don't attempt to rotate an empty array, which would cause an error.\n- Rotating the array using slicing simulates performing right shifts. The last element of the original list becomes the first element in the rotated list.\n- Comparing the sorted version of the original list with the rotated list allows us to determine if the list can be sorted by performing right shifts. If they are equal, the list is already sorted; otherwise, it cannot be sorted.",
+    "tokens": 236,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/110",
+    "system": "krama",
+    "answer": "Plan:\n1. Count how many even numbers are in lst1 and how many odd numbers are in lst2.\n2. If there are enough even numbers in lst1 to replace all odd numbers in lst2, return \"YES\".\n3. Otherwise, return \"NO\".\n\nCode:\n```python\ndef exchange(lst1, lst2):\n    even_count_lst1 = sum(1 for x in lst1 if x % 2 == 0)\n    odd_count_lst2 = sum(1 for x in lst2 if x % 2 != 0)\n    \n    return \"YES\" if even_count_lst1 >= len(lst2) - odd_count_lst2 else \"NO\"\n```\n\nWhy:\n- The function uses list comprehensions to count the number of even and odd elements.\n- It then compares these counts to determine if an exchange is possible.\n- The test cases cover different scenarios, including edge cases like empty lists.",
+    "tokens": 190,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/111",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into individual letters.\n2. Count the occurrences of each letter using `collections.Counter`.\n3. Find the maximum occurrence count.\n4. Filter the dictionary to include only those letters with the maximum count.\n\nCode:\n```python\nfrom collections import Counter\n\ndef histogram(test):\n    counts = Counter(test.split())\n    max_count = max(counts.values(), default=0)\n    return {letter: count for letter, count in counts.items() if count == max_count}\n```\n\nWhy:\n- `Counter` helps count occurrences efficiently.\n- `max` ensures we handle ties correctly by returning all letters with the highest count.\n- The dictionary comprehension filters out letters that don't meet the criteria.",
+    "tokens": 148,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/112",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate over each character in `s`.\n2. If it's not in `c`, add it to a new string.\n3. Check if the new string is equal to its reverse.\n\nCode:\n```python\ndef reverse_delete(s, c):\n    result = \"\"\n    \n    for char in s:\n        if char not in c:\n            result += char\n            \n    return (result, result == result[::-1])\n```\n\nWhy:\n- We iterate over each character in `s` and check if it's not in `c`.\n- If it is, we add it to the `result` string.\n- Finally, we compare the `result` string with its reverse (`result[::-1]`) to determine if it's a palindrome.",
+    "tokens": 155,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/113",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to count odd digits in a single string.\n2. Iterate over each string in the list, apply the helper function, and format the result.\n\nCode:\n```python\ndef odd_count(lst):\n    def count_odds(s):\n        return sum(1 for char in s if int(char) % 2 != 0)\n    \n    results = []\n    for i, item in enumerate(lst):\n        count = count_odds(item)\n        results.append(f\"the number of odd elements {count}n the str{i+1}ng {i+1} of the {len(lst)}nput.\")\n    \n    return results\n```\n\nWhy:\n- The helper function `count_odds` iterates through each character in the string and checks if it is an odd digit.\n- We use `enumerate` to keep track of the index while iterating over the list, making the output more readable.\n- The test cases cover both empty lists and non-empty lists with single elements.",
+    "tokens": 207,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/114",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize `min_sum` to the maximum possible integer value.\n2. Iterate through the array using two pointers: `start` and `end`.\n3. Calculate the sum of the current sub-array using these pointers.\n4. Update `min_sum` if the current sum is smaller than the previous minimum sum.\n5. Move the `start` pointer to expand the sub-array from the left.\n\nCode:\n```python\ndef minSubArraySum(nums):\n    min_sum = float('inf')\n    start = 0\n    \n    for end in range(len(nums)):\n        current_sum = sum(nums[start:end+1])\n        \n        if current_sum < min_sum:\n            min_sum = current_sum\n        \n        while current_sum >= min_sum and start < end:\n            current_sum -= nums[start]\n            start += 1\n            \n    return min_sum\n```\n\nWhy:\n- The `while` loop inside the `for` loop ensures that we can expand the sub-array from the left if necessary.\n- By moving the `start` pointer, we ensure that we always consider the smallest possible sub-array.\n- Using `float('inf')` as the initial value for `min_sum` handles cases where all numbers are negative.",
+    "tokens": 251,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/115",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate over each well.\n2. Count how many buckets are needed to empty the current well.\n3. Sum up all the counts.\n\nCode:\n```python\ndef max_fill(grid, bucket_capacity):\n    total_buckets = 0\n    \n    for row in grid:\n        water_units = sum(row)\n        if water_units > 0:\n            total_buckets += math.ceil(water_units / bucket_capacity)\n    \n    return total_buckets\n```\n\nWhy:\n- `math.ceil` ensures we round up to the nearest whole number because even if a well has less than one full bucket, it still needs at least one bucket to empty.\n- The loop iterates over each row in the grid, and for each row, it calculates how many buckets are needed using `sum(row)` and `math.ceil`.\n- This approach ensures we correctly count the total number of times buckets need to be lowered.",
+    "tokens": 184,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/116",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to count the number of ones in each number.\n2. Sort the array using this helper function.\n\nCode:\n```python\ndef sort_array(arr):\n    def count_ones(n):\n        return bin(n).count('1')\n\n    return sorted(arr, key=lambda x: (count_ones(x), x))\n```\n\nWhy:\n- The `bin` function converts an integer to its binary representation as a string.\n- `.count('1')` counts how many '1's are in the binary string.\n- Sorting by `(count_ones(x), x)` ensures that numbers with fewer ones come first, and if there are ties, they are sorted by their decimal values.",
+    "tokens": 146,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/117",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into words.\n2. Filter out words that do not have exactly `n` consonants.\n3. Return the filtered list of words.\n\nCode:\n```python\ndef select_words(s, n):\n    def count_consonants(word):\n        return sum(1 for char in word if char.isalpha() and char.lower() not in \"aeiou\")\n\n    words = s.split()\n    result = [word for word in words if count_consonants(word) == n]\n    return result\n```\n\nWhy:\n- The helper function `count_consonants` counts how many consonants are in a given word.\n- We use a list comprehension to filter out words based on the count of consonants.\n- This approach ensures that we correctly identify words with exactly `n` consonants while handling edge cases like empty strings.",
+    "tokens": 177,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/118",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a character is a vowel.\n2. Iterate through the word from right to left, looking for vowels between consonants.\n\nCode:\n```python\ndef get_closest_vowel(word):\n    def is_vowel(char):\n        return char.lower() in \"aeiou\"\n    \n    for i in range(len(word) - 1, 0, -1):\n        if not is_vowel(word[i]) and is_vowel(word[i - 1]):\n            return word[i]\n    return \"\"\n```\n\nWhy:\n- The helper function `is_vowel` simplifies checking if a character is a vowel.\n- We iterate backwards to find the closest vowel from the right side.\n- If no such vowel exists, we return an empty string.",
+    "tokens": 162,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/119",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the first string is empty or has more closing parentheses than opening ones.\n2. Check if the second string is empty or has more opening parentheses than closing ones.\n3. If both conditions are met, return 'Yes'.\n4. Otherwise, return 'No'.\n\nCode:\n```python\ndef match_parens(lst):\n    s1, s2 = lst\n    \n    if s1 == '' or sum(1 for c in s1 if c == ')') > sum(1 for c in s1 if c == '('):\n        return 'No'\n    \n    if s2 == '' or sum(1 for c in s2 if c == '(') < sum(1 for c in s2 if c == ')'):\n        return 'No'\n    \n    return 'Yes'\n```\n\nWhy:\n- The function checks the balance of parentheses by counting opening and closing parentheses.\n- If either string has more closing than opening parentheses, it's impossible to make a balanced string.\n- By checking both strings separately, we ensure that any combination works.",
+    "tokens": 218,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/120",
+    "system": "krama",
+    "answer": "Plan:\n1. Sort the array in descending order.\n2. Slice the first `k` elements from the sorted list.\n\nCode:\n```python\ndef maximum(arr, k):\n    return sorted(arr, reverse=True)[:k]\n```\n\nWhy:\n- Sorting reverses the order of the numbers, so the largest ones come first.\n- Slicing `[start:stop]` gives us the first `k` elements. If there are fewer than `k`, it returns all available elements.",
+    "tokens": 100,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/121",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a variable to keep track of the sum.\n2. Iterate over the list using `enumerate` to access both index and value.\n3. Check if the index is even (`i % 2 == 0`) and if the value is odd (`value % 2 != 0`).\n4. Add the odd value at an even position to the sum.\n\nCode:\n```python\ndef solution(lst):\n    total_sum = 0\n    \n    for i, value in enumerate(lst):\n        if i % 2 == 0 and value % 2 != 0:\n            total_sum += value\n            \n    return total_sum\n```\n\nWhy:\n- `enumerate` provides both the index (`i`) and the value (`value`) at each iteration.\n- Checking `i % 2 == 0` ensures we're looking at even positions.\n- Using `value % 2 != 0` filters out even numbers, leaving only odd ones.\n- The loop runs through all elements in the list, ensuring all conditions are checked.",
+    "tokens": 215,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/122",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize the sum to zero.\n2. Loop through the first `k` elements of the array.\n3. Add each element to the sum if it has at most two digits.\n\nCode:\n```python\ndef add_elements(arr, k):\n    total_sum = 0\n    for i in range(k):\n        if -99 <= arr[i] <= 99:\n            total_sum += arr[i]\n    return total_sum\n```\n\nWhy:\n- The condition `-99 <= arr[i] <= 99` ensures the number has at most two digits.\n- Looping through `k` elements allows us to consider only the first `k` elements of the array.",
+    "tokens": 144,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/123",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to generate the Collatz sequence.\n2. Filter out even numbers from the sequence.\n3. Return the filtered list sorted in ascending order.\n\nCode:\n```python\ndef get_odd_collatz(n):\n    def collatz_sequence(num):\n        while num != 1:\n            yield num\n            if num % 2 == 0:\n                num //= 2\n            else:\n                num = 3 * num + 1\n    \n    sequence = collatz_sequence(n)\n    odd_numbers = [num for num in sequence if num % 2 != 0]\n    \n    return sorted(odd_numbers)\n```\n\nWhy:\n- The helper function `collatz_sequence` generates the Collatz sequence up to 1.\n- We use a list comprehension to filter out even numbers and collect only the odd ones.\n- Finally, we sort the resulting list before returning it.",
+    "tokens": 185,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/124",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the date string into month, day, and year.\n2. Check if the month is between 1 and 12.\n3. Check if the day is between 1 and the appropriate number of days for the given month.\n4. Ensure the date format is mm-dd-yyyy.\n\nCode:\n```python\ndef valid_date(date):\n    parts = date.split('-')\n    \n    if len(parts) != 3 or not all(part.isdigit() for part in parts):\n        return False\n    \n    month, day, year = map(int, parts)\n    \n    if month < 1 or month > 12:\n        return False\n    \n    if month in [4, 6, 9, 11] and day < 1 or day > 30:\n        return False\n    elif month == 2 and day < 1 or day > 29:\n        return False\n    elif month in [1, 3, 5, 7, 8, 10, 12] and day < 1 or day > 31:\n        return False\n    \n    return True\n```\n\nWhy:\n- The function checks if the date string is empty or contains non-digit characters.\n- It converts the month and day parts to integers and ensures they are within valid ranges.\n- The conditions check for leap years specifically for February.",
+    "tokens": 286,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/125",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the text by whitespace first.\n2. If that fails, try splitting by commas.\n3. If that also fails, count the odd-positioned lowercase letters.\n\nCode:\n```python\ndef split_words(txt):\n    try:\n        return txt.split()\n    except ValueError:\n        try:\n            return txt.split(',')\n        except ValueError:\n            return sum(1 for c in txt if ord(c) % 2 == 0)\n```\n\nWhy:\n- `try` and `except ValueError:` allow us to catch errors when splitting fails.\n- The second `try` ensures we handle cases where there are no spaces or commas.\n- Counting the odd-positioned letters is done by iterating over each character and checking its position in the alphabet.",
+    "tokens": 155,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/126",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the list is empty or has only one element.\n2. Iterate through the list and compare each element with the next one.\n3. If any element is greater than the next one, return False.\n4. If all elements are in ascending order, return True.\n\nCode:\n```python\ndef is_sorted(lst):\n    if len(lst) <= 1:\n        return True\n    \n    for i in range(len(lst) - 1):\n        if lst[i] > lst[i + 1]:\n            return False\n            \n    return True\n```\n\nWhy:\n- The function checks if the list is empty or has only one element, which are considered sorted.\n- It iterates through the list using a loop and compares each element with the next one. If it finds an element that is greater than the next one, it returns False immediately.\n- If the loop completes without finding any such pair, it means the list is sorted, so it returns True.\n\nThis approach ensures that the function handles all given examples correctly while avoiding unnecessary checks or conditions.",
+    "tokens": 217,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/127",
+    "system": "krama",
+    "answer": "Plan:\n1. Find the maximum start and minimum end of the two intervals.\n2. Calculate the length of their intersection.\n3. Check if this length is a prime number.\n\nCode:\n```python\ndef is_prime(n):\n    \"\"\"Check if a number is prime.\"\"\"\n    if n <= 1:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n\ndef intersection(interval1, interval2):\n    start_max = max(interval1[0], interval2[0])\n    end_min = min(interval1[1], interval2[1])\n    intersection_length = end_min - start_max\n    \n    if intersection_length > 0 and is_prime(intersection_length):\n        return \"YES\"\n    else:\n        return \"NO\"\n```\n\nWhy:\n- The `is_prime` function checks if a number is prime by iterating up to its square root.\n- We calculate the length of the intersection using the maximum start and minimum end.\n- If the intersection has a positive length and is prime, we return \"YES\". Otherwise, we return \"NO\".\n- This approach ensures that we correctly determine whether the length of the intersection is a prime number.",
+    "tokens": 262,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/128",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the array is empty and return `None` if it is.\n2. Initialize variables to keep track of the product of signs and the sum of magnitudes.\n3. Iterate through the array, updating these variables accordingly.\n\nCode:\n```python\ndef prod_signs(arr):\n    if not arr:\n        return None\n    \n    sign_product = 1\n    magnitude_sum = 0\n    \n    for num in arr:\n        if num == 0:\n            return 0\n        \n        sign_product *= (-1) ** (num < 0)\n        magnitude_sum += abs(num)\n    \n    return sign_product * magnitude_sum\n```\n\nWhy:\n- The function checks if the array is empty at the beginning to handle edge cases.\n- It uses `(-1) ** (num < 0)` to determine the sign of each number, which simplifies the logic.\n- The sum of magnitudes is calculated by taking the absolute value of each number and adding them up.",
+    "tokens": 203,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/129",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if the path is valid.\n2. Use depth-first search (DFS) to explore all possible paths of length `k`.\n3. Keep track of the minimum path found and return it.\n\nCode:\n```python\ndef minPath(grid, k):\n    N = len(grid)\n    \n    def isValid(x, y):\n        return 0 <= x < N and 0 <= y < N\n    \n    def dfs(x, y, path, steps):\n        if steps == k:\n            if not result or path < result:\n                result = path[:]\n            return\n        \n        for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:\n            nx, ny = x + dx, y + dy\n            if isValid(nx, ny) and (nx, ny) not in visited:\n                visited.add((nx, ny))\n                dfs(nx, ny, path + [grid[nx][ny]], steps + 1)\n                visited.remove((nx, ny))\n    \n    result = []\n    visited = set()\n    for i in range(N):\n        for j in range(N):\n            if grid[i][j] not in visited:\n                visited.add((i, j))\n                dfs(i, j, [grid[i][j]], 1)\n                visited.remove((i, j))\n    \n    return result\n```\n\nWhy:\n- The `isValid` function checks if a given cell is within the grid boundaries.\n- The `dfs` function uses recursion to explore all possible paths of length `k`.\n- We keep track of the minimum path found and return it at the end.",
+    "tokens": 348,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/130",
+    "system": "krama",
+    "answer": "Plan:\n1. Define the base cases for the first three terms of the Tribonacci sequence.\n2. Implement the recursive logic based on whether `n` is even or odd.\n3. Collect all terms up to `n` in a list.\n\nCode:\n```python\ndef tri(n):\n    \"\"\"Everyone knows Fibonacci sequence, it was studied deeply by mathematicians in \n    the last couple centuries. However, what people don't know is Tribonacci sequence.\n    Tribonacci sequence is defined by the recurrence:\n    tri(1) = 3\n    tri(n) = 1 + n / 2, if n is even.\n    tri(n) =  tri(n - 1) + tri(n - 2) + tri(n + 1), if n is odd.\n    For example:\n    tri(2) = 1 + (2 / 2) = 2\n    tri(4) = 3\n    tri(3) = tri(2) + tri(1) + tri(4)\n           = 2 + 3 + 3 = 8 \n    You are given a non-negative integer number n, you have to a return a list of the \n    first n + 1 numbers of the Tribonacci sequence.\n    Examples:\n    tri(3) = [1, 3, 2, 8]\n    \"\"\"\n    if n < 0:\n        raise ValueError(\"Input must be non-negative\")\n    \n    result = []\n    a, b, c = 1, 3, 2\n    \n    for i in range(n + 1):\n        result.append(a)\n        a, b, c = b, c, a + b + c\n    \n    return result\n```\n\nWhy:\n- The base cases handle the first three terms of the sequence.\n- The loop iterates from 0 to `n`, collecting each term in the list.\n- The recursive calls ensure that all terms up to `n` are computed correctly.",
+    "tokens": 412,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/131",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a variable to keep track of the product of odd digits.\n2. Iterate through each digit in the number.\n3. Check if the digit is odd and multiply it to the product.\n\nCode:\n```python\ndef digits(n):\n    product = 1\n    has_odd = False\n    \n    while n > 0:\n        digit = n % 10\n        if digit % 2 != 0:\n            product *= digit\n            has_odd = True\n            \n        n //= 10\n    \n    return product if has_odd else 0\n```\n\nWhy:\n- We use a loop to iterate through each digit of the number.\n- `n % 10` gives us the last digit, and `//=` removes it from the end.\n- If we find an odd digit, we multiply it into our result and set a flag indicating that there was at least one odd digit.\n- Finally, if no odd digits were found, we return 0; otherwise, we return the product.",
+    "tokens": 210,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/132",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate through the string using two pointers.\n2. Keep track of the depth of nesting with a counter.\n3. If we find a nested pair, return True.\n4. Return False if no valid subsequence is found.\n\nCode:\n```python\ndef is_nested(string):\n    depth = 0\n    has_nested = False\n    \n    for char in string:\n        if char == '[':\n            depth += 1\n            if depth > 1:\n                has_nested = True\n        elif char == ']':\n            depth -= 1\n            \n        if depth < 0:\n            return False\n    \n    return has_nested\n```\n\nWhy:\n- The depth counter keeps track of how many levels deep we are in the nesting.\n- If we find a pair where `depth > 1`, it means there is at least one nested bracket.\n- We also check for invalid cases like multiple closing brackets before opening ones.",
+    "tokens": 190,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/133",
+    "system": "krama",
+    "answer": "Plan:\n1. Round each number in the list to the upper integer using `math.ceil`.\n2. Square each rounded number.\n3. Sum up all squared numbers.\n\nCode:\n```python\nimport math\n\ndef sum_squares(lst):\n    return sum(math.ceil(x) ** 2 for x in lst)\n```\n\nWhy:\n- Using `math.ceil` ensures that each number is rounded up to the nearest integer before squaring.\n- The list comprehension iterates over the list, applying these operations to each element.\n- Summing up all squared values gives the final result.",
+    "tokens": 118,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/134",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the string is empty.\n2. If not, split the string into words using spaces as delimiters.\n3. Get the last word and check if it ends with a letter but not part of another word.\n\nCode:\n```python\ndef check_if_last_char_is_a_letter(txt):\n    if txt == \"\":\n        return False\n    \n    words = txt.split()\n    if len(words) > 0:\n        last_word = words[-1]\n        if last_word[-1].isalpha() and \" \" not in last_word[:-1]:\n            return True\n    return False\n```\n\nWhy:\n- The function checks if the string is empty first to handle edge cases like `\"\"`.\n- It splits the text into words using spaces as delimiters. This allows us to check each word individually.\n- We then check if the last character of the last word is a letter and not part of another word by ensuring there are no spaces before it in the previous words.",
+    "tokens": 202,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/135",
+    "system": "krama",
+    "answer": "Plan:\n1. Iterate through the list using `enumerate`.\n2. Check if the current element is less than its predecessor.\n3. Return the index if found; otherwise return -1.\n\nCode:\n```python\ndef can_arrange(arr):\n    for i, x in enumerate(arr):\n        if i > 0 and arr[i] < arr[i-1]:\n            return i\n    return -1\n```\n\nWhy:\n- `enumerate` provides both the index and value during iteration.\n- The condition checks if the current element is smaller than its predecessor.\n- If such an element is found, it returns its index; otherwise, it returns -1.",
+    "tokens": 135,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/136",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize `a` and `b` to `None`.\n2. Iterate through the list to find the smallest positive integer.\n3. Iterate through the list again to find the largest negative integer.\n\nCode:\n```python\ndef largest_smallest_integers(lst):\n    a, b = None, None\n    \n    for num in lst:\n        if num > 0 and (b is None or num < b):\n            b = num\n        elif num < 0 and (a is None or num > a):\n            a = num\n            \n    return (a, b)\n```\n\nWhy:\n- We initialize `a` and `b` to `None` because we don't know what they should be until we find them.\n- We iterate through the list twice: once for positive numbers and once for negative numbers. This ensures we capture both the smallest positive and largest negative integers.\n- If there are no positive or negative integers, `a` and `b` will remain `None`, as expected.",
+    "tokens": 209,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/137",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to convert strings to floats if necessary.\n2. Compare the values and return them in their original types.\n\nCode:\n```python\ndef compare_one(a, b):\n    def convert_to_float(value):\n        if isinstance(value, str) and ',' in value:\n            value = value.replace(',', '.')\n        return float(value)\n\n    a_val = convert_to_float(a)\n    b_val = convert_to_float(b)\n\n    if a_val > b_val:\n        return a\n    elif b_val > a_val:\n        return b\n    else:\n        return None\n```\n\nWhy:\n- The helper function `convert_to_float` ensures that both inputs are treated as floats, handling commas in string representations.\n- The comparison checks for equality and returns the appropriate value based on the original types.",
+    "tokens": 168,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/138",
+    "system": "krama",
+    "answer": "Plan:\n1. A number can be written as the sum of 4 even numbers if and only if it's even.\n2. Since each even number must be at least 2, we need to check if `n` is greater than or equal to 8.\n\nCode:\n```python\ndef is_equal_to_sum_even(n):\n    return n >= 8\n```\n\nWhy:\n- If `n` is odd, it cannot be written as the sum of four even numbers.\n- If `n` is less than 8, it's impossible to form such a sum with exactly four even numbers.",
+    "tokens": 125,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/139",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to calculate factorial recursively.\n2. Use the helper function within `special_factorial` to compute the result.\n\nCode:\n```python\ndef special_factorial(n):\n    def factorial(k):\n        if k == 0:\n            return 1\n        else:\n            return k * factorial(k - 1)\n    \n    result = 1\n    for i in range(1, n + 1):\n        result *= factorial(i)\n    \n    return result\n```\n\nWhy:\n- The helper function `factorial` uses recursion to compute the factorial of a number.\n- We iterate from 1 to `n`, multiplying the results together using the helper function.\n- This approach ensures that we correctly compute the Brazilian factorial for any positive integer.",
+    "tokens": 160,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/140",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the text into words using `split()`.\n2. Join the words with underscores if there's only one word, otherwise join them with hyphens.\n\nCode:\n```python\ndef fix_spaces(text):\n    words = text.split()\n    if len(words) == 1:\n        return words[0]\n    else:\n        return '_'.join(words)\n```\n\nWhy:\n- `split()` breaks the string into a list of words based on spaces.\n- If there's only one word, we just return it without any changes.\n- Otherwise, we join all words with hyphens to handle multiple consecutive spaces.",
+    "tokens": 131,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/141",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input string into two parts using the dot as a delimiter.\n2. Check if there is exactly one dot in the filename.\n3. Ensure the part before the dot starts with a letter and contains only letters or underscores.\n4. Verify that the part after the dot matches one of the allowed extensions ('txt', 'exe', 'dll').\n5. Count the number of digits in the part before the dot.\n\nCode:\n```python\ndef file_name_check(file_name):\n    parts = file_name.split('.')\n    \n    if len(parts) != 2:\n        return \"No\"\n    \n    name_part, ext_part = parts\n    \n    if not name_part or not name_part[0].isalpha():\n        return \"No\"\n    \n    digit_count = sum(c.isdigit() for c in name_part)\n    \n    if digit_count > 3:\n        return \"No\"\n    \n    allowed_extensions = ['txt', 'exe', 'dll']\n    \n    if ext_part not in allowed_extensions:\n        return \"No\"\n    \n    return \"Yes\"\n```\n\nWhy:\n- The function splits the input string into two parts using the dot as a delimiter. This allows us to check both the name and the extension separately.\n- We then verify that there is exactly one dot in the filename, ensuring it's correctly formatted.\n- The part before the dot must start with a letter and contain only letters or underscores. This ensures it follows standard naming conventions for file names.\n- We count the number of digits in the part before the dot to ensure it doesn't exceed three characters.\n- Finally, we check if the extension matches one of the allowed values ('txt', 'exe', 'dll'). If not, we return \"No\".\n- This approach ensures that all conditions are checked systematically and efficiently.",
+    "tokens": 366,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/142",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a variable to keep track of the sum.\n2. Iterate over the list using `enumerate` to get both index and value.\n3. Check if the index is a multiple of 3 or 4, and apply the appropriate operation.\n4. Add the result to the sum.\n5. Return the sum.\n\nCode:\n```python\ndef sum_squares(lst):\n    total_sum = 0\n    \n    for i, num in enumerate(lst):\n        if i % 3 == 0:\n            total_sum += num ** 2\n        elif i % 4 == 0 and i % 3 != 0:\n            total_sum += num ** 3\n            \n    return total_sum\n```\n\nWhy:\n- `enumerate` allows us to loop over the list while keeping track of the index.\n- We check if the index is a multiple of 3 or 4 using modulo (`%`). If it is, we apply the corresponding operation.\n- The function handles all edge cases including an empty list and lists with negative numbers.",
+    "tokens": 216,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/143",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is prime.\n2. Split the input sentence into words.\n3. Filter out words whose lengths are not prime.\n4. Join the remaining words back into a single string.\n\nCode:\n```python\ndef is_prime(n):\n    \"\"\"Check if a number is prime.\"\"\"\n    if n <= 1:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            return False\n    return True\n\ndef words_in_sentence(sentence):\n    \"\"\"\n    Filter words by their length being a prime number.\n    \"\"\"\n    words = sentence.split()\n    filtered_words = [word for word in words if is_prime(len(word))]\n    return ' '.join(filtered_words)\n```\n\nWhy:\n- The helper function `is_prime` checks if a given number is prime. This is used to filter out words based on their length being a prime number.\n- The main function splits the input sentence into individual words and then filters these words using the `is_prime` function.\n- Finally, it joins the filtered words back together into a single string and returns it.",
+    "tokens": 244,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/144",
+    "system": "krama",
+    "answer": "Plan:\n1. Split the input strings into numerators and denominators.\n2. Convert these strings to integers.\n3. Multiply the numerators together and the denominators together.\n4. Check if the result is a whole number by verifying if the remainder of the division is zero.\n\nCode:\n```python\ndef simplify(x, n):\n    x_numerator, x_denominator = map(int, x.split('/'))\n    n_numerator, n_denominator = map(int, n.split('/'))\n\n    product_numerator = x_numerator * n_numerator\n    product_denominator = x_denominator * n_denominator\n\n    return product_numerator % product_denominator == 0\n```\n\nWhy:\n- `map(int, ...)` converts the string representations of numbers into integers.\n- The function checks if the product of the numerators divided by the product of the denominators results in a whole number (i.e., no remainder).\n- This approach ensures that both x and n are valid fractions without zero as denominator.",
+    "tokens": 208,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/145",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to calculate the sum of digits.\n2. Sort the list using this helper function and the original index.\n\nCode:\n```python\ndef order_by_points(nums):\n    def digit_sum(n):\n        return sum(int(digit) for digit in str(abs(n)))\n\n    return sorted(range(len(nums)), key=lambda i: (digit_sum(nums[i]), i))\n```\n\nWhy:\n- The `digit_sum` function converts each number to a string, splits it into digits, and sums them up.\n- Sorting by the tuple `(digit_sum(nums[i]), i)` ensures that numbers with the same digit sum are ordered by their original index.",
+    "tokens": 136,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/146",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if the first and last digits of a number are odd.\n2. Iterate through the list using `enumerate` to access both index and value.\n3. Apply the helper function to each element and count how many meet the criteria.\n\nCode:\n```python\ndef specialFilter(nums):\n    def is_odd_digit(n):\n        return str(abs(n))[0] in '13579' and str(abs(n))[-1] in '13579'\n    \n    count = 0\n    for i, num in enumerate(nums):\n        if num > 10 and is_odd_digit(num):\n            count += 1\n            \n    return count\n```\n\nWhy:\n- The helper function `is_odd_digit` checks if the first and last digits of a number are odd.\n- We use `enumerate` to loop through the list while keeping track of the index.\n- By checking both conditions (`num > 10` and `is_odd_digit(num)`), we ensure we count only numbers that meet both criteria.",
+    "tokens": 220,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/147",
+    "system": "krama",
+    "answer": "Plan:\n1. Create the array `a` using the given formula.\n2. Initialize a counter for triples that satisfy the condition.\n3. Iterate through all possible triples and check if their sum is divisible by 3.\n\nCode:\n```python\ndef get_max_triples(n):\n    a = [i * i - i + 1 for i in range(1, n + 1)]\n    count = 0\n    \n    for i in range(n):\n        for j in range(i + 1, n):\n            for k in range(j + 1, n):\n                if (a[i] + a[j] + a[k]) % 3 == 0:\n                    count += 1\n                    \n    return count\n```\n\nWhy:\n- The formula `i * i - i + 1` generates the sequence of numbers we need.\n- We use three nested loops to check all possible triples.\n- By iterating through the array only once, we ensure efficiency.",
+    "tokens": 200,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/148",
+    "system": "krama",
+    "answer": "Planets = [\"Mercury\", \"Venus\", \"Earth\", \"Mars\", \"Jupiter\", \"Saturn\", \"Uranus\", \"Neptune\"]\ndef bf(planet1, planet2):\n    if planet1 not in Planets or planet2 not in Planets:\n        return ()\n    \n    index1 = Planets.index(planet1)\n    index2 = Planets.index(planet2)\n    \n    if index1 < index2:\n        return tuple(Planets[index1+1:index2])\n    else:\n        return tuple(Planets[index2+1:index1])",
+    "tokens": 125,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/149",
+    "system": "krama",
+    "answer": "Plan:\n1. Filter out strings with odd lengths.\n2. Sort the filtered list by length, then alphabetically.\n\nCode:\n```python\ndef sorted_list_sum(lst):\n    \"\"\"Write a function that accepts a list of strings as a parameter,\n    deletes the strings that have odd lengths from it,\n    and returns the resulted list with a sorted order,\n    The list is always a list of strings and never an array of numbers,\n    and it may contain duplicates.\n    The order of the list should be ascending by length of each word, and you\n    should return the list sorted by that rule.\n    If two words have the same length, sort the list alphabetically.\n    The function should return a list of strings in sorted order.\n    You may assume that all words will have the same length.\n    For example:\n    assert list_sort([\"aa\", \"a\", \"aaa\"]) => [\"aa\"]\n    assert list_sort([\"ab\", \"a\", \"aaa\", \"cd\"]) => [\"ab\", \"cd\"]\n    \"\"\"\n    filtered_list = [s for s in lst if len(s) % 2 == 0]\n    return sorted(filtered_list)\n```\n\nWhy:\n- The function uses a list comprehension to filter out strings with odd lengths.\n- `sorted()` sorts the list first by length and then alphabetically if lengths are equal.\n- The test cases cover normal cases, an empty list, and a list with all even-length words.",
+    "tokens": 297,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/150",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to check if a number is prime.\n2. Use the helper function inside `x_or_y` to decide which value to return.\n\nCode:\n```python\ndef x_or_y(n, x, y):\n    def is_prime(num):\n        \"\"\"Check if a number is prime.\"\"\"\n        if num <= 1:\n            return False\n        for i in range(2, int(math.sqrt(num)) + 1):\n            if num % i == 0:\n                return False\n        return True\n    \n    if is_prime(n):\n        return x\n    else:\n        return y\n```\n\nWhy:\n- The helper function `is_prime` checks if a number is prime by testing divisibility up to the square root of the number.\n- This approach ensures that we correctly identify prime numbers without unnecessary complexity.\n- The main function uses this helper to decide between returning `x` or `y`, making the code clear and easy to understand.",
+    "tokens": 200,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/151",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize a variable to keep track of the sum.\n2. Iterate through each number in the list.\n3. Check if the number is odd and positive.\n4. Add its square to the sum if it meets the criteria.\n\nCode:\n```python\ndef double_the_difference(lst):\n    total_sum = 0\n    \n    for num in lst:\n        if isinstance(num, int) and num > 0 and num % 2 != 0:\n            total_sum += num ** 2\n            \n    return total_sum\n```\n\nWhy:\n- `isinstance(num, int)` checks if the number is an integer.\n- `num > 0` ensures the number is positive.\n- `num % 2 != 0` confirms the number is odd.\n- The function handles negative numbers and non-integers gracefully by skipping them.",
+    "tokens": 173,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/152",
+    "system": "krama",
+    "answer": "Plan:\n1. Initialize an empty list to store the differences.\n2. Loop through each pair of scores and guesses.\n3. Calculate the absolute difference between the guess and the score.\n4. Append this difference to the differences list.\n\nCode:\n```python\ndef compare(game,guess):\n    differences = []\n    \n    for i in range(len(game)):\n        diff = abs(guess[i] - game[i])\n        differences.append(diff)\n        \n    return differences\n```\n\nWhy:\n- The function uses a loop to iterate over the indices of the lists.\n- `abs()` is used to ensure the difference is always non-negative, even if the guess was higher than the score.\n- The test cases cover normal scenarios, edge cases like all zeros, and negative guesses.",
+    "tokens": 155,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/153",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to calculate the strength of an extension.\n2. Iterate through the list of extensions, keeping track of the strongest one found so far.\n3. Return the result in the required format.\n\nCode:\n```python\ndef Strongest_Extension(class_name, extensions):\n    def strength(extension):\n        return sum(1 for char in extension if char.isupper()) - sum(1 for char in extension if char.islower())\n    \n    strongest = \"\"\n    for ext in extensions:\n        if not strongest or strength(ext) > strength(strongest):\n            strongest = ext\n    \n    return f\"{class_name}.{strongest}\"\n```\n\nWhy:\n- The helper function `strength` calculates the strength of each extension based on the number of uppercase and lowercase letters.\n- We initialize `strongest` to an empty string and update it whenever we find a stronger extension.\n- Finally, we construct the result string using the class name and the strongest extension.",
+    "tokens": 198,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/154",
+    "system": "krama",
+    "answer": "Plan:\n1. Rotate the second word by one character at a time.\n2. Check if any rotated version is a substring of the first word.\n\nCode:\n```python\ndef cycpattern_check(a , b):\n    \"\"\"You are given 2 words. You need to return True if the second word or any of its rotations is a substring in the first word\n    cycpattern_check(\"abcd\",\"abd\") => False\n    cycpattern_check(\"hello\",\"ell\") => True\n    cycpattern_check(\"whassup\",\"psus\") => False\n    cycpattern_check(\"abab\",\"baa\") => True\n    cycpattern_check(\"efef\",\"eeff\") => False\n    cycpattern_check(\"himenss\",\"simen\") => True\n\n    \"\"\"\n    for i in range(len(b)):\n        if b[i:] + b[:i] in a:\n            return True\n    return False\n```\n\nWhy:\n- Rotating the word by one character at a time ensures we check all possible rotations.\n- Using `in` checks if the rotated word is a substring of the first word, making the solution straightforward.",
+    "tokens": 233,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/155",
+    "system": "krama",
+    "answer": "Plan:\n1. Convert the number to its absolute value to handle negative numbers.\n2. Initialize counters for even and odd digits.\n3. Iterate through each digit in the number.\n4. Check if the digit is even or odd and update the respective counter.\n\nCode:\n```python\ndef even_odd_count(num):\n    num = abs(num)\n    even_count, odd_count = 0, 0\n    \n    while num > 0:\n        digit = num % 10\n        if digit % 2 == 0:\n            even_count += 1\n        else:\n            odd_count += 1\n        num //= 10\n    \n    return (even_count, odd_count)\n```\n\nWhy:\n- Converting to absolute value ensures we count all digits, including negative signs.\n- Using `while` loop allows iterating through each digit individually.\n- Modulo operation `%` gives the last digit of the number.\n- Division by 10 removes the last digit from the number.",
+    "tokens": 203,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/156",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a dictionary mapping integers to their corresponding Roman numerals.\n2. Initialize an empty string to build the result.\n3. Loop through the keys of the dictionary in descending order.\n4. Subtract the key from the number and append the corresponding Roman numeral to the result until the number is reduced to zero.\n\nCode:\n```python\ndef int_to_mini_roman(number):\n    roman_numerals = {\n        1000: 'm', 900: 'cm', 500: 'd', 400: 'cd',\n        100: 'c', 90: 'xc', 50: 'l', 40: 'xl',\n        10: 'x', 9: 'ix', 5: 'v', 4: 'iv', 1: 'i'\n    }\n    \n    result = ''\n    for value, numeral in sorted(roman_numerals.items(), reverse=True):\n        while number >= value:\n            result += numeral\n            number -= value\n            \n    return result\n```\n\nWhy:\n- The dictionary ensures we can look up the correct Roman numeral for each integer.\n- Sorting by key in descending order allows us to subtract the largest possible values first, reducing the complexity of the loop.\n- This approach handles all valid inputs within the given constraints.",
+    "tokens": 280,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/157",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if the sum of the squares of two sides equals the square of the third side.\n2. Return True if it does, otherwise return False.\n\nCode:\n```python\ndef right_angle_triangle(a, b, c):\n    \"\"\"\n    Given the lengths of the three sides of a triangle. Return True if the three\n    sides form a right-angled triangle, False otherwise.\n    A right-angled triangle is a triangle in which one angle is right angle or \n    90 degree.\n    Example:\n    right_angle_triangle(3, 4, 5) == True\n    right_angle_triangle(1, 2, 3) == False\n    \"\"\"\n    return a**2 + b**2 == c**2\n```\n\nWhy:\n- The Pythagorean theorem states that in a right-angled triangle, the square of the length of the hypotenuse (the side opposite the right angle) is equal to the sum of the squares of the lengths of the other two sides.\n- This function uses this theorem to determine if the given sides can form a right-angled triangle.",
+    "tokens": 231,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/158",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a helper function to count unique characters in a word.\n2. Iterate through the list, keeping track of the word with the most unique characters.\n\nCode:\n```python\ndef find_max(words):\n    def count_unique(word):\n        return len(set(word))\n    \n    max_word = \"\"\n    max_count = 0\n    \n    for word in words:\n        unique_count = count_unique(word)\n        \n        if unique_count > max_count or (unique_count == max_count and word < max_word):\n            max_word = word\n            max_count = unique_count\n            \n    return max_word\n```\n\nWhy:\n- The helper function `count_unique` simplifies counting unique characters.\n- We initialize `max_word` and `max_count` to keep track of the word with the most unique characters found so far.\n- By comparing words lexicographically, we ensure that in case of a tie, the first word encountered is chosen.",
+    "tokens": 192,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/159",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if there are enough carrots to meet the need.\n2. If not, eat all remaining carrots and update the remaining stock accordingly.\n3. Update the total number of eaten carrots.\n\nCode:\n```python\ndef eat(number, need, remaining):\n    if need <= remaining:\n        return [number + need, remaining - need]\n    else:\n        return [number + remaining, 0]\n```\n\nWhy:\n- The function checks if there are enough carrots to meet the need. If not, it eats all remaining carrots.\n- It updates both the total number of eaten carrots and the remaining stock accordingly.\n- The constraints ensure that the inputs are within valid ranges.",
+    "tokens": 140,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/160",
+    "system": "krama",
+    "answer": "Plan:\n1. Define a dictionary to map string operators to their corresponding functions.\n2. Iterate over the operator list and apply each operation in sequence to the operand list.\n\nCode:\n```python\ndef do_algebra(operator, operand):\n    ops = {'+': lambda x, y: x + y,\n           '-': lambda x, y: x - y,\n           '*': lambda x, y: x * y,\n           '//': lambda x, y: x // y,\n           '**': lambda x, y: x ** y}\n\n    result = operand[0]\n    for op in operator:\n        result = ops[op](result, operand[1])\n    \n    return result\n```\n\nWhy:\n- Using a dictionary allows us to easily look up the correct operation based on the string.\n- We iterate over the operator list and apply each operation sequentially to the current result and the next operand.\n- This approach ensures that we correctly evaluate the algebraic expression defined by the given lists.",
+    "tokens": 202,
+    "passed": false
+  },
+  {
+    "id": "HumanEval/161",
+    "system": "krama",
+    "answer": "Plan:\n1. Check if there are any letters in the string. If not, reverse it.\n2. Otherwise, flip the case of each letter.\n\nCode:\n```python\ndef solve(s):\n    has_letters = False\n    for char in s:\n        if char.isalpha():\n            has_letters = True\n            break\n    \n    if not has_letters:\n        return s[::-1]\n    \n    result = []\n    for char in s:\n        if char.isalpha():\n            if char.islower():\n                result.append(char.upper())\n            else:\n                result.append(char.lower())\n        else:\n            result.append(char)\n            \n    return ''.join(result)\n```\n\nWhy:\n- `has_letters` keeps track of whether there were any letters in the string.\n- If no letters are found, we reverse the entire string using slicing (`s[::-1]`).\n- Otherwise, we iterate through each character and flip its case if it's a letter.",
+    "tokens": 193,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/162",
+    "system": "krama",
+    "answer": "Plan:\n1. Import the `hashlib` module.\n2. Define the function `string_to_md5`.\n3. Check if the input is an empty string and return None if true.\n4. Otherwise, compute the MD5 hash of the text using `hashlib.md5()`.\n\nCode:\n```python\nimport hashlib\n\ndef string_to_md5(text):\n    \"\"\"\n    Given a string 'text', return its md5 hash equivalent string.\n    If 'text' is an empty string, return None.\n    \"\"\"\n    if not text:\n        return None\n    \n    m = hashlib.md5()\n    m.update(text.encode('utf-8'))\n    return m.hexdigest()\n```\n\nWhy:\n- `hashlib.md5()` computes the MD5 hash of a bytes object. We need to encode the string to bytes before hashing.\n- The function checks if the input is empty and returns None immediately if true, avoiding unnecessary computations.\n- The test cases cover normal usage, an edge case where the text is empty, and another edge case where the text contains non-alphanumeric characters.",
+    "tokens": 221,
+    "passed": true
+  },
+  {
+    "id": "HumanEval/163",
+    "system": "krama",
+    "answer": "Plan:\n1. Ensure `a` is less than or equal to `b`.\n2. Iterate through the range from `a` to `b`, collecting even numbers.\n3. Return the collected even numbers sorted in ascending order.\n\nCode:\n```python\ndef generate_integers(a, b):\n    if a > b:\n        a, b = b, a\n    \n    result = []\n    \n    for num in range(a, b + 1):\n        if num % 2 == 0:\n            result.append(num)\n            \n    return sorted(result)\n```\n\nWhy:\n- The condition `if a > b:` ensures that we iterate from the smaller number to the larger one.\n- We check if each number is even using `num % 2 == 0`.\n- Finally, we sort the list before returning it.",
+    "tokens": 169,
+    "passed": false
+  }
+]

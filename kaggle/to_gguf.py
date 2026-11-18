@@ -17,10 +17,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-MODEL_DIR = Path("/kaggle/working/krama-coder-1.5b")
+ROUND = 2              # must match kaggle/train.py
+SUFFIX = "" if ROUND == 1 else f"-r{ROUND}"
+MODEL_DIR = Path(f"/kaggle/working/krama-coder-1.5b{SUFFIX}")
 TOOLS = Path("/tmp/llama.cpp")              # not in /kaggle/working, so it is not saved
 FULL_FILE = Path("/tmp/krama-coder-1.5b-f16.gguf")   # full size, about 3 GB
-OUT_FILE = Path("/kaggle/working/krama-coder-1.5b-q4_k_m.gguf")
+OUT_FILE = Path(f"/kaggle/working/krama-coder-1.5b{SUFFIX}-q4_k_m.gguf")
 
 
 def run(command):

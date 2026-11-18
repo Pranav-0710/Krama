@@ -1,0 +1,1898 @@
+[
+  {
+    "id": "py-group-by-first-letter",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama-r2",
+      "base+prompt",
+      "krama"
+    ],
+    "scores": {
+      "base": {
+        "plan": 2,
+        "why": 0,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is to initialize an empty dictionary, iterate over each word, and append it to the corresponding list in the dictionary.",
+          "why": "The explanation is brief and doesn't provide any insight into the reasoning behind the code.",
+          "clarity": "The code is mostly clear, but the variable names could be more descriptive.",
+          "length": "The code is concise and to the point, but could benefit from some comments.",
+          "why_correct": "The explanation is mostly accurate, but doesn't mention the importance of using the `lower()` method to handle case-insensitive grouping."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but could benefit from more explanation of the choices made.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about handling both non-empty and empty strings is a bit misleading."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the time complexity is not accurate."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but could benefit from more explanation of the choices made.",
+          "length": "The code and explanation are concise, but could be improved with more detail.",
+          "why_correct": "The explanation is mostly true, but could be improved with more detail."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-count-words",
+    "kind": "coding",
+    "shown_order": [
+      "krama-r2",
+      "base",
+      "krama",
+      "base+prompt"
+    ],
+    "scores": {
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with three numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed and accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms like 'case insensitivity' might require a beginner to look up.",
+          "length": "The code and explanation are well-balanced, with no excessive padding or brevity.",
+          "why_correct": "The explanation contains a small inaccuracy, as `lower()` does not convert all characters to lowercase, but rather converts the entire string to lowercase."
+        }
+      },
+      "base": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is mostly clear, but it could be improved with numbered steps.",
+          "why": "The explanation gives some reasons, but it's not entirely clear why certain choices were made.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are a good length, but could be improved with more concise language.",
+          "why_correct": "The explanation contains some minor inaccuracies, such as the claim that the `split()` method is used to split the text into words."
+        }
+      },
+      "krama": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but not in a numbered step format.",
+          "why": "The explanation is mostly clear, but doesn't explain the choice of using a dictionary to count word frequencies.",
+          "clarity": "The code is mostly clear, but the variable names could be more descriptive.",
+          "length": "The code is a good length, but the explanation is a bit padded.",
+          "why_correct": "The explanation is mostly true, but the claim that 'We iterate over each word and update our dictionary accordingly' is a bit vague."
+        }
+      },
+      "base+prompt": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it's not a numbered list of steps.",
+          "why": "The explanation is mostly clear, but it's a bit verbose and doesn't address potential edge cases.",
+          "clarity": "The code is mostly clear, but the variable names could be more descriptive.",
+          "length": "The code is a good length, but the explanation is a bit too long.",
+          "why_correct": "The explanation is mostly accurate, but it implies that the `split()` method always splits at spaces, which is not true."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-safe-divide",
+    "kind": "coding",
+    "shown_order": [
+      "base+prompt",
+      "krama-r2",
+      "base",
+      "krama"
+    ],
+    "scores": {
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed and accurate.",
+          "clarity": "The code and explanation are mostly clear, but could benefit from more explanation of the choices made.",
+          "length": "The answer is well-balanced in terms of length, with a good amount of explanation without being too verbose.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that the function is 'clear and concise' without explanation."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for the code, including avoiding division by zero errors.",
+          "clarity": "The code and explanation are clear and easy to understand, with no jargon.",
+          "length": "The answer is well-balanced, with a good length for the task.",
+          "why_correct": "Every claim in the explanation is true, and the code correctly implements the plan."
+        }
+      },
+      "base": {
+        "plan": 0,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code is straightforward and easy to follow.",
+          "why": "The explanation is brief and mentions the purpose of the function, but doesn't delve deeper into the reasoning.",
+          "clarity": "The explanation is mostly clear, but uses some programming jargon that a beginner might not be familiar with.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary words.",
+          "why_correct": "The explanation claims that returning None is a common practice to indicate an undefined operation, which is true."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for the code, including avoiding division by zero errors.",
+          "clarity": "The code and explanation are clear and easy to understand, with no jargon.",
+          "length": "The answer is well-balanced, with a good length for the task.",
+          "why_correct": "Every claim in the explanation is true, and the code correctly implements the plan."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-flatten-one-level",
+    "kind": "coding",
+    "shown_order": [
+      "krama",
+      "base+prompt",
+      "base",
+      "krama-r2"
+    ],
+    "scores": {
+      "krama": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it's not a numbered list of steps.",
+          "why": "The explanation is mostly clear, but it doesn't explain why the approach works for one level deep nesting.",
+          "clarity": "The code is clear and easy to understand, but the explanation could be more detailed.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claim that `extend` adds all elements of a list to another list is true, but the claim that additional logic is needed for deeper levels is misleading."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides a good understanding of the code's behavior and design choices.",
+          "clarity": "The code and explanation are well-written and easy to follow.",
+          "length": "The code and explanation are concise and to the point, without unnecessary filler.",
+          "why_correct": "Every claim in the explanation is true and accurately describes the code's behavior."
+        }
+      },
+      "base": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The answer provides a clear plan with numbered steps, but it's a bit verbose and could be condensed.",
+          "why": "The explanation provides some reasons for the code, but it's mostly a restatement of what the code does.",
+          "clarity": "The code and explanation are mostly clear, but some terms like 'extend' and 'isinstance' might require a brief explanation for a beginner.",
+          "length": "The answer is a bit long, but it's not excessively so, and the code and explanation are well-organized.",
+          "why_correct": "The explanation claims that the function 'ensures that only one level of nesting is flattened', which is true, but it also claims that it 'handles nested lists of any depth', which is not entirely accurate."
+        }
+      },
+      "krama-r2": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it's not a numbered list of steps.",
+          "why": "The explanation is mostly clear, but it doesn't explain why the approach works for one level deep nesting.",
+          "clarity": "The code is clear and easy to understand, but the explanation could be more detailed.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that extend adds all items of a list to another list, which is true, but it also claims that this approach works for one level deep nesting, which is not entirely accurate."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-most-common",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama-r2",
+      "krama",
+      "base+prompt"
+    ],
+    "scores": {
+      "base": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is mostly clear, but it could be improved with numbered steps.",
+          "why": "The explanation gives some reasons, but it's not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are not explained.",
+          "length": "The code and explanation are a good length, but could be improved with more concise language.",
+          "why_correct": "The explanation claims that the function returns the first item encountered in the list if there are multiple items with the same maximum count, but this is not entirely accurate."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed for a beginner.",
+          "clarity": "The code and explanation are mostly clear, but some variable names could be more descriptive.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The explanation is mostly true, but the claim about iterating through the dictionary again being efficient could be misleading."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides some reasons, but could be more detailed and accurate.",
+          "clarity": "The code and explanation are mostly clear, but could benefit from more concise language.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The explanation contains some minor inaccuracies, such as the claim that finding the maximum value helps identify the most common item."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for the code, including efficiency and consistency with the problem statement.",
+          "clarity": "The code and explanation are clear and easy to follow, with no jargon or complex concepts.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary words or filler.",
+          "why_correct": "The explanation accurately describes the code's behavior and reasoning."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-parse-config",
+    "kind": "coding",
+    "shown_order": [
+      "base+prompt",
+      "krama",
+      "krama-r2",
+      "base"
+    ],
+    "scores": {
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but doesn't address potential issues or edge cases.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms without explanation.",
+          "length": "The code and explanation are concise and well-structured.",
+          "why_correct": "The explanation claims that `split('=', 1)` splits each line on the first equals sign, but this is not entirely accurate, as it will split on the first equals sign, regardless of whether it's the only one in the line."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons for the code, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but a beginner might need to look up some terms.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation is mostly accurate, but the claim about `split('=', 1)` handling values with spaces is misleading."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed for a beginner.",
+          "clarity": "The code and explanation are mostly clear, but some terms like `splitlines()` and `startswith()` might require a quick lookup.",
+          "length": "The code and explanation are concise and well-formatted, with no unnecessary filler.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about `split("
+        }
+      },
+      "base": {
+        "plan": 1,
+        "why": 0,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code follows a clear and logical structure.",
+          "why": "The explanation does not provide any reasons for the code's behavior.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation contains some minor inaccuracies, such as the statement that the function splits the input text into lines."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-chunk",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "base+prompt",
+      "krama-r2",
+      "krama"
+    ],
+    "scores": {
+      "base": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides reasons for the choices made in the code, including the use of list comprehension and the handling of the last list.",
+          "clarity": "The explanation is clear and easy to follow, with no jargon or technical terms that require explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary padding or filler.",
+          "why_correct": "Every claim in the explanation is true, including the use of list comprehension and the handling of the last list."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate or clear.",
+          "clarity": "The code and explanation are mostly clear, but some terms are not explained.",
+          "length": "The answer is well-balanced, with a good length for the task.",
+          "why_correct": "Some claims in the explanation are misleading or incorrect."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for the code, including handling edge cases.",
+          "clarity": "The code and explanation are clear and easy to follow, with no jargon.",
+          "length": "The answer is well-balanced, with a good length for the task.",
+          "why_correct": "Every claim in the explanation is true, including the handling of edge cases."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for the code, including avoiding unnecessary slicing and ensuring all items are processed.",
+          "clarity": "The code and explanation are clear and easy to follow, with no jargon or unnecessary complexity.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary padding.",
+          "why_correct": "Every claim in the explanation is true and accurate."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-dedupe",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "base+prompt",
+      "krama-r2",
+      "krama"
+    ],
+    "scores": {
+      "base": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code follows a clear and logical structure.",
+          "why": "The explanation only mentions that the function keeps track of seen items and deduped items, but doesn't explain why this approach is used.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms that a beginner might not be familiar with.",
+          "length": "The code and explanation are concise and to the point, but could be slightly shorter.",
+          "why_correct": "The explanation accurately describes the code's behavior, but doesn't address potential edge cases or limitations."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation is mostly true, but it's not entirely accurate (e.g., the item is not added to the `items` list).",
+          "clarity": "The code and explanation are mostly clear, but some terms (e.g., 'deduplicated items') might require a beginner to look up.",
+          "length": "The answer is well-balanced, with a good amount of code and explanation.",
+          "why_correct": "The explanation contains a small inaccuracy (e.g., the item is not added to the `items` list)."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides good reasons for the code's behavior, but could be more detailed.",
+          "clarity": "The code and explanation are clear and easy to understand, with no jargon or technical terms.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary words or filler.",
+          "why_correct": "The claims in the explanation are mostly true, but the last sentence is slightly misleading."
+        }
+      },
+      "krama": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it could be improved with more detail.",
+          "why": "The explanation is mostly accurate, but it could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are a good length, but could be improved with more detail.",
+          "why_correct": "The claims in the explanation are mostly true, but one claim about sorting the result is misleading."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-average-scores",
+    "kind": "coding",
+    "shown_order": [
+      "krama",
+      "base",
+      "base+prompt",
+      "krama-r2"
+    ],
+    "scores": {
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms are not explained.",
+          "length": "The code and explanation are a good length, with no unnecessary filler.",
+          "why_correct": "The explanation is mostly true, but the claim about initializing the total and count to 1 is not entirely accurate."
+        }
+      },
+      "base": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is mostly clear, but it could be improved with numbered steps.",
+          "why": "The explanation is mostly true, but it doesn't explain why the code uses a dictionary to store the average scores.",
+          "clarity": "The code is mostly clear, but it uses some jargon (e.g. 'average_scores_dict') without explanation.",
+          "length": "The code is a good length, but the explanation is a bit padded.",
+          "why_correct": "The explanation claims that the average score is calculated by summing all scores and dividing by the number of scores, which is mostly true, but it doesn't account for the case where the record has only one score."
+        }
+      },
+      "base+prompt": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it doesn't match the code.",
+          "why": "The explanation is mostly true, but it doesn't explain why the code is dividing by the number of records instead of the number of scores.",
+          "clarity": "The code and explanation are mostly clear, but some terms like 'summing the scores' and 'dividing by the number of scores' could be explained further.",
+          "length": "The code and explanation are a good length, but the plan is a bit too long.",
+          "why_correct": "The explanation claims that the code is dividing by the number of records, which is incorrect."
+        }
+      },
+      "krama-r2": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it doesn't follow the exact steps required for the task.",
+          "why": "The explanation is mostly true, but it doesn't address the potential issue of empty records.",
+          "clarity": "The code and explanation are mostly clear, but some variable names could be more descriptive.",
+          "length": "The code and explanation are a good length, but some parts could be condensed.",
+          "why_correct": "The explanation contains a small inaccuracy about the function's behavior with empty records."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-merge-totals",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama-r2",
+      "krama",
+      "base+prompt"
+    ],
+    "scores": {
+      "base": {
+        "plan": 0,
+        "why": 0,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is a one-sentence summary of the code, but it doesn't provide any insight into the thought process.",
+          "why": "The explanation doesn't provide any reasons for the code's behavior, it just describes what the code does.",
+          "clarity": "The code is mostly clear, but the explanation uses some jargon without explanation.",
+          "length": "The code and explanation are a bit padded, but not excessively so.",
+          "why_correct": "The explanation contains some inaccuracies, such as saying the code 'adds the values from both dictionaries' when it actually adds the value from the first dictionary."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, with no jargon.",
+          "length": "The code and explanation are concise, with no unnecessary padding.",
+          "why_correct": "The claims in the explanation are mostly true, but could be more accurate."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed and accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that the original dictionaries remain unchanged."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed and accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that the function handles cases where keys are present in only one of the dictionaries."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-to-snake-case",
+    "kind": "coding",
+    "shown_order": [
+      "base+prompt",
+      "krama",
+      "base",
+      "krama-r2"
+    ],
+    "scores": {
+      "base+prompt": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides a good understanding of the code's purpose and behavior.",
+          "clarity": "The code and explanation are clear and easy to follow, with no jargon or unnecessary complexity.",
+          "length": "The answer is well-balanced, with a good amount of code and explanation.",
+          "why_correct": "Every claim in the explanation is true, and the code accurately implements the plan."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides a clear and accurate description of the code's behavior.",
+          "clarity": "The code and explanation are easy to follow, with no jargon or technical terms.",
+          "length": "The code and explanation are concise and to the point, without unnecessary padding.",
+          "why_correct": "Every claim in the explanation is true and accurately describes the code's behavior."
+        }
+      },
+      "base": {
+        "plan": 0,
+        "why": 0,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code is well-structured and follows a logical sequence.",
+          "why": "The explanation does not provide any insight into the reasoning behind the code.",
+          "clarity": "The code is mostly clear, but the explanation uses some technical terms without explanation.",
+          "length": "The code and explanation are concise, but could be improved with more detail.",
+          "why_correct": "The explanation contains some inaccuracies, such as stating that the `lower()` method is used to convert the entire string to lowercase."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides good reasons for each step, including the importance of lowercasing each word.",
+          "clarity": "The code and explanation are easy to understand, with no jargon or complex concepts.",
+          "length": "The answer is well-balanced, with a good amount of code and explanation.",
+          "why_correct": "Every claim in the explanation is true, and the code accurately implements the plan."
+        }
+      }
+    }
+  },
+  {
+    "id": "py-sum-numbers",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "base+prompt",
+      "krama-r2",
+      "krama"
+    ],
+    "scores": {
+      "base": {
+        "plan": 0,
+        "why": 0,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code is well-structured and follows a logical sequence.",
+          "why": "The explanation does not provide any reasons for the code's design or implementation choices.",
+          "clarity": "The explanation is mostly clear, but some technical terms (e.g., 'list comprehension') may require a beginner to look up.",
+          "length": "The code and explanation are concise and to the point, but could benefit from a brief introduction or summary.",
+          "why_correct": "The explanation accurately describes the code's behavior, but does not address potential edge cases or errors."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with 5 numbered steps that match the code.",
+          "why": "The explanation is detailed and accurate, explaining each step of the code.",
+          "clarity": "The code and explanation are easy to follow, with no jargon or complex concepts.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary words.",
+          "why_correct": "Every claim in the explanation is true, and the code accurately implements the plan."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 2,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for the code choices, including the use of `strip()` and `isdigit()`.",
+          "clarity": "The code and explanation are clear and easy to follow, with no jargon or unnecessary complexity.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary padding.",
+          "why_correct": "Every claim in the explanation is true, including the use of `strip()` and `isdigit()`."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 2,
+        "length": 2,
+        "why_correct": 2,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides good reasons for each step, but could be more detailed.",
+          "clarity": "The code and explanation are easy to follow, with no jargon or unnecessary complexity.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary padding.",
+          "why_correct": "The explanation accurately describes the code's behavior, with no misleading claims."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-create-item",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama-r2",
+      "krama",
+      "base+prompt"
+    ],
+    "scores": {
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons for the code, but could be more detailed.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms without explanation.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The explanation is mostly accurate, but could be improved with more detail."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about FastAPI automatically returning a 409 Conflict response is misleading."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but a beginner might need to look up some terms.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation is mostly true, but the claim about the first item having id 1 is not entirely accurate."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that UUIDs are used to generate unique IDs for each item."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-health",
+    "kind": "coding",
+    "shown_order": [
+      "base+prompt",
+      "krama",
+      "krama-r2",
+      "base"
+    ],
+    "scores": {
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms without explanation.",
+          "length": "The answer is well-balanced in terms of length, with a good amount of explanation without being too verbose.",
+          "why_correct": "The explanation contains some inaccuracies, such as the statement about Uvicorn being a web server."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms (e.g. Pydantic model) may require a beginner to look up.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about FastAPI serializing the response into JSON is not entirely accurate."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, but only provides two steps.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but the use of jargon (e.g. `BaseModel`) may confuse a beginner.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that the endpoint returns a dictionary with the key 'status' set to 'ok', but the code actually returns a dictionary with a single key-value pair."
+        }
+      },
+      "base": {
+        "plan": 0,
+        "why": 0,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is missing, it only describes the code and its usage.",
+          "why": "The explanation only repeats what the code does, without explaining the choices made.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms without explanation.",
+          "length": "The answer is a good length, with a clear separation between code and explanation.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that the output will be on `http://127.0.0.1:8000/health`."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-hello-path",
+    "kind": "coding",
+    "shown_order": [
+      "krama",
+      "base+prompt",
+      "krama-r2",
+      "base"
+    ],
+    "scores": {
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but doesn't fully justify the choices.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about the `NameRequest` model is slightly misleading."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The answer is well-balanced in terms of length, with a good amount of explanation without being too verbose.",
+          "why_correct": "The explanation contains some inaccuracies, such as the use of `HTTPException` to handle errors."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that FastAPI automatically returns a 422 response, which is not entirely accurate."
+        }
+      },
+      "base": {
+        "plan": 1,
+        "why": 0,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is a series of numbered steps, but they are not explicitly stated in the code",
+          "why": "The explanation does not provide any reasons for the code choices",
+          "clarity": "The explanation is mostly clear, but some technical terms are used without explanation",
+          "length": "The answer is a bit too long, with unnecessary details",
+          "why_correct": "Some claims in the explanation are misleading or incorrect, such as the use of `uvicorn.run`"
+        }
+      }
+    }
+  },
+  {
+    "id": "api-add-query",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama",
+      "base+prompt",
+      "krama-r2"
+    ],
+    "scores": {
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons for the code, but could be more detailed.",
+          "clarity": "The explanation is mostly clear, but some technical terms are used without explanation.",
+          "length": "The code and explanation are a good length, with no unnecessary filler.",
+          "why_correct": "The explanation is mostly accurate, but the claim about the `Query` decorator making parameters required is not entirely clear."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that the code follows.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claim that the Pydantic model ensures both a and b are integers is true, but the claim about default values for query parameters is misleading."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms like 'Annotated' might require a quick lookup.",
+          "length": "The plan, code, and explanation are well-balanced and easy to follow.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about 'common format' for API responses is a bit vague."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but doesn't address potential beginner questions.",
+          "clarity": "The code and explanation are mostly clear, but some terms like 'Pydantic model' might require a quick lookup.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about 'FastAPI will automatically respond with 422' is not entirely accurate."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-get-item-404",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama",
+      "base+prompt",
+      "krama-r2"
+    ],
+    "scores": {
+      "base": {
+        "plan": 0,
+        "why": 0,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code follows a logical structure.",
+          "why": "The explanation does not provide any reasons for the code's design choices.",
+          "clarity": "The explanation is mostly clear, but some technical terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation accurately describes the code's behavior, but does not address potential edge cases."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that the `response_model` ensures the returned JSON matches the expected structure, which is not entirely accurate."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation contains some inaccuracies, such as the use of `db` as an optional parameter."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that the Pydantic model ensures the returned JSON has the correct structure, but this is not actually used in the code."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-create-user-201",
+    "kind": "coding",
+    "shown_order": [
+      "krama",
+      "krama-r2",
+      "base+prompt",
+      "base"
+    ],
+    "scores": {
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but a beginner might need to look up some terms.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation contains at least one misleading claim, such as 'FastAPI will automatically return a 422 error' which is not entirely accurate."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but a beginner might need to look up some terms.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation contains at least one misleading claim, such as 'If the username is empty, FastAPI will automatically reject it without needing additional checks'."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some technical terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation claims that Pydantic is used for data validation, but it is actually used for data modeling."
+        }
+      },
+      "base": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is detailed and follows a numbered step format, but it's a bit padded with unnecessary information.",
+          "why": "The explanation provides some reasons, but it's mostly a repetition of what the code does.",
+          "clarity": "The explanation is mostly clear, but it uses some technical terms without explanation.",
+          "length": "The code and explanation are a good length, but the plan is a bit too long.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that the response will have a status code of 201, which is not necessarily true."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-validate-price",
+    "kind": "coding",
+    "shown_order": [
+      "krama",
+      "base+prompt",
+      "base",
+      "krama-r2"
+    ],
+    "scores": {
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but doesn't fully justify the choices.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about `response_model=dict` is misleading."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The answer is well-balanced in terms of length, with a good amount of explanation without being too verbose.",
+          "why_correct": "The explanation contains some inaccuracies, such as the claim that Pydantic is used for data validation (it's actually used for model validation)."
+        }
+      },
+      "base": {
+        "plan": 0,
+        "why": 0,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is not explicitly stated, but the code is self-explanatory.",
+          "why": "The explanation only repeats what the code does, without providing any insight into the design choices.",
+          "clarity": "The code is mostly clear, but the explanation uses some technical terms without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation accurately describes the code's behavior, but does not address potential edge cases."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some terms like `gt` are not explained.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The claims in the explanation are mostly true, but the statement about FastAPI automatically rejecting the request is misleading."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-search-default",
+    "kind": "coding",
+    "shown_order": [
+      "krama-r2",
+      "krama",
+      "base",
+      "base+prompt"
+    ],
+    "scores": {
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but a beginner might need to look up some terms.",
+          "length": "The answer is well-balanced, with a good amount of code and explanation.",
+          "why_correct": "The explanation is mostly true, but it could be more accurate."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but a beginner might need to look up some terms.",
+          "length": "The answer is well-balanced, with a good amount of code and explanation.",
+          "why_correct": "The explanation contains a small inaccuracy about the `...` syntax."
+        }
+      },
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The answer provides a clear and concise plan with numbered steps, explaining each part of the code.",
+          "why": "The explanation provides some reasons for the choices made, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some technical terms are used without explanation.",
+          "length": "The answer is a good length, with a clear plan, code, and explanation.",
+          "why_correct": "The explanation is mostly true, but the claim about the `ge` parameter is not entirely accurate."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The explanation is mostly clear, but uses some technical terms without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that the `async` keyword is necessary for handling asynchronous operations, which is not entirely true."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-notes-delete",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "base+prompt",
+      "krama",
+      "krama-r2"
+    ],
+    "scores": {
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons for the code, but could be more detailed.",
+          "clarity": "The explanation is mostly clear, but some technical terms are used without explanation.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The explanation is mostly accurate, but the claim about the GET endpoint is not entirely clear."
+        }
+      },
+      "base+prompt": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is mostly clear, but it's a bit vague and doesn't match the code perfectly.",
+          "why": "The explanation mostly explains the code, but it's a bit too brief and doesn't address every choice.",
+          "clarity": "The explanation is mostly clear, but it uses some technical terms without explanation.",
+          "length": "The code and explanation are a good length, but the plan is a bit too long.",
+          "why_correct": "The explanation contains a small inaccuracy, saying that the `notes` dictionary is an in-memory database."
+        }
+      },
+      "krama": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it's just a list of steps without explanations.",
+          "why": "The explanation is mostly true, but it doesn't explain why we use a Pydantic model or why we iterate through the list in the DELETE endpoint.",
+          "clarity": "The code and explanation are mostly clear, but some terms like 'Pydantic model' and 'HTTPException' might be unfamiliar to a beginner.",
+          "length": "The code and explanation are concise and to the point, but a little more context would be helpful.",
+          "why_correct": "The explanation is mostly true, but it doesn't mention that the ID is incremented by 1 in each new note, which is a subtle but important detail."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are not explained.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that deleting a non-existent note results in a 404 error, which is true, but it also claims that the HTTPException is used to handle invalid inputs, which is not entirely accurate."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-tasks-filter",
+    "kind": "coding",
+    "shown_order": [
+      "base+prompt",
+      "base",
+      "krama-r2",
+      "krama"
+    ],
+    "scores": {
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation is vague and doesn't address any potential issues.",
+          "clarity": "The code is mostly clear, but some parts could be explained better.",
+          "length": "The code and explanation are a good length, but could be a bit more concise.",
+          "why_correct": "Some claims in the explanation are misleading or incorrect."
+        }
+      },
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The explanation is mostly clear, but some technical terms are used without explanation.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "There are some inaccuracies in the explanation, such as the claim that the POST endpoint adds a new task to the in-memory storage."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation claims that the `Query` parameter allows filtering, which is true, but also mentions that no `done` query parameter is provided, which is not accurate."
+        }
+      },
+      "krama": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it could be more detailed.",
+          "why": "The explanation is brief and doesn't provide much insight into the code's functionality.",
+          "clarity": "The code and explanation are mostly clear, but some terms like `Query` and `BaseModel` might be unfamiliar to a beginner.",
+          "length": "The code and explanation are concise and to the point, but a few more details would be helpful.",
+          "why_correct": "The explanation is mostly accurate, but it doesn't fully justify the use of `bool | None` for the `done` parameter."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-counter-put",
+    "kind": "coding",
+    "shown_order": [
+      "krama",
+      "base",
+      "base+prompt",
+      "krama-r2"
+    ],
+    "scores": {
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The explanation contains a small inaccuracy regarding the use of the global variable."
+        }
+      },
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not detailed enough to address a beginner's potential questions.",
+          "clarity": "The code and explanation are mostly clear, but some technical terms are used without explanation.",
+          "length": "The code and explanation are well-balanced, with no unnecessary filler.",
+          "why_correct": "The explanation contains some minor inaccuracies, such as the claim that the `counter` variable is initialized in the global scope."
+        }
+      },
+      "base+prompt": {
+        "plan": 1,
+        "why": 1,
+        "clarity": 1,
+        "length": 1,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, but it's not a numbered list of steps.",
+          "why": "The explanation is mostly clear, but it doesn't address the use of a global variable.",
+          "clarity": "The code is mostly clear, but it could benefit from more comments.",
+          "length": "The code and explanation are a good length, but the plan is a bit too brief.",
+          "why_correct": "The explanation is mostly accurate, but it implies that the use of a global variable is necessary for persistent state."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are well-balanced, with no unnecessary padding.",
+          "why_correct": "The explanation contains some inaccuracies, such as the use of a global variable."
+        }
+      }
+    }
+  },
+  {
+    "id": "api-whoami-header",
+    "kind": "coding",
+    "shown_order": [
+      "base",
+      "krama-r2",
+      "base+prompt",
+      "krama"
+    ],
+    "scores": {
+      "base": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The answer provides a clear and concise plan with numbered steps, explaining each part of the code.",
+          "why": "The explanation provides some reasons for the code, but could be more detailed.",
+          "clarity": "The code and explanation are mostly clear, but some technical terms are used without explanation.",
+          "length": "The answer is well-balanced in terms of length, providing enough detail without being too verbose.",
+          "why_correct": "The explanation is mostly accurate, but some minor inaccuracies could be improved."
+        }
+      },
+      "krama-r2": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 0,
+        "reasons": {
+          "plan": "The plan is clear and concise, with two numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point, with no unnecessary filler.",
+          "why_correct": "The explanation claims that the `UserName` model ensures the user name is provided correctly, but it does not actually validate the user name."
+        }
+      },
+      "base+prompt": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that raising an HTTPException raises a 401 status code, which is not entirely accurate."
+        }
+      },
+      "krama": {
+        "plan": 2,
+        "why": 1,
+        "clarity": 1,
+        "length": 2,
+        "why_correct": 1,
+        "reasons": {
+          "plan": "The plan is clear and concise, with numbered steps that match the code.",
+          "why": "The explanation provides some reasons, but they are not entirely accurate.",
+          "clarity": "The code and explanation are mostly clear, but some terms are used without explanation.",
+          "length": "The code and explanation are concise and to the point.",
+          "why_correct": "The explanation claims that the `request.headers.get` method returns None if the header is missing, which is not entirely accurate."
+        }
+      }
+    }
+  },
+  {
+    "id": "quick-list-vs-tuple",
+    "kind": "quick",
+    "shown_order": [
+      "krama-r2",
+      "base",
+      "base+prompt",
+      "krama"
+    ],
+    "scores": {
+      "krama-r2": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer explains the difference between lists and tuples, but it's too verbose and includes unnecessary code.",
+          "length": "The answer includes a long walkthrough with multiple code blocks and comments."
+        }
+      },
+      "base": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a clear explanation of the difference between lists and tuples, but it's too verbose and includes unnecessary code examples.",
+          "length": "The answer is too long and includes multiple code examples, making it difficult to understand the main point."
+        }
+      },
+      "base+prompt": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a plan, but it's overly detailed and doesn't directly address the question. It also contains misleading information about the use cases for lists and tuples.",
+          "length": "The code block is excessively long and contains multiple examples, making it difficult to understand the main difference between lists and tuples."
+        }
+      },
+      "krama": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer correctly explains the difference between mutable and immutable data structures, but the example is too long and includes unnecessary code.",
+          "length": "The answer includes a long example with multiple code blocks and comments, making it too padded."
+        }
+      }
+    }
+  },
+  {
+    "id": "quick-zip",
+    "kind": "quick",
+    "shown_order": [
+      "krama",
+      "krama-r2",
+      "base",
+      "base+prompt"
+    ],
+    "scores": {
+      "krama": {
+        "correct": 2,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer is correct, but the explanation is a bit too verbose and could be more concise.",
+          "length": "The answer is a bit padded with an example, but it's still a relatively short and direct answer."
+        }
+      },
+      "krama-r2": {
+        "correct": 2,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer is correct, but it's a bit too verbose and includes an example that's not strictly necessary to explain the function's purpose.",
+          "length": "The answer is a bit too long and includes an example that's not necessary to explain the function's purpose."
+        }
+      },
+      "base": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a clear explanation of what the `zip` function does, but it's not entirely accurate as it implies that `zip` creates a single iterable of tuples, which is not entirely correct.",
+          "length": "The answer is a long walkthrough with multiple code blocks and explanations, which is not a short direct answer."
+        }
+      },
+      "base+prompt": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a plan, but it's overly detailed and doesn't directly answer the question. The explanation of the zip function is also too verbose.",
+          "length": "The answer is too long and includes a plan, which is not necessary for a simple question like this."
+        }
+      }
+    }
+  },
+  {
+    "id": "quick-422",
+    "kind": "quick",
+    "shown_order": [
+      "base",
+      "base+prompt",
+      "krama",
+      "krama-r2"
+    ],
+    "scores": {
+      "base": {
+        "correct": 2,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer correctly identifies the status code as 422, but the explanation is a bit too verbose and doesn't add much value.",
+          "length": "The answer is a bit too long and includes an unnecessary explanation, but it's still a direct answer."
+        }
+      },
+      "base+prompt": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "This answer provides a plan, but it's overly detailed and doesn't directly answer the question.",
+          "length": "The plan is too long and includes several unnecessary steps."
+        }
+      },
+      "krama": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer is correct, but it's not a direct answer to the question. It's a explanation of the status code.",
+          "length": "The answer is a little padded with an example, but it's not too long."
+        }
+      },
+      "krama-r2": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer is correct, but it's misleading because it implies that the 422 status code is only raised when the code explicitly checks for validation, whereas FastAPI will automatically raise it when the request body fails validation.",
+          "length": "The answer is padded with a code example that's not necessary to answer the question."
+        }
+      }
+    }
+  },
+  {
+    "id": "quick-name-main",
+    "kind": "quick",
+    "shown_order": [
+      "base",
+      "krama-r2",
+      "krama",
+      "base+prompt"
+    ],
+    "scores": {
+      "base": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a detailed explanation of the purpose and behavior of the `if __name__ == '__main__':` block, but it's overly verbose and includes unnecessary examples.",
+          "length": "The answer is too long and includes multiple examples, making it difficult to understand the main point."
+        }
+      },
+      "krama-r2": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer explains the purpose of the block, but also includes an example that is not directly related to the question.",
+          "length": "The answer is a little padded with an example, but it's not excessively long."
+        }
+      },
+      "krama": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer explains the purpose of the block, but the example is not necessary to understand the concept.",
+          "length": "The answer is a little padded with an unnecessary example."
+        }
+      },
+      "base+prompt": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer provides a plan, but the explanation is too long and includes unnecessary details.",
+          "length": "The answer is padded with unnecessary details and a plan that is too elaborate."
+        }
+      }
+    }
+  },
+  {
+    "id": "quick-equals-vs-is",
+    "kind": "quick",
+    "shown_order": [
+      "krama",
+      "base",
+      "base+prompt",
+      "krama-r2"
+    ],
+    "scores": {
+      "krama": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer correctly explains the difference between == and is, but the example is unnecessary and makes the answer too long.",
+          "length": "The answer is too long because it includes an unnecessary example."
+        }
+      },
+      "base": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer is overly verbose and provides unnecessary examples, making it difficult to understand the simple difference between == and is.",
+          "length": "The answer is excessively long and includes multiple code blocks, making it hard to read and understand the question's simple request."
+        }
+      },
+      "base+prompt": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a plan, but the explanation of the difference between == and is is incomplete and misleading.",
+          "length": "The answer is padded with unnecessary code examples and explanations."
+        }
+      },
+      "krama-r2": {
+        "correct": 2,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer correctly explains the difference between == and is, but the example is unnecessary and makes the answer too long.",
+          "length": "The answer is too long because it includes an unnecessary example."
+        }
+      }
+    }
+  },
+  {
+    "id": "quick-run-fastapi",
+    "kind": "quick",
+    "shown_order": [
+      "base",
+      "base+prompt",
+      "krama-r2",
+      "krama"
+    ],
+    "scores": {
+      "base": {
+        "correct": 1,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a detailed, step-by-step guide to running a FastAPI app, but it's overly verbose and includes unnecessary information.",
+          "length": "The answer is excessively long and includes multiple code blocks, as well as a lengthy explanation of each step."
+        }
+      },
+      "base+prompt": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "The answer provides a plan, but the code is not run using the `app.run()` method, it's missing the `if __name__ == '__main__':` block, and the route is not properly defined.",
+          "length": "The answer is a plan and a code block, but the code is a bit padded with unnecessary comments."
+        }
+      },
+      "krama-r2": {
+        "correct": 2,
+        "length": 0,
+        "reasons": {
+          "correct": "The answer provides a detailed, but correct, step-by-step guide to setting up and running a FastAPI app locally.",
+          "length": "The answer is a long walkthrough with multiple code blocks and explanations."
+        }
+      },
+      "krama": {
+        "correct": 1,
+        "length": 1,
+        "reasons": {
+          "correct": "This answer provides a clear plan and explanation, but the code example is not directly related to running the app, and the 'why' section is not necessary for the task.",
+          "length": "The answer is a bit padded with unnecessary details and a code example that is not directly relevant to the task."
+        }
+      }
+    }
+  }
+]
