@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 from krama_cli.backends import BACKENDS, KRAMA_MODEL, BackendError, make_backend
-from krama_cli.check import CheckResult, check, extract_code
+from krama_cli.check import CheckResult, check, defines_something, extract_code
 from krama_cli.selftest import evaluate, self_test
 
 TRIES = 3   # the first answer plus up to two fixes
@@ -98,6 +98,8 @@ def answer_with_check(question, backend, python, approve, tries=TRIES, say=print
     messages = start_conversation(question)
     answer = backend.chat(messages)
     code = extract_code(answer)
+    if code.strip() and not defines_something(code):
+        return answer, CheckResult("skipped", "a short example, so it was not run"), None
     if code.strip() and not approve():
         return answer, CheckResult("skipped", "not run, because it needs your OK (answer y, or add --yes)"), None
     result = check(code, python)
@@ -154,6 +156,8 @@ def show(answer, result, report=None):
     elif result.status == "failed":
         print(f"[self-check FAILED: {result.message}]")
         print("[Krama could not fix this. Read the error before you use this code.]")
+    elif result.message.startswith("a short example"):
+        print("[example code: not run]")
     elif result.message != "no code to check":
         print(f"[self-check skipped: {result.message}]")
 
@@ -173,10 +177,58 @@ def setup_command(arguments):
     print('Done. Try:  krama "what is a list?"')
 
 
+def ask_before_edit(path, diff):
+    """Show a change and ask; anything but yes means no."""
+    print(f"\n  Krama wants to change {path}:")
+    for line in diff.splitlines():
+        print("    " + line)
+    if not sys.stdin.isatty():
+        print("  (no terminal to ask in, so the change was not made)")
+        return False
+    return input("  Make this change? [y/N]: ").strip().lower() in ("y", "yes")
+
+
+def fix_command(arguments):
+    from krama_cli.agent import run_agent
+    parser = argparse.ArgumentParser(prog="krama fix",
+                                     description="Let Krama work on the project in this folder until its tests pass. "
+                                                 "Every change is shown first and needs your yes.")
+    parser.add_argument("task", nargs="*", help='what to do (default: "Make the failing tests pass.")')
+    parser.add_argument("--backend", default="auto", choices=["auto", *BACKENDS])
+    parser.add_argument("--model", default=KRAMA_MODEL)
+    parser.add_argument("--python", default=shutil.which("python") or sys.executable,
+                        help="the Python that runs the tests (it needs pytest)")
+    parser.add_argument("--steps", type=int, default=15, help="most actions Krama may take (default 15)")
+    args = parser.parse_args(arguments)
+    task = " ".join(args.task) or "Make the failing tests pass."
+    say = lambda text: print(text, file=sys.stderr, flush=True)  # noqa: E731
+
+    backend = None
+    try:
+        backend = make_backend(args.backend, args.model, context=8192)
+        say(f"  working in {Path.cwd()}")
+        result = run_agent(task, Path.cwd(), backend, args.python, ask_before_edit, say=say, max_steps=args.steps)
+    except KeyboardInterrupt:
+        say("\n  stopped.")
+        sys.exit(130)
+    except BackendError as error:
+        say(str(error))
+        sys.exit(1)
+    finally:
+        if backend is not None:
+            backend.close()
+    print(f"\n[{result.status}] {result.summary}")
+    if result.edits:
+        print(f"Changed: {', '.join(sorted(set(result.edits)))}. Copies of the old files are in .krama/backups/.")
+
+
 def main():
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     if sys.argv[1:2] == ["setup"]:
         setup_command(sys.argv[2:])
+        return
+    if sys.argv[1:2] == ["fix"]:
+        fix_command(sys.argv[2:])
         return
 
     parser = argparse.ArgumentParser(prog="krama", description="An offline Python and FastAPI tutor that checks its own code.",

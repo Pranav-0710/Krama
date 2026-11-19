@@ -202,16 +202,39 @@ def test_every_conversation_starts_with_kramas_system_line():
 
 
 def test_gives_up_after_the_last_try():
-    backend = FakeBackend("```python\nprint(undefined_name)\n```")
+    backend = FakeBackend("```python\ndef show():\n    pass\n\nprint(undefined_name)\n```")
     answer, result, _ = main.answer_with_check("q", backend, PYTHON, approve=lambda: True,
                                                tries=3, say=lambda text: None, use_tests=False)
     assert result.status == "failed"
     assert len(backend.sent) == 3
 
 
+def test_a_short_example_is_not_run_and_nobody_is_asked(monkeypatch):
+    monkeypatch.setattr(main, "check", lambda code, python: pytest.fail("example was run"))
+    backend = FakeBackend("A list holds items in order:\n```python\nfruits = ['apple', 'banana']\n```")
+    answer, result, report = main.answer_with_check("what is a list?", backend, PYTHON,
+                                                    approve=lambda: pytest.fail("user was asked"),
+                                                    say=lambda text: None)
+    assert result.status == "skipped" and "example" in result.message
+    assert report is None
+
+
+@pytest.mark.parametrize("code, defines", [
+    ("fruits = ['apple']\nprint(fruits)", False),
+    ("x = 1 + 1", False),
+    ("def largest(numbers):\n    return max(numbers)", True),
+    ("class Stack:\n    pass", True),
+    ("from fastapi import FastAPI\napp = FastAPI()", True),
+    ("import fastapi\napp = fastapi.FastAPI()", True),
+    ("def broken(:", True),            # broken code still goes through the check
+])
+def test_what_counts_as_defining_something(code, defines):
+    assert check_module.defines_something(code) is defines
+
+
 def test_nothing_runs_without_the_users_ok(monkeypatch):
     monkeypatch.setattr(main, "check", lambda code, python: pytest.fail("code was run"))
-    backend = FakeBackend("```python\nx = 1\n```")
+    backend = FakeBackend("```python\ndef one():\n    return 1\n```")
     answer, result, _ = main.answer_with_check("q", backend, PYTHON, approve=lambda: False, say=lambda text: None)
     assert result.status == "skipped"
     assert "needs your OK" in result.message

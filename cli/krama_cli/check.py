@@ -214,34 +214,62 @@ def _posix_limits():
             pass  # macOS does not allow every limit
 
 
-def run_contained(folder, python, entry="import krama_answer"):
-    """Run the Python line `entry` in `folder`, in a limited process.
+def run_contained(folder, python, entry="import krama_answer", args=None, timeout=None, all_output=False):
+    """Run Python in `folder`, in a limited process.
 
-    By default that imports krama_answer.py. Returns (exit code, error text).
+    By default it runs the line `entry`, which imports krama_answer.py; `args`
+    (like ["-m", "pytest", "-q"]) runs those instead. Returns (exit code, text):
+    the error output, or with `all_output` everything the program printed.
     Raises subprocess.TimeoutExpired.
     """
-    command = [python, "-c", entry]
-    options = {"cwd": folder, "stdin": subprocess.DEVNULL, "stdout": subprocess.DEVNULL,
-               "stderr": subprocess.PIPE, "env": clean_env()}
+    command = [python, *(args if args else ["-c", entry])]
+    timeout = timeout or TIME_LIMIT
+    options = {"cwd": folder, "stdin": subprocess.DEVNULL, "env": clean_env(),
+               "stdout": subprocess.PIPE if all_output else subprocess.DEVNULL,
+               "stderr": subprocess.STDOUT if all_output else subprocess.PIPE}
 
     if sys.platform == "win32":
         from krama_cli import winjob
-        limit = windows_process_limit(python, options)
-        code, error = winjob.run(command, options, MEMORY_LIMIT, limit, TIME_LIMIT)
-        return code, error.decode("utf-8", errors="replace")
+        limit = windows_process_limit(python, {**options, "stdout": subprocess.DEVNULL, "stderr": subprocess.PIPE})
+        code, text = winjob.run(command, options, MEMORY_LIMIT, limit, timeout)
+        return code, text.decode("utf-8", errors="replace")
 
     process = subprocess.Popen(command, preexec_fn=_posix_limits, start_new_session=True, **options)
     try:
-        _, error = process.communicate(timeout=TIME_LIMIT)
+        output, error = process.communicate(timeout=timeout)
     except subprocess.TimeoutExpired:
         import signal
         os.killpg(process.pid, signal.SIGKILL)   # the code and anything it started
         process.communicate()
         raise
-    return process.returncode, error.decode("utf-8", errors="replace")
+    text = error if error is not None else (output or b"")
+    return process.returncode, text.decode("utf-8", errors="replace")
 
 
 # ---------------------------------------------------------------- the check
+
+def defines_something(code):
+    """True if the code defines a function, a class or a FastAPI app.
+
+    Code that defines nothing is a short example (like `fruits = ["apple"]`
+    in a quick answer). Running it proves little, so it is not run and the
+    user is not asked. Code that cannot be parsed counts as "something", so
+    a broken answer still goes through the check.
+    """
+    try:
+        tree = ast.parse(code)
+    except SyntaxError:
+        return True
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            return True
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Call):
+            func = node.value.func
+            if (isinstance(func, ast.Name) and func.id == "FastAPI") or \
+                    (isinstance(func, ast.Attribute) and func.attr == "FastAPI"):
+                return True
+    return False
+
 
 def last_line(error):
     lines = [line for line in error.strip().splitlines() if line.strip()]

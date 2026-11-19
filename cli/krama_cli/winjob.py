@@ -129,13 +129,14 @@ def run(command, options, memory_limit, max_processes, timeout):
             process.communicate()
             raise
         try:
-            _, error = process.communicate(timeout=timeout)
+            output, error = process.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
             kernel32.CloseHandle(job)       # kills the process and anything it started
             job = None
             process.communicate()
             raise
-        return process.returncode, error
+        # With stderr sent into stdout, everything arrives as `output`.
+        return process.returncode, error if error is not None else (output or b"")
     finally:
         if job:
             kernel32.CloseHandle(job)
