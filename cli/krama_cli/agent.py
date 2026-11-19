@@ -191,8 +191,7 @@ class Tools:
             return self._change(path, text, text.replace(old, new, 1))
         changed = tolerant_replace(text, old, new)     # right lines, wrong spaces in front?
         if changed is None:
-            return (f"That `old` text is not in {path}. Copy the lines exactly as they are in the file, "
-                    "without the line numbers and the `|`.")
+            return f"That `old` text is not in {path}. " + why_not_found(text, old)
         return self._change(path, text, changed)
 
     def create_file(self, action):
@@ -250,6 +249,35 @@ def tolerant_replace(text, old, new):
     return "\n".join(file_lines[:first] + "\n".join(fixed).split("\n") + file_lines[last + 1:])
 
 
+def why_not_found(text, old):
+    """Say what is wrong with an `old` that is not in the file, so the next try can be right.
+
+    Small models often skip a line in the middle (like the `def` under a
+    decorator) or change a line a little. Showing the exact lines helps more
+    than "not found".
+    """
+    file_lines = text.split("\n")
+    stripped = [line.strip() for line in file_lines]
+    wanted = [line.strip() for line in old.split("\n") if line.strip()]
+    missing = [line for line in wanted if line not in stripped]
+    if missing:
+        shown = "\n".join(f"  {line}" for line in missing[:3])
+        return (f"These lines of `old` are not in the file:\n{shown}\n"
+                "Read the file again and copy the lines exactly, without the line numbers and the `|`.")
+    positions, start = [], 0
+    for line in wanted:                       # where each line is, looking forward from the last one
+        found = stripped.index(line, start) if line in stripped[start:] else stripped.index(line)
+        positions.append(found)
+        start = found + 1
+    first, last = min(positions), max(positions)
+    if last - first + 1 > 30:
+        return "Copy the lines exactly as they are in the file, one after the other, without the line numbers."
+    block = "\n".join(file_lines[first:last + 1])
+    return (f"Every line of `old` is in the file, but not one after the other: lines in between are missing. "
+            f"Lines {first + 1} to {last + 1} are exactly:\n{block}\n"
+            "Copy every line in between too (`new` must keep them, if they should stay).")
+
+
 def short(action):
     tool = action.get("tool")
     if tool in ("read_file", "replace_in_file", "create_file"):
@@ -269,16 +297,27 @@ def run_agent(task, project, backend, python, approve, say=print, max_steps=15):
     tried = {}            # an action (without its thought) -> what it gave back last time
     read_at = {}          # a path -> the step it was last read at, since the last change
 
+    def key_of(action):
+        return json.dumps({k: v for k, v in action.items() if k != "thought"}, sort_keys=True)
+
+    def is_repeat(action, step):
+        """The same failed change again, or a file that is still in the prompt and unchanged."""
+        tool = action.get("tool")
+        if tool in ("replace_in_file", "create_file"):
+            return key_of(action) in tried
+        return tool == "read_file" and step - read_at.get(action.get("path"), -99) <= RECENT_READ
+
     for step in range(1, max_steps + 1):
         reply = backend.chat(messages[:2] + messages[2:][-12:], schema=STEP_SCHEMA)   # keep the prompt short
         try:
             action = json.loads(reply)
-            tool = action["tool"]
+            action["tool"]
         except (ValueError, KeyError, TypeError):
             messages += [{"role": "assistant", "content": reply},
                          {"role": "user", "content": "Reply with one JSON action only."}]
             log.append(f"{step}: unreadable reply")
             continue
+        tool = action["tool"]
 
         say(f"  step {step}: {short(action)}  ({str(action.get('thought', ''))[:80]})")
         log.append(f"{step}: {short(action)}")
@@ -286,23 +325,23 @@ def run_agent(task, project, backend, python, approve, say=print, max_steps=15):
             done = tools.last_tests.passed
             return AgentResult("solved" if done else "gave up", str(action.get("summary", "")), step, tools.edits, log)
         handler = getattr(tools, tool, None) if tool in TOOLS else None
-        key = json.dumps({k: v for k, v in action.items() if k != "thought"}, sort_keys=True)
-        if tool in ("replace_in_file", "create_file") and key in tried:
+        key = key_of(action)
+        if is_repeat(action, step) and tool != "read_file":
             # The same change again would fail the same way: say so instead of looping.
             result = ("You already tried exactly this action, and it did not work:\n"
                       f"{tried[key]}\nDo something different: read the file again, change fewer lines, "
                       "or try another fix.")
-        elif tool == "read_file" and step - read_at.get(action.get("path"), -99) <= RECENT_READ:
+        elif is_repeat(action, step):
             # Still in the prompt and unchanged: reading it again only goes round in circles.
             result = (f"You read {action.get('path')} at step {read_at[action.get('path')]} and it has not changed "
-                      "since. Do not read it again. Change a file (look for the bug in a different place), or finish.")
+                      "since. Do not read it again: change a file, or finish.")
         else:
             edits_before = len(tools.edits)
             result = handler(action) if handler else f"Unknown tool {tool!r}."
             if len(tools.edits) > edits_before:
                 tried.clear()           # a file changed, so earlier failures may now work
                 read_at.clear()
-            tried[key] = result.splitlines()[0] if result else ""
+            tried[key] = "\n".join(result.splitlines()[:12])
             if tool == "read_file":
                 read_at[action.get("path")] = step
         messages += [{"role": "assistant", "content": reply}, {"role": "user", "content": result}]

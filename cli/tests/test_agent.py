@@ -85,6 +85,21 @@ def test_wrong_old_text_is_explained(project):
     assert "is not in calc.py" in model.seen[1]
 
 
+def test_a_skipped_line_is_pointed_out():
+    from krama_cli.agent import why_not_found
+    text = "from fastapi import FastAPI\n\napp = FastAPI()\n\n\n@app.get('/items')\ndef list_items():\n    return ITEMS\n"
+    # What the 7B really sent: the decorator and the return, without the def between them.
+    hint = why_not_found(text, "@app.get('/items')\n    return ITEMS")
+    assert "not one after the other" in hint
+    assert "Lines 6 to 8 are exactly:\n@app.get('/items')\ndef list_items():\n    return ITEMS\n" in hint
+
+
+def test_a_changed_line_is_named():
+    from krama_cli.agent import why_not_found
+    hint = why_not_found("def add(a, b):\n    return a - b\n", "def add(a, b):\n    return a * b")
+    assert "return a * b" in hint and "def add" not in hint
+
+
 def test_right_lines_with_wrong_indentation_still_apply(tmp_path):
     from krama_cli.agent import tolerant_replace
     text = "@app.get('/helo')\ndef hello():\n    return {'message': 'hello'}\n"

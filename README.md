@@ -190,6 +190,38 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
     - The built-in engine's plain score (106) is below Krama's 112 on Ollama. The same weights run with a different chat template and context setting, so compare modes on one engine, not across engines.
   - Tests: 82 pass (12 new for the test-based check and its fix loop).
 
+- Step 5, the guided agent `krama fix`, 2026-11-18 and -19 (`cli/krama_cli/agent.py`):
+  - krama drives the steps, not the model. It lists the files and runs the tests, then the model picks one action per turn: read a file, replace a piece of text, create a file, run the tests, or finish. Each reply is forced into JSON with a schema. The tests run by themselves after every change, and the job is done when they pass.
+  - Safety: every change is shown as a diff and needs a yes (default no). A backup goes to `.krama/backups/` first. Test files and anything outside the project folder cannot be changed. Tests run on a copy, in the same limited process as the self-check.
+  - Benchmark (`eval/agent_tasks.py`, `eval/agent_bench.py`): small beginner projects whose tests fail, each proved by `--check` to fail as given and pass with a known fix. Edits are approved automatically but counted, and the original tests are put back before marking.
+    - Main 20 (12 bugs, 8 features), written first.
+    - Held-out 10, written after the main 20 had been used to change the agent.
+    - Held-out 10 more ("fresh"), written 2026-11-19 after the first held-out set had been used for changes too.
+  - Results, 15 actions at most, built-in engine:
+
+    | Agent version | Model | Main 20 | Held-out 10 | Fresh 10 |
+    |---|---|---|---|---|
+    | v1 | Krama 1.5B | 2 | not run | not run |
+    | v1 | Qwen2.5-Coder-1.5B | 1 | not run | not run |
+    | v1 | Qwen2.5-Coder-7B (no training) | 12 | not run | not run |
+    | v2 | Krama 1.5B | 2 | 2 | not run |
+    | v2 | Qwen2.5-Coder-7B | 14 | 7 | not run |
+    | v3 | Krama 1.5B | 5 | 3 | 2 |
+    | v3 | Qwen2.5-Coder-7B | 17 | 8 | **9** |
+
+    - v1 to v2: the 7B often sent the right lines with the wrong spaces in front, so the replace failed and it tried the same thing again. v2 matches lines while ignoring the spaces in front, only when exactly one place matches, and moves the new lines by the same amount. It also says "you already tried exactly this" instead of failing the same way again. The 7B went from 183 to 124 seconds per project.
+    - At 1.5B the agent mostly fails at the bookkeeping, not the Python. All 26 of Krama's v2 misses ran out of steps: the same replace that does not match again and again, reading one file over and over, or trying to change a test file.
+    - v2's misses: five projects that add code. The 7B left `old` empty to mean "add at the end", which krama refused. `bug-two-files` alternated reading two files for 15 steps, wrongly sure the conversion was right. Three others made many edits without finding the fix.
+    - v3 (both from the v2 misses): an empty `old` adds the new code at the end of the file (still shown as a diff and asked), and a file read in the last 4 steps that has not changed is not shown again. The model is told to change something or finish.
+    - v3 with the 7B (`agent-qwen-7b-v3.json`): 34 of 40, 93 seconds per project. Every "add code" project that looped in v2 was solved, most in 2 steps. The fresh 10 are the fair number: 9, written before any agent saw them.
+    - v3's 6 misses: three "add an API endpoint" projects ended with no edit, and three (`bug-two-files`, `bug-api-201`, `held-count-letters`) are reasoning failures. In the endpoint projects the 7B leaves out the `def` line under the decorator, in the text it copies and in the code it writes. So even a perfect match would give broken code: a model weakness, not a tool one.
+    - Tried and dropped (2026-11-19): asking again at temperature 0.8 when the model repeats a failed action. The 7B then filled `old` with thousands of blank lines up to the reply limit, so each try took about a minute and could not be read. Kept: when `old` is not found, krama now says which lines are not in the file, or shows the exact lines when one in the middle was skipped. It did not change what the 7B sent.
+    - v3 with Krama 1.5B (`agent-krama-1.5b-v3.json`, run with the clearer not-found message): 10 of 40, against 4 of 30 in v2. It even solved `bug-two-files`, which the 7B missed. All 30 misses ran out of steps, mostly with replaces that did not match (313 of its 450 actions in those projects).
+    - So with the program steering, a plain 7B already solves most beginner-sized fixes. The rest needs a model trained on agent steps (step 6).
+  - Tried by hand on the user's own PC: `uv tool install ./cli`, then `krama setup`, then questions worked in PowerShell with no Ollama. Two things to train out in v0.2: Krama named a function `max` (hiding Python's own), and its tests compare with `== None`.
+  - Short examples (no function, class or app defined) are no longer run by the self-check and show `[example code: not run]`, because running a two-line example only proved it ran.
+  - Tests: 107 pass (agent: 19, with a scripted fake model).
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle
