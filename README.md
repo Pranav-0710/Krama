@@ -222,6 +222,30 @@ Krama is an **offline coding tutor for beginners that checks its own code**. It 
   - Short examples (no function, class or app defined) are no longer run by the self-check and show `[example code: not run]`, because running a two-line example only proved it ran.
   - Tests: 107 pass (agent: 19, with a scripted fake model).
 
+- Step 6, training Krama on agent steps (round 3, a 1.5B pilot), 2026-11-19:
+  - A new exam first (`eval/agent_exam.py`, `--set=exam`): 20 more projects (12 bugs, 8 that add code), written before any training data. They are used only to judge trained models, never to change krama or the data.
+  - Training data (`data/agent_data.py`; the output, `data/agent_train.jsonl`, stays private like the rest of the training data):
+    - Each seed is a working answer from the round-2 data (1,580 of them). 183 seeds were left out because their code was too close to a benchmark or exam project (same plain-Python name, or more than 60% alike). Afterwards no training file was more than 45% alike to any exam file.
+    - A program breaks the seed's code with one small realistic slip, such as a swapped operator, an off-by-one or a removed `.strip()`, or it removes a function, method or endpoint that the tests need. The right steps are then run through krama's real tools on a copy, so every file view and test result in the data is real, and every example ends with the tests passing.
+    - 2,474 examples: 1,117 bug fixes and 1,357 additions. In 198 of them the first action is a mistake (a mistyped `old`, or an attempt to change a test file) followed by the recovery. The model sees the mistake but is not trained to make it.
+    - User paths are replaced with `C:\Users\student`, including the doubled-`\` form pytest prints.
+  - Training (`kaggle/train_agent.py`): LoRA on Qwen2.5-Coder-1.5B-Instruct with the 1,578 round-2 tutor answers plus the 2,474 agent examples, 2 epochs, 500 steps, 84 minutes on one T4. It learns only from Krama's own turns. The layout is checked against Qwen's own chat template before training starts. It was converted to 4-bit with `kaggle/to_gguf.py` on a CPU session.
+  - To keep the data readable, krama's test output is now shorter (`--tb=short`, no warnings), and steps inside libraries are replaced with "(N steps outside the project hidden)". An empty `old` in an empty file now gives just the new code.
+  - Results, built-in engine, one run each (it repeats itself exactly):
+
+    | Model | Exam 20 | Main 20 | Held-out 10 | Fresh 10 | Seconds per project |
+    |---|---|---|---|---|---|
+    | Krama 1.5B (round 2, no agent training) | 4 | 5 | 3 | 2 | 103 (exam) |
+    | **Krama 1.5B round 3** | **14** | **13** | **7** | **5** | **33-36** |
+    | Qwen2.5-Coder-7B (no training) | 17 | 17 | 8 | 9 | 113 (exam) |
+
+    - On the exam, round 3 solved all 8 "add code" projects, including `exam-add-api-post`, which the 7B missed, but only 6 of 12 bugs.
+    - All 21 misses (exam and 40) ran out of steps, almost all with replaces. The pattern: one wrong fix is applied, the tests still fail, and the model repeats the same reasoning ("Line 2 has `1` where it needs `0`") until the step limit. The training data never shows a fix that applies but leaves the tests failing, followed by a second look. That is the next thing to add.
+    - The bug slips in the data are a small, fixed set. The model may now guess those kinds first, so bugs of other kinds are its weak spot.
+  - Tutor answers did not get worse: the 24-task self-check (`selfcheck-run8.json`, `eval/selfcheck.py` now takes a model file) went from 14 to 17 (Python 10/12, FastAPI 7/12). 4 newly passing, 1 newly failing (`py-most-common`).
+  - Numbers this small (20 to 40 projects) show a clear jump, not a finished agent. Krama is still a beginner-sized tool.
+  - Tests: 109 pass.
+
 ## Not yet verified
 
 - Teacher model throughput on Kaggle

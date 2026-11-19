@@ -7,7 +7,8 @@ Run from the project folder:
 The number at the end names the run (1, 2, ...). CPU runs are not exactly
 repeatable, so run it more than once. Results: eval/results/selfcheck-run<N>.json
 Add a backend name after the number to choose the engine, e.g. `... 5 local`
-for the built-in llama.cpp engine (default: ollama). Add --no-tests to skip
+for the built-in llama.cpp engine (default: ollama), and a model file after
+that to test a newly trained GGUF. Add --no-tests to skip
 Krama's own tests and only use the run check.
 """
 
@@ -27,7 +28,9 @@ def main():
     run_name = sys.argv[1] if len(sys.argv) > 1 else "1"
     records = []
     backend_name = sys.argv[2] if len(sys.argv) > 2 else "ollama"
-    backend = make_backend(backend_name)
+    positional = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+    # An optional third name: a model file, e.g. a newly trained GGUF for the built-in engine.
+    backend = make_backend(backend_name, positional[2]) if len(positional) > 2 else make_backend(backend_name)
     use_tests = "--no-tests" not in sys.argv
     for task in TASKS:
         if task["kind"] == "quick":

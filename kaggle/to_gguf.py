@@ -17,7 +17,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-ROUND = 2              # must match kaggle/train.py
+ROUND = 3              # must match the training script: 2 = train.py, 3 = train_agent.py (step 6 pilot)
 SUFFIX = "" if ROUND == 1 else f"-r{ROUND}"
 MODEL_DIR = Path(f"/kaggle/working/krama-coder-1.5b{SUFFIX}")
 TOOLS = Path("/tmp/llama.cpp")              # not in /kaggle/working, so it is not saved
