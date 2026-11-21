@@ -143,6 +143,33 @@ def test_empty_old_adds_new_code_at_the_end(tmp_path):
     assert (tmp_path / "calc.py").read_text() == "def add(a, b):\n    return a + b\n\n\ndef multiply(a, b):\n    return a * b\n"
 
 
+def test_empty_old_in_an_empty_file_gives_just_the_new_code(tmp_path):
+    (tmp_path / "calc.py").write_text("")
+    (tmp_path / "test_calc.py").write_text("from calc import add\n\ndef test_add():\n    assert add(2, 3) == 5\n")
+    model = ScriptedModel(fix_action(old="", new="def add(a, b):\n    return a + b"))
+    assert run_agent("write add", tmp_path, model, PYTHON, yes, say=lambda text: None).status == "solved"
+    assert (tmp_path / "calc.py").read_text() == "def add(a, b):\n    return a + b\n"
+
+
+def test_library_steps_are_hidden_from_test_output():
+    from krama_cli.agent import hide_library_frames
+    lines = ["test_app.py:9: in test_get",
+             "    r = client.get('/items/1')",
+             r"..\uv\Lib\site-packages\starlette\routing.py:289: in handle",
+             "    await self.app(scope, receive, send)",
+             "           ^^^^^^^^^^^^^^^^^^^^^^",
+             r"C:\Python312\Lib\contextlib.py:618: in close",
+             "    self.__exit__(None, None, None)",
+             "/usr/lib/python3/site-packages/fastapi/routing.py:175: in app",
+             "    await wrap(app)",
+             "app.py:12: in get_item",
+             "    return ITEMS[item_id]",
+             "E   KeyError: 1"]
+    assert hide_library_frames(lines) == ["test_app.py:9: in test_get", "    r = client.get('/items/1')",
+                                          "(3 steps outside the project hidden)",
+                                          "app.py:12: in get_item", "    return ITEMS[item_id]", "E   KeyError: 1"]
+
+
 def test_reading_an_unchanged_file_again_is_refused(project):
     read = {"thought": "look", "tool": "read_file", "path": "calc.py"}
     model = ScriptedModel(read, read)

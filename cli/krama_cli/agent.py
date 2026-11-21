@@ -23,6 +23,7 @@ Safety:
 
 import difflib
 import json
+import re
 import shutil
 import subprocess
 import tempfile
@@ -113,7 +114,10 @@ def run_project_tests(project, python):
         copy = Path(folder) / "project"
         shutil.copytree(project, copy, ignore=shutil.ignore_patterns(*SKIP))
         try:
-            code, output = run_contained(copy, python, args=["-m", "pytest", "-q", "--no-header", "-p", "no:cacheprovider"],
+            # Short tracebacks and no warnings summary: the last MAX_TEST_LINES lines
+            # should show the failing test, not library internals.
+            code, output = run_contained(copy, python, args=["-m", "pytest", "-q", "--no-header", "--tb=short",
+                                                             "-p", "no:cacheprovider", "-p", "no:warnings"],
                                          timeout=TEST_TIME_LIMIT, all_output=True)
         except subprocess.TimeoutExpired:
             return TestRun(False, f"the tests were still running after {TEST_TIME_LIMIT} seconds")
@@ -121,8 +125,31 @@ def run_project_tests(project, python):
             return TestRun(False, f"the tests could not run ({error})")
     if "No module named pytest" in output:
         return TestRun(False, "pytest is not installed. Install it with: python -m pip install pytest")
-    lines = output.strip().splitlines()
+    lines = hide_library_frames(output.strip().splitlines())
     return TestRun(code == 0, "\n".join(lines[-MAX_TEST_LINES:]))
+
+
+OUTSIDE_STEP = re.compile(r"^(\.\.[\\/]|[A-Za-z]:[\\/]|/).*:\d+: in \S")
+
+
+def hide_library_frames(lines):
+    """Drop traceback steps outside the project (Python itself, FastAPI, pytest...):
+    they push the lines that matter out of view. With --tb=short a step is a
+    'path:line: in name' line and the indented lines under it. Project files
+    show as plain names (app.py:12); anything else starts with ..\\, C:\\ or /."""
+    kept, hidden, skipping = [], 0, False
+    for line in lines:
+        if OUTSIDE_STEP.match(line):
+            hidden, skipping = hidden + 1, True
+            continue
+        if skipping and line.startswith(" "):
+            continue
+        skipping = False
+        if hidden:
+            kept.append(f"({hidden} steps outside the project hidden)")
+            hidden = 0
+        kept.append(line)
+    return kept
 
 
 def backup(project, full):
@@ -182,6 +209,8 @@ class Tools:
         if not old:                                    # empty `old` means: add `new` at the end
             if not new.strip():
                 return "Both `old` and `new` are empty, so there is nothing to change."
+            if not text.strip():                       # an empty file: the new code is all of it
+                return self._change(path, text, new.strip("\n") + "\n")
             gap = "\n" if new.startswith((" ", "\t")) else "\n\n"     # inside a class, or a new top-level block
             return self._change(path, text, text.rstrip("\n") + "\n" + gap + new.strip("\n") + "\n")
         count = text.count(old)
@@ -285,14 +314,19 @@ def short(action):
     return tool or "?"
 
 
+def start_message(task, project, tests):
+    """The first thing Krama is shown: the task, the files and the test results.
+    The training data (data/agent_data.py) builds it here too, so the two match."""
+    files = "\n".join(f"- {name}" for name in list_files(project))
+    return f"Task: {task}\n\nFiles in the project:\n{files}\n\nTest results now:\n{tests.output}"
+
+
 def run_agent(task, project, backend, python, approve, say=print, max_steps=15):
     """Work on `task` in `project` until the tests pass, Krama stops, or steps run out."""
     tools = Tools(project, python, approve, say)
     tools.last_tests = run_project_tests(project, python)
-    files = "\n".join(f"- {name}" for name in list_files(project))
-    start = (f"Task: {task}\n\nFiles in the project:\n{files}\n\n"
-             f"Test results now:\n{tools.last_tests.output}")
-    messages = [{"role": "system", "content": AGENT_SYSTEM}, {"role": "user", "content": start}]
+    messages = [{"role": "system", "content": AGENT_SYSTEM},
+                {"role": "user", "content": start_message(task, project, tools.last_tests)}]
     log = []
     tried = {}            # an action (without its thought) -> what it gave back last time
     read_at = {}          # a path -> the step it was last read at, since the last change

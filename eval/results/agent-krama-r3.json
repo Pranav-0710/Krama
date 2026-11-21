@@ -1,0 +1,1188 @@
+[
+  {
+    "id": "bug-add",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "calc.py"
+    ],
+    "approvals": 1,
+    "seconds": 10,
+    "log": [
+      "1: read_file calc.py",
+      "2: replace_in_file calc.py"
+    ],
+    "notes": [
+      "  step 1: read_file calc.py  (Read calc.py to see what `add` does.)",
+      "  step 2: replace_in_file calc.py  (Line 2 has `-` where it needs `+`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "bug-sum-to",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "counting.py",
+      "counting.py",
+      "counting.py",
+      "counting.py"
+    ],
+    "approvals": 4,
+    "seconds": 96,
+    "log": [
+      "1: read_file counting.py",
+      "2: replace_in_file counting.py",
+      "3: replace_in_file counting.py",
+      "4: replace_in_file counting.py",
+      "5: replace_in_file counting.py",
+      "6: replace_in_file counting.py",
+      "7: replace_in_file counting.py",
+      "8: replace_in_file counting.py",
+      "9: replace_in_file counting.py",
+      "10: replace_in_file counting.py",
+      "11: replace_in_file counting.py",
+      "12: replace_in_file counting.py",
+      "13: replace_in_file counting.py",
+      "14: replace_in_file counting.py",
+      "15: replace_in_file counting.py"
+    ],
+    "notes": [
+      "  step 1: read_file counting.py  (The test fails; I will read counting.py to find out why.)",
+      "  step 2: replace_in_file counting.py  (Line 3 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 3: replace_in_file counting.py  (Line 4 has `+` where it needs `*`, which is why the test fails.)",
+      "  step 4: replace_in_file counting.py  (Line 4 has `*` where it needs `+`, which is why the test fails.)",
+      "  step 5: replace_in_file counting.py  (Line 4 has `+` where it needs `-`, which is why the test fails.)",
+      "  step 6: replace_in_file counting.py  (Line 4 has `-` where it needs `/`, which is why the test fails.)",
+      "  step 7: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 8: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 9: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 10: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 11: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 12: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 13: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 14: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)",
+      "  step 15: replace_in_file counting.py  (I copied a line wrongly. Line 4 has `+` where it needs `-`, which is why the tes)"
+    ]
+  },
+  {
+    "id": "bug-adult",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "people.py"
+    ],
+    "approvals": 1,
+    "seconds": 8,
+    "log": [
+      "1: read_file people.py",
+      "2: replace_in_file people.py"
+    ],
+    "notes": [
+      "  step 1: read_file people.py  (Read people.py to see what `is_adult` does.)",
+      "  step 2: replace_in_file people.py  (Line 2 has `>` where it needs `>=`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "bug-import",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "geometry.py"
+    ],
+    "approvals": 1,
+    "seconds": 6,
+    "log": [
+      "1: read_file geometry.py",
+      "2: replace_in_file geometry.py"
+    ],
+    "notes": [
+      "  step 1: read_file geometry.py  (Read geometry.py to see what `geometry` does.)",
+      "  step 2: replace_in_file geometry.py  (`math` is used but never imported, so add `import math`.)"
+    ]
+  },
+  {
+    "id": "bug-average-empty",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "stats.py"
+    ],
+    "approvals": 1,
+    "seconds": 69,
+    "log": [
+      "1: read_file stats.py",
+      "2: replace_in_file stats.py",
+      "3: replace_in_file stats.py",
+      "4: replace_in_file stats.py",
+      "5: replace_in_file stats.py",
+      "6: replace_in_file stats.py",
+      "7: replace_in_file stats.py",
+      "8: replace_in_file stats.py",
+      "9: replace_in_file stats.py",
+      "10: replace_in_file stats.py",
+      "11: replace_in_file stats.py",
+      "12: replace_in_file stats.py",
+      "13: replace_in_file stats.py",
+      "14: replace_in_file stats.py",
+      "15: replace_in_file stats.py"
+    ],
+    "notes": [
+      "  step 1: read_file stats.py  (The test fails; I will read stats.py to find out why.)",
+      "  step 2: replace_in_file stats.py  (Line 2 has `0` where it needs `len(values)`, which is why the test fails.)",
+      "  step 3: replace_in_file stats.py  (Line 2 has `0` where it needs `len(values)`, which is why the test fails.)",
+      "  step 4: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 5: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 6: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 7: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 8: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 9: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 10: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 11: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 12: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 13: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 14: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)",
+      "  step 15: replace_in_file stats.py  (I read stats.py and found that `0` is where it needs `len(values)`, but I change)"
+    ]
+  },
+  {
+    "id": "bug-reverse",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "text_tools.py"
+    ],
+    "approvals": 1,
+    "seconds": 7,
+    "log": [
+      "1: read_file text_tools.py",
+      "2: replace_in_file text_tools.py"
+    ],
+    "notes": [
+      "  step 1: read_file text_tools.py  (Read text_tools.py to see what `reverse` does.)",
+      "  step 2: replace_in_file text_tools.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "bug-key-typo",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "users.py"
+    ],
+    "approvals": 1,
+    "seconds": 6,
+    "log": [
+      "1: read_file users.py",
+      "2: replace_in_file users.py"
+    ],
+    "notes": [
+      "  step 1: read_file users.py  (Read users.py to see what `display_name` does.)",
+      "  step 2: replace_in_file users.py  (`nmae` is misspelled, so fix it.)"
+    ]
+  },
+  {
+    "id": "bug-vowels",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "letters.py"
+    ],
+    "approvals": 1,
+    "seconds": 67,
+    "log": [
+      "1: read_file letters.py",
+      "2: replace_in_file letters.py",
+      "3: replace_in_file letters.py",
+      "4: replace_in_file letters.py",
+      "5: replace_in_file letters.py",
+      "6: replace_in_file letters.py",
+      "7: replace_in_file letters.py",
+      "8: replace_in_file letters.py",
+      "9: replace_in_file letters.py",
+      "10: replace_in_file letters.py",
+      "11: replace_in_file letters.py",
+      "12: replace_in_file letters.py",
+      "13: replace_in_file letters.py",
+      "14: replace_in_file letters.py",
+      "15: replace_in_file letters.py"
+    ],
+    "notes": [
+      "  step 1: read_file letters.py  (The test fails; I will read letters.py to find out why.)",
+      "  step 2: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 3: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 4: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 5: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 6: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 7: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 8: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 9: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 10: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 11: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 12: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 13: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 14: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)",
+      "  step 15: replace_in_file letters.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "bug-api-path",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "app.py",
+      "app.py"
+    ],
+    "approvals": 2,
+    "seconds": 69,
+    "log": [
+      "1: read_file app.py",
+      "2: replace_in_file app.py",
+      "3: replace_in_file app.py",
+      "4: replace_in_file app.py",
+      "5: replace_in_file app.py",
+      "6: replace_in_file app.py",
+      "7: replace_in_file app.py",
+      "8: replace_in_file app.py",
+      "9: replace_in_file app.py",
+      "10: replace_in_file app.py",
+      "11: replace_in_file app.py",
+      "12: replace_in_file app.py",
+      "13: replace_in_file app.py",
+      "14: replace_in_file app.py",
+      "15: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file app.py  (Read app.py to see what `get_weather` does.)",
+      "  step 2: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 3: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 4: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 5: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 6: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 7: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 8: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 9: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 10: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 11: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 12: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 13: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 14: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)",
+      "  step 15: replace_in_file app.py  (Line 6 is missing `/`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "bug-api-201",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "app.py",
+      "app.py"
+    ],
+    "approvals": 2,
+    "seconds": 81,
+    "log": [
+      "1: read_file app.py",
+      "2: replace_in_file app.py",
+      "3: read_file test_book.py",
+      "4: replace_in_file test_app.py",
+      "5: read_file app.py",
+      "6: replace_in_file app.py",
+      "7: read_file test_book.py",
+      "8: replace_in_file test_app.py",
+      "9: read_file app.py",
+      "10: replace_in_file app.py",
+      "11: read_file test_book.py",
+      "12: read_file app.py",
+      "13: read_file test_book.py",
+      "14: read_file app.py",
+      "15: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file app.py  (Read app.py to see what `create` does.)",
+      "  step 2: replace_in_file app.py  (Line 13 has `200` where it needs `201`, which is why the test fails.)",
+      "  step 3: read_file test_book.py  (The test fails; I will read book_test.py to find out why.)",
+      "  step 4: replace_in_file test_app.py  (I made a mistake; there is in fact a `test_book.py` in the project.)",
+      "  step 5: read_file app.py  (Read app.py to see what `create` does.)",
+      "  step 6: replace_in_file app.py  (Line 13 has `200` where it needs `201`, which is why the test fails.)",
+      "  step 7: read_file test_book.py  (The test fails; I will read book_test.py to find out why.)",
+      "  step 8: replace_in_file test_app.py  (I made a mistake; there is in fact a `test_book.py` in the project.)",
+      "  step 9: read_file app.py  (Read app.py to see what `create` does.)",
+      "  step 10: replace_in_file app.py  (Line 13 has `200` where it needs `201`, which is why the test fails.)",
+      "  step 11: read_file test_book.py  (I will read book_test.py to find out why.)",
+      "  step 12: read_file app.py  (I will read app.py to see what `create` does.)",
+      "  step 13: read_file test_book.py  (I will read book_test.py to find out why.)",
+      "  step 14: read_file app.py  (I will read app.py to see what `create` does.)",
+      "  step 15: replace_in_file app.py  (Line 13 has `200` where it needs `201`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "bug-mutates-input",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "lists.py",
+      "lists.py"
+    ],
+    "approvals": 2,
+    "seconds": 69,
+    "log": [
+      "1: read_file lists.py",
+      "2: replace_in_file lists.py",
+      "3: replace_in_file lists.py",
+      "4: replace_in_file lists.py",
+      "5: replace_in_file lists.py",
+      "6: replace_in_file lists.py",
+      "7: replace_in_file lists.py",
+      "8: replace_in_file lists.py",
+      "9: replace_in_file lists.py",
+      "10: replace_in_file lists.py",
+      "11: replace_in_file lists.py",
+      "12: replace_in_file lists.py",
+      "13: replace_in_file lists.py",
+      "14: replace_in_file lists.py",
+      "15: replace_in_file lists.py"
+    ],
+    "notes": [
+      "  step 1: read_file lists.py  (The test fails; I will read lists.py to find out why.)",
+      "  step 2: replace_in_file lists.py  (Line 2 is missing `not`, which is why the test fails.)",
+      "  step 3: replace_in_file lists.py  (Line 2 has `:` where it needs `]`, which is why the test fails.)",
+      "  step 4: replace_in_file lists.py  (Line 2 has `:` where it needs `]`, which is why the test fails.)",
+      "  step 5: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 6: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 7: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 8: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 9: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 10: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 11: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 12: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 13: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 14: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)",
+      "  step 15: replace_in_file lists.py  (I copied a line wrongly. Line 2 has `:` where it needs `]`, which is why the tes)"
+    ]
+  },
+  {
+    "id": "bug-two-files",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "convert.py"
+    ],
+    "approvals": 1,
+    "seconds": 8,
+    "log": [
+      "1: read_file convert.py",
+      "2: replace_in_file convert.py"
+    ],
+    "notes": [
+      "  step 1: read_file convert.py  (Read convert.py to see what `convert` does.)",
+      "  step 2: replace_in_file convert.py  (Line 2 has `9` where it needs `5`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "feat-multiply",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "calc.py"
+    ],
+    "approvals": 1,
+    "seconds": 8,
+    "log": [
+      "1: read_file test_calc.py",
+      "2: read_file calc.py",
+      "3: replace_in_file calc.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_calc.py  (First see what the tests expect from `multiply`.)",
+      "  step 2: read_file calc.py  (Now read calc.py to see where `multiply` belongs.)",
+      "  step 3: replace_in_file calc.py  (Add `multiply` at the end of the file.)"
+    ]
+  },
+  {
+    "id": "feat-is-even",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "parity.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file test_parity.py",
+      "2: read_file parity.py",
+      "3: replace_in_file parity.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_parity.py  (First see what the tests expect from `is_even`.)",
+      "  step 2: read_file parity.py  (Now read parity.py to see where `is_even` belongs.)",
+      "  step 3: replace_in_file parity.py  (Add `is_even` just before `def is_odd(n):`.)"
+    ]
+  },
+  {
+    "id": "feat-default",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "greet.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file test_greet.py",
+      "2: read_file greet.py",
+      "3: replace_in_file greet.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_greet.py  (First see what the tests expect from `greet`.)",
+      "  step 2: read_file greet.py  (Now read greet.py to see where `greet` belongs.)",
+      "  step 3: replace_in_file greet.py  (Add `None` as the default value for `name`.)"
+    ]
+  },
+  {
+    "id": "feat-api-item",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 5,
+    "edits": [
+      "app.py",
+      "app.py"
+    ],
+    "approvals": 2,
+    "seconds": 23,
+    "log": [
+      "1: read_file test_app.py",
+      "2: read_file app.py",
+      "3: replace_in_file app.py",
+      "4: read_file app.py",
+      "5: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_app.py  (First see what the tests expect from `GET /items/{item_id}`.)",
+      "  step 2: read_file app.py  (Now read app.py to see where `GET /items/{item_id}` belongs.)",
+      "  step 3: replace_in_file app.py  (Add `GET /items/{item_id}` at the end of the file.)",
+      "  step 4: read_file app.py  (The test fails; I will read app.py again to find out why.)",
+      "  step 5: replace_in_file app.py  (`HTTPException` is used but never imported, so add `from fastapi import HTTPExce)"
+    ]
+  },
+  {
+    "id": "feat-peek",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "stack.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file test_stack.py",
+      "2: read_file stack.py",
+      "3: replace_in_file stack.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_stack.py  (First see what the tests expect from `peek`.)",
+      "  step 2: read_file stack.py  (Now read stack.py to see where `peek` belongs.)",
+      "  step 3: replace_in_file stack.py  (Add `peek` just before `def pop(self):`.)"
+    ]
+  },
+  {
+    "id": "feat-withdraw-check",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "bank.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file test_bank.py",
+      "2: read_file bank.py",
+      "3: replace_in_file bank.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_bank.py  (First see what the tests expect from `withdraw`.)",
+      "  step 2: read_file bank.py  (Now read bank.py to see where `withdraw` belongs.)",
+      "  step 3: replace_in_file bank.py  (Add `withdraw` at the end of the file.)"
+    ]
+  },
+  {
+    "id": "feat-toggle",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "todos.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file test_todos.py",
+      "2: read_file todos.py",
+      "3: replace_in_file todos.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_todos.py  (First see what the tests expect from `toggle`.)",
+      "  step 2: read_file todos.py  (Now read todos.py to see where `toggle` belongs.)",
+      "  step 3: replace_in_file todos.py  (Add `toggle` at the end of the file.)"
+    ]
+  },
+  {
+    "id": "feat-word-count",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "words.py"
+    ],
+    "approvals": 1,
+    "seconds": 78,
+    "log": [
+      "1: read_file words.py",
+      "2: replace_in_file words.py",
+      "3: replace_in_file words.py",
+      "4: replace_in_file words.py",
+      "5: replace_in_file words.py",
+      "6: replace_in_file words.py",
+      "7: replace_in_file words.py",
+      "8: replace_in_file words.py",
+      "9: replace_in_file words.py",
+      "10: replace_in_file words.py",
+      "11: replace_in_file words.py",
+      "12: replace_in_file words.py",
+      "13: replace_in_file words.py",
+      "14: replace_in_file words.py",
+      "15: replace_in_file words.py"
+    ],
+    "notes": [
+      "  step 1: read_file words.py  (Read words.py to see what `word_count` does.)",
+      "  step 2: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 3: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 4: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 5: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 6: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 7: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 8: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 9: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 10: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 11: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 12: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 13: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 14: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)",
+      "  step 15: replace_in_file words.py  (Line 4 is missing `.strip()` which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "held-max",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "finder.py"
+    ],
+    "approvals": 1,
+    "seconds": 7,
+    "log": [
+      "1: read_file finder.py",
+      "2: replace_in_file finder.py"
+    ],
+    "notes": [
+      "  step 1: read_file finder.py  (Read finder.py to see what `find_max` does.)",
+      "  step 2: replace_in_file finder.py  (Line 4 has `<` where it needs `>`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "held-clean-name",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "names.py"
+    ],
+    "approvals": 1,
+    "seconds": 6,
+    "log": [
+      "1: read_file names.py",
+      "2: replace_in_file names.py"
+    ],
+    "notes": [
+      "  step 1: read_file names.py  (The test fails; I will read names.py to find out why.)",
+      "  step 2: replace_in_file names.py  (Line 2 is missing `.strip()`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "held-last-item",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "items.py"
+    ],
+    "approvals": 1,
+    "seconds": 7,
+    "log": [
+      "1: read_file items.py",
+      "2: replace_in_file items.py"
+    ],
+    "notes": [
+      "  step 1: read_file items.py  (The test fails; I will read items.py to find out why.)",
+      "  step 2: replace_in_file items.py  (Line 2 has `len(items)` where it needs `-1`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "held-count-letters",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "letters_count.py"
+    ],
+    "approvals": 1,
+    "seconds": 61,
+    "log": [
+      "1: read_file letters_count.py",
+      "2: replace_in_file letters_count.py",
+      "3: replace_in_file letters_count.py",
+      "4: replace_in_file letters_count.py",
+      "5: replace_in_file letters_count.py",
+      "6: replace_in_file letters_count.py",
+      "7: replace_in_file letters_count.py",
+      "8: replace_in_file letters_count.py",
+      "9: replace_in_file letters_count.py",
+      "10: replace_in_file letters_count.py",
+      "11: replace_in_file letters_count.py",
+      "12: replace_in_file letters_count.py",
+      "13: replace_in_file letters_count.py",
+      "14: replace_in_file letters_count.py",
+      "15: replace_in_file letters_count.py"
+    ],
+    "notes": [
+      "  step 1: read_file letters_count.py  (The test fails; I will read letters_count.py to find out why.)",
+      "  step 2: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 3: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 4: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 5: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 6: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 7: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 8: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 9: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 10: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 11: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 12: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 13: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 14: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)",
+      "  step 15: replace_in_file letters_count.py  (Line 4 has `+` where it needs `=`.)"
+    ]
+  },
+  {
+    "id": "held-api-square",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "app.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file app.py",
+      "2: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file app.py  (Read app.py to see what `square` does.)",
+      "  step 2: replace_in_file app.py  (Line 8 has `+` where it needs `*`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "held-percent",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "maths_tools.py"
+    ],
+    "approvals": 1,
+    "seconds": 10,
+    "log": [
+      "1: read_file test_maths_tools.py",
+      "2: read_file maths_tools.py",
+      "3: replace_in_file maths_tools.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_maths_tools.py  (First see what the tests expect from `percent`.)",
+      "  step 2: read_file maths_tools.py  (Now read maths_tools.py to see where `percent` belongs.)",
+      "  step 3: replace_in_file maths_tools.py  (Add `percent` at the end of the file.)"
+    ]
+  },
+  {
+    "id": "held-palindrome",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "words_check.py"
+    ],
+    "approvals": 1,
+    "seconds": 10,
+    "log": [
+      "1: read_file test_words_check.py",
+      "2: read_file words_check.py",
+      "3: replace_in_file words_check.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_words_check.py  (First see what the tests expect from `is_palindrome`.)",
+      "  step 2: read_file words_check.py  (Now read words_check.py to see where `is_palindrome` belongs.)",
+      "  step 3: replace_in_file words_check.py  (Add `is_palindrome` at the end of the file.)"
+    ]
+  },
+  {
+    "id": "held-api-delete",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "app.py",
+      "app.py"
+    ],
+    "approvals": 2,
+    "seconds": 107,
+    "log": [
+      "1: read_file test_app.py",
+      "2: read_file app.py",
+      "3: replace_in_file app.py",
+      "4: read_file app.py",
+      "5: replace_in_file app.py",
+      "6: replace_in_file app.py",
+      "7: replace_in_file app.py",
+      "8: replace_in_file app.py",
+      "9: replace_in_file app.py",
+      "10: replace_in_file app.py",
+      "11: replace_in_file app.py",
+      "12: replace_in_file app.py",
+      "13: replace_in_file app.py",
+      "14: replace_in_file app.py",
+      "15: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_app.py  (First see what the tests expect from `DELETE /items/{item_id}`.)",
+      "  step 2: read_file app.py  (Now read app.py to see where `DELETE /items/{item_id}` belongs.)",
+      "  step 3: replace_in_file app.py  (Add `DELETE /items/{item_id}` at the end of the file.)",
+      "  step 4: read_file app.py  (The test fails; I will read app.py again to find out why.)",
+      "  step 5: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 6: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 7: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 8: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 9: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 10: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 11: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 12: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 13: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 14: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)",
+      "  step 15: replace_in_file app.py  (Line 8 has `1` where it needs `2`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "held-area",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [],
+    "approvals": 0,
+    "seconds": 86,
+    "log": [
+      "1: read_file test_shapes.py",
+      "2: read_file shapes.py",
+      "3: replace_in_file shapes.py",
+      "4: replace_in_file shapes.py",
+      "5: replace_in_file shapes.py",
+      "6: replace_in_file shapes.py",
+      "7: replace_in_file shapes.py",
+      "8: replace_in_file shapes.py",
+      "9: replace_in_file shapes.py",
+      "10: replace_in_file shapes.py",
+      "11: replace_in_file shapes.py",
+      "12: replace_in_file shapes.py",
+      "13: replace_in_file shapes.py",
+      "14: replace_in_file shapes.py",
+      "15: replace_in_file shapes.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_shapes.py  (First see what the tests expect from `area`.)",
+      "  step 2: read_file shapes.py  (Now read shapes.py to see where `area` belongs.)",
+      "  step 3: replace_in_file shapes.py  (Add `area` just before `def __str__(self):`.)",
+      "  step 4: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 5: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 6: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 7: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 8: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 9: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 10: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 11: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 12: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 13: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 14: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)",
+      "  step 15: replace_in_file shapes.py  (I copied a line wrongly. Add `area` just before `def __str__(self):`.)"
+    ]
+  },
+  {
+    "id": "held-tax",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 4,
+    "edits": [
+      "shop.py",
+      "tax.py"
+    ],
+    "approvals": 2,
+    "seconds": 14,
+    "log": [
+      "1: read_file shop.py",
+      "2: replace_in_file shop.py",
+      "3: read_file tax.py",
+      "4: replace_in_file tax.py"
+    ],
+    "notes": [
+      "  step 1: read_file shop.py  (Read shop.py to see what `total` does.)",
+      "  step 2: replace_in_file shop.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 3: read_file tax.py  (The test fails; I will read tax.py to find out why.)",
+      "  step 4: replace_in_file tax.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "fresh-min-index",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "lowest.py"
+    ],
+    "approvals": 1,
+    "seconds": 81,
+    "log": [
+      "1: read_file lowest.py",
+      "2: replace_in_file lowest.py",
+      "3: replace_in_file lowest.py",
+      "4: replace_in_file lowest.py",
+      "5: replace_in_file lowest.py",
+      "6: replace_in_file lowest.py",
+      "7: replace_in_file lowest.py",
+      "8: replace_in_file lowest.py",
+      "9: replace_in_file lowest.py",
+      "10: replace_in_file lowest.py",
+      "11: replace_in_file lowest.py",
+      "12: replace_in_file lowest.py",
+      "13: replace_in_file lowest.py",
+      "14: replace_in_file lowest.py",
+      "15: replace_in_file lowest.py"
+    ],
+    "notes": [
+      "  step 1: read_file lowest.py  (The test fails; I will read lowest.py to find out why.)",
+      "  step 2: replace_in_file lowest.py  (Line 4 has `<` where it needs `<=`, which is why the test fails.)",
+      "  step 3: replace_in_file lowest.py  (Line 4 has `<` where it needs `<=`, which is why the test fails.)",
+      "  step 4: replace_in_file lowest.py  (I read lowest.py and saw that `<=` is missing where it needs it.)",
+      "  step 5: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 6: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 7: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 8: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 9: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 10: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 11: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 12: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 13: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 14: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)",
+      "  step 15: replace_in_file lowest.py  (I will read lowest.py and see that `<=` is missing where it needs it.)"
+    ]
+  },
+  {
+    "id": "fresh-only-even",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "evens.py"
+    ],
+    "approvals": 1,
+    "seconds": 8,
+    "log": [
+      "1: read_file evens.py",
+      "2: replace_in_file evens.py"
+    ],
+    "notes": [
+      "  step 1: read_file evens.py  (Read evens.py to see what `only_even` does.)",
+      "  step 2: replace_in_file evens.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "fresh-initials",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "short_names.py"
+    ],
+    "approvals": 1,
+    "seconds": 8,
+    "log": [
+      "1: read_file short_names.py",
+      "2: replace_in_file short_names.py"
+    ],
+    "notes": [
+      "  step 1: read_file short_names.py  (Read short_names.py to see what `initials` does.)",
+      "  step 2: replace_in_file short_names.py  (Line 2 has `1` where it needs `0`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "fresh-countdown",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "launch.py"
+    ],
+    "approvals": 1,
+    "seconds": 65,
+    "log": [
+      "1: read_file launch.py",
+      "2: replace_in_file launch.py",
+      "3: replace_in_file launch.py",
+      "4: replace_in_file launch.py",
+      "5: replace_in_file launch.py",
+      "6: replace_in_file launch.py",
+      "7: replace_in_file launch.py",
+      "8: replace_in_file launch.py",
+      "9: replace_in_file launch.py",
+      "10: replace_in_file launch.py",
+      "11: replace_in_file launch.py",
+      "12: replace_in_file launch.py",
+      "13: replace_in_file launch.py",
+      "14: replace_in_file launch.py",
+      "15: replace_in_file launch.py"
+    ],
+    "notes": [
+      "  step 1: read_file launch.py  (The test fails; I will read launch.py to find out why.)",
+      "  step 2: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 3: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 4: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 5: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 6: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 7: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 8: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 9: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 10: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 11: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 12: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 13: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 14: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 15: replace_in_file launch.py  (Line 2 has `0` where it needs `1`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "fresh-add-leap",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "dates_tools.py",
+      "dates_tools.py"
+    ],
+    "approvals": 2,
+    "seconds": 109,
+    "log": [
+      "1: read_file test_dates_tools.py",
+      "2: read_file dates_tools.py",
+      "3: replace_in_file dates_tools.py",
+      "4: read_file dates_tools.py",
+      "5: replace_in_file dates_tools.py",
+      "6: replace_in_file dates_tools.py",
+      "7: replace_in_file dates_tools.py",
+      "8: replace_in_file dates_tools.py",
+      "9: replace_in_file dates_tools.py",
+      "10: replace_in_file dates_tools.py",
+      "11: replace_in_file dates_tools.py",
+      "12: replace_in_file dates_tools.py",
+      "13: replace_in_file dates_tools.py",
+      "14: replace_in_file dates_tools.py",
+      "15: replace_in_file dates_tools.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_dates_tools.py  (First see what the tests expect from `is_leap`.)",
+      "  step 2: read_file dates_tools.py  (Now read dates_tools.py to see where `is_leap` belongs.)",
+      "  step 3: replace_in_file dates_tools.py  (Add `is_leap` at the end of the file.)",
+      "  step 4: read_file dates_tools.py  (The test fails; I will read dates_tools.py to find out why.)",
+      "  step 5: replace_in_file dates_tools.py  (Line 8 has `!=` where it needs `==`, which is why the test fails.)",
+      "  step 6: replace_in_file dates_tools.py  (Line 8 has `!=` where it needs `==`, which is why the test fails.)",
+      "  step 7: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 8: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 9: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 10: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 11: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 12: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 13: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 14: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)",
+      "  step 15: replace_in_file dates_tools.py  (I read dates_tools.py and found the bug.)"
+    ]
+  },
+  {
+    "id": "fresh-add-size",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "waiting_line.py"
+    ],
+    "approvals": 1,
+    "seconds": 9,
+    "log": [
+      "1: read_file test_waiting_line.py",
+      "2: read_file waiting_line.py",
+      "3: replace_in_file waiting_line.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_waiting_line.py  (First see what the tests expect from `size`.)",
+      "  step 2: read_file waiting_line.py  (Now read waiting_line.py to see where `size` belongs.)",
+      "  step 3: replace_in_file waiting_line.py  (Add `size` just before `def join(self, person):`.)"
+    ]
+  },
+  {
+    "id": "fresh-add-clamp",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 3,
+    "edits": [
+      "limits.py"
+    ],
+    "approvals": 1,
+    "seconds": 10,
+    "log": [
+      "1: read_file test_limits.py",
+      "2: read_file limits.py",
+      "3: replace_in_file limits.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_limits.py  (First see what the tests expect from `clamp`.)",
+      "  step 2: read_file limits.py  (Now read limits.py to see where `clamp` belongs.)",
+      "  step 3: replace_in_file limits.py  (Add `clamp` at the end of the file.)"
+    ]
+  },
+  {
+    "id": "fresh-api-greet",
+    "solved": true,
+    "agent_status": "solved",
+    "steps": 2,
+    "edits": [
+      "app.py"
+    ],
+    "approvals": 1,
+    "seconds": 13,
+    "log": [
+      "1: read_file app.py",
+      "2: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file app.py  (Read app.py to see what `GET /greet/{name}` does.)",
+      "  step 2: replace_in_file app.py  (Line 8 has `mesage` where it needs `message`, which is why the test fails.)"
+    ]
+  },
+  {
+    "id": "fresh-api-count",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [],
+    "approvals": 0,
+    "seconds": 76,
+    "log": [
+      "1: read_file test_app.py",
+      "2: read_file app.py",
+      "3: replace_in_file app.py",
+      "4: replace_in_file app.py",
+      "5: replace_in_file app.py",
+      "6: replace_in_file app.py",
+      "7: replace_in_file app.py",
+      "8: replace_in_file app.py",
+      "9: replace_in_file app.py",
+      "10: replace_in_file app.py",
+      "11: replace_in_file app.py",
+      "12: replace_in_file app.py",
+      "13: replace_in_file app.py",
+      "14: replace_in_file app.py",
+      "15: replace_in_file app.py"
+    ],
+    "notes": [
+      "  step 1: read_file test_app.py  (First see what the tests expect from `GET /items/count`.)",
+      "  step 2: read_file app.py  (Now read app.py to see where `GET /items/count` belongs.)",
+      "  step 3: replace_in_file app.py  (Add `GET /items/count` just before `@app.get(\"/items\")`.)",
+      "  step 4: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 5: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 6: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 7: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 8: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 9: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 10: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 11: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 12: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 13: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 14: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)",
+      "  step 15: replace_in_file app.py  (I copied a line wrongly. Add `GET /items/count` just before `@app.get(\"/items\")`)"
+    ]
+  },
+  {
+    "id": "fresh-discount",
+    "solved": false,
+    "agent_status": "stopped",
+    "steps": 15,
+    "edits": [
+      "cart.py"
+    ],
+    "approvals": 1,
+    "seconds": 75,
+    "log": [
+      "1: read_file cart.py",
+      "2: replace_in_file cart.py",
+      "3: replace_in_file cart.py",
+      "4: replace_in_file cart.py",
+      "5: replace_in_file cart.py",
+      "6: replace_in_file cart.py",
+      "7: replace_in_file cart.py",
+      "8: replace_in_file cart.py",
+      "9: replace_in_file cart.py",
+      "10: replace_in_file cart.py",
+      "11: replace_in_file cart.py",
+      "12: replace_in_file cart.py",
+      "13: replace_in_file cart.py",
+      "14: replace_in_file cart.py",
+      "15: replace_in_file cart.py"
+    ],
+    "notes": [
+      "  step 1: read_file cart.py  (The test fails; I will read cart.py to find out why.)",
+      "  step 2: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 3: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 4: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 5: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 6: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 7: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 8: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 9: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 10: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 11: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 12: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 13: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 14: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)",
+      "  step 15: replace_in_file cart.py  (Line 5 has `0` where it needs `1`, which is why the test fails.)"
+    ]
+  }
+]

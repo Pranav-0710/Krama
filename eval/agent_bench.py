@@ -7,8 +7,9 @@ Run from the project folder:
 --check proves every project fails as given and passes with its known fix.
 Add --set=heldout (10 projects written after the agent's edit rules were
 changed because of the main 20), --set=heldout2 (10 more, written after the
-first held-out set was used for changes too) or --set=all; the default is the
-main 20.
+first held-out set was used for changes too), --set=exam (the step-6 exam in
+agent_exam.py, for judging trained models) or --set=all (the 40, not the
+exam); the default is the main 20.
 A run copies each project to a new folder and lets the agent work on it with
 up to 15 actions. Edits are approved automatically here, but each approval
 is counted, and the agent cannot write anywhere without one. Before marking,
@@ -22,6 +23,7 @@ import tempfile
 import time
 from pathlib import Path
 
+from agent_exam import AGENT_EXAM
 from agent_tasks import AGENT_HELDOUT, AGENT_HELDOUT2, AGENT_TASKS
 from krama_cli.agent import run_agent, run_project_tests
 from krama_cli.backends import KRAMA_MODEL, make_backend
@@ -37,7 +39,7 @@ def write_project(folder, files):
 
 def check_tasks():
     problems = 0
-    for task in AGENT_TASKS + AGENT_HELDOUT + AGENT_HELDOUT2:
+    for task in AGENT_TASKS + AGENT_HELDOUT + AGENT_HELDOUT2 + AGENT_EXAM:
         with tempfile.TemporaryDirectory() as folder:
             folder = Path(folder)
             write_project(folder, task["files"])
@@ -47,7 +49,7 @@ def check_tasks():
         if before or not after:
             problems += 1
             print(f"PROBLEM {task['id']}: fails as given = {not before}, passes with fix = {after}")
-    print(f"checked {len(AGENT_TASKS) + len(AGENT_HELDOUT) + len(AGENT_HELDOUT2)} projects, {problems} problems")
+    print(f"checked {len(AGENT_TASKS) + len(AGENT_HELDOUT) + len(AGENT_HELDOUT2) + len(AGENT_EXAM)} projects, {problems} problems")
 
 
 def main():
@@ -60,6 +62,7 @@ def main():
     model = positional[2] if len(positional) > 2 else KRAMA_MODEL
     project_set = next((arg.split("=", 1)[1] for arg in sys.argv if arg.startswith("--set=")), "main")
     chosen = {"main": AGENT_TASKS, "heldout": AGENT_HELDOUT, "heldout2": AGENT_HELDOUT2,
+              "exam": AGENT_EXAM,
               "all": AGENT_TASKS + AGENT_HELDOUT + AGENT_HELDOUT2}[project_set]
     backend = make_backend(backend_name, model, context=8192)
 

@@ -16,3 +16,4 @@ models/
 
 # HumanEval tasks; eval/benchmark.py downloads them when needed.
 eval/benchmark/
+data/agent_train*.jsonl
