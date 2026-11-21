@@ -1,8 +1,13 @@
 """Before the exam: turn the trained Krama into one small 4-bit file for Ollama.
 
-Paste this whole file into ONE cell of the training notebook (the one whose
-/kaggle/working holds krama-coder-1.5b). No GPU is needed: set Accelerator
-to None so it costs no GPU quota. Internet must be On.
+Kaggle: paste this whole file into ONE cell of the training notebook (the one
+whose /kaggle/working holds krama-coder-1.5b). No GPU is needed: set
+Accelerator to None so it costs no GPU quota. Internet must be On.
+
+Colab: put this file in My Drive/krama-train. In a CPU runtime (no GPU units used), run:
+    from google.colab import drive; drive.mount("/content/drive")
+    exec(open("/content/drive/MyDrive/krama-train/to_gguf.py").read())
+The GGUF file lands in My Drive/krama-work; download it from Drive.
 
 Why 4-bit Q4_K_M: the base model in the exam was the default Ollama file,
 which is Q4_K_M. Krama must be shrunk the same way, or the comparison is unfair.
@@ -13,16 +18,20 @@ file, then its quantize tool shrinks that file to Q4_K_M.
 (Ollama itself can no longer make Q4_K_M files from a trained model.)
 """
 
+import os
 import subprocess
 import sys
 from pathlib import Path
 
-ROUND = 3              # must match the training script: 2 = train.py, 3 = train_agent.py (step 6 pilot)
+ROUND = 5              # must match the training script: 2 = train.py, 3 to 5 = train_agent.py
 SUFFIX = "" if ROUND == 1 else f"-r{ROUND}"
-MODEL_DIR = Path(f"/kaggle/working/krama-coder-1.5b{SUFFIX}")
-TOOLS = Path("/tmp/llama.cpp")              # not in /kaggle/working, so it is not saved
+# Colab first: Colab also has a /kaggle/input folder, so that folder alone does not mean Kaggle.
+ON_KAGGLE = "COLAB_RELEASE_TAG" not in os.environ and Path("/kaggle/input").exists()
+WORK = Path("/kaggle/working") if ON_KAGGLE else Path("/content/drive/MyDrive/krama-work")
+MODEL_DIR = WORK / f"krama-coder-1.5b{SUFFIX}"
+TOOLS = Path("/tmp/llama.cpp")              # not in the work folder, so it is not saved
 FULL_FILE = Path("/tmp/krama-coder-1.5b-f16.gguf")   # full size, about 3 GB
-OUT_FILE = Path(f"/kaggle/working/krama-coder-1.5b{SUFFIX}-q4_k_m.gguf")
+OUT_FILE = WORK / f"krama-coder-1.5b{SUFFIX}-q4_k_m.gguf"
 
 
 def run(command):
@@ -48,7 +57,7 @@ def main():
     run(f"{TOOLS}/build/bin/llama-quantize {FULL_FILE} {OUT_FILE} Q4_K_M")
 
     size_mb = OUT_FILE.stat().st_size / 1_000_000
-    print(f"saved {OUT_FILE} ({size_mb:.0f} MB). Download it from the Output panel.")
+    print(f"saved {OUT_FILE} ({size_mb:.0f} MB). Download it from the Output panel (Kaggle) or Drive (Colab).")
 
 
 if __name__ == "__main__":

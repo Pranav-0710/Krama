@@ -9,20 +9,28 @@ took, and what krama replied. This program writes good trajectories to learn fro
 3. Breaks: the code is broken on purpose, and only breaks that make the
    tests fail are kept, so the original code is a known fix:
      bug      one small change (`<` for `<=`, `+` for `-`, 1 for 0, 400 for 404,
-              a dropped `.strip()` or `not`, a missing import)
+              a dropped `.strip()`, `not`, `return` or `+ 1`, `elif` for `if`,
+              one variable used for another, a missing import, ...).
+              The kind is picked first, so rare kinds are as common as the rest.
+              Up to two bug tasks per seed, of different kinds.
      feature  one function, method or endpoint is removed; the task asks for it back
 4. Steps: the ideal actions (read, then one exact replace) are run through
    krama's real tools on a copy of the project, so every reply in the data is
-   what krama really says, and the tests really pass at the end. About one in
-   five also has a typical mistake first, and the recovery from krama's real
-   message. Mistaken actions are marked "train": false: the model sees them
-   but is not taught to make them.
+   what krama really says, and the tests really pass at the end. Some also
+   have a typical mistake first, and the recovery from krama's real message:
+     slip         a wrongly copied `old`, which is not found
+     test file    an attempt to change the tests, which is refused
+     second look  (round 4) a wrong fix somewhere else that applies but leaves
+                  the tests failing; the model puts it back, then finds the bug
+   Mistaken actions are marked "train": false: the model sees them but is not
+   taught to make them. Bug thoughts often quote the test failure, so the model
+   learns to reason from the output.
 
 Seeds that look like a benchmark or exam project (same function name, or
 similar code) are left out, so the scores stay fair.
 
 Run from the project folder (about an hour on a laptop):
-    uv run --no-project --with pytest --with fastapi --with httpx --with uvicorn --with-editable ./cli data/agent_data.py [--limit=N]
+    uv run --no-project --with pytest --with fastapi --with httpx --with uvicorn --with-editable ./cli data/agent_data.py [--limit=N] [--out=FILE]
 Writes data/agent_train.jsonl and prints what was kept and why.
 """
 
@@ -55,13 +63,22 @@ from krama_cli.agent import AGENT_SYSTEM, Tools, run_project_tests, start_messag
 OUT_FILE = DATA / "agent_train.jsonl"
 WORKERS = 6
 RECOVERY_SHARE = 0.2
+SECOND_LOOK_SHARE = 0.3        # of bug tasks: a wrong fix first, then the right one
+BUGS_PER_SEED = 2
 HOME = str(Path.home())
 
 # Small, realistic slips. Each maps what the code says to what the break says.
 OP_SWAPS = {"<": "<=", "<=": "<", ">": ">=", ">=": ">", "==": "!=", "!=": "==",
-            "+": "-", "-": "+", "*": "+", "//": "/", "+=": "-=", "-=": "+="}
+            "+": "-", "-": "+", "*": "+", "//": "/", "/": "//", "%": "//", "**": "*",
+            "+=": "-=", "-=": "+="}
 NAME_SWAPS = {"and": "or", "or": "and", "True": "False", "False": "True",
-              "lower": "upper", "upper": "lower", "min": "max", "max": "min"}
+              "lower": "upper", "upper": "lower", "min": "max", "max": "min",
+              "elif": "if", "break": "continue", "continue": "break", "any": "all", "all": "any",
+              "keys": "values", "values": "keys", "startswith": "endswith", "endswith": "startswith",
+              "isdigit": "isalpha", "isalpha": "isdigit", "append": "extend"}
+# Pieces whose loss is a typical bug: (pattern, what to call it).
+DROPS = [(r"\.(strip|lower|title)\(\)", "method"), (r"(?<=\S) [+-] 1\b(?![.\d])", "plus one"),
+         (r", reverse=True", "reverse")]
 STATUS_SWAPS = {404: 400, 400: 404, 201: 200, 200: 201, 401: 403, 403: 401, 422: 400, 204: 200}
 ROUTE_METHODS = {"get", "post", "put", "patch", "delete"}
 
@@ -162,15 +179,16 @@ def compiles(code):
 
 
 def bug_candidates(code):
-    """Every one-place slip in the code, as dicts: row (1-based), broken code, kind, wrong and right text."""
+    """Every one-place slip in the code, as dicts: row (1-based), broken code, kind (how the thought
+    reads: swap, dropped, variable or import), label (the bug family, for an even mix), wrong and right text."""
     lines = code.split("\n")
     found = []
 
-    def swap(row, start, end, new):
+    def swap(row, start, end, new, label, kind=None):
         line = lines[row - 1]
         broken = "\n".join(lines[:row - 1] + [line[:start] + new + line[end:]] + lines[row:])
-        found.append({"row": row, "broken": broken, "kind": "swap" if new else "dropped",
-                      "wrong": new, "right": line[start:end]})
+        found.append({"row": row, "broken": broken, "kind": kind or ("swap" if new else "dropped"),
+                      "label": label, "wrong": new, "right": line[start:end]})
 
     tokens = list(tokenize.generate_tokens(StringIO(code).readline))
     for position, token in enumerate(tokens):
@@ -178,24 +196,38 @@ def bug_candidates(code):
         if row != end_row:
             continue
         if token.type == tokenize.OP and token.string in OP_SWAPS:
-            swap(row, start, end, OP_SWAPS[token.string])
+            swap(row, start, end, OP_SWAPS[token.string], "operator")
         elif token.type == tokenize.NAME and token.string in NAME_SWAPS:
-            swap(row, start, end, NAME_SWAPS[token.string])
-        elif token.type == tokenize.NAME and token.string == "not" and lines[row - 1][end:end + 1] == " ":
-            swap(row, start, end + 1, "")
+            swap(row, start, end, NAME_SWAPS[token.string], "word")
+        elif token.type == tokenize.NAME and token.string in ("not", "return") and lines[row - 1][end:end + 1] == " ":
+            swap(row, start, end + 1, "", token.string)
         elif token.type == tokenize.NUMBER and token.string.isdigit():
             number = int(token.string)
             before = tokens[position - 1].string if position else ""
             if number in STATUS_SWAPS and before in ("=", "("):
-                swap(row, start, end, str(STATUS_SWAPS[number]))
+                swap(row, start, end, str(STATUS_SWAPS[number]), "status")
             elif number in (0, 1, 2):
-                swap(row, start, end, str(number + 1 if number == 0 else number - 1))
+                swap(row, start, end, str(number + 1 if number == 0 else number - 1), "number")
     for row, line in enumerate(lines, 1):
-        for match in re.finditer(r"\.(strip|lower|title)\(\)", line):
-            swap(row, match.start(), match.end(), "")
+        for pattern, label in DROPS:
+            for match in re.finditer(pattern, line):
+                swap(row, match.start(), match.end(), "", label)
         if re.match(r"(import |from \S+ import )", line) and "fastapi import FastAPI" not in line:
             found.append({"row": row, "broken": "\n".join(lines[:row - 1] + lines[row:]), "kind": "import",
-                          "wrong": "", "right": line})
+                          "label": "import", "wrong": "", "right": line})
+    # One variable used where another was meant: a read of a local name swapped for another local.
+    for function in ast.walk(ast.parse(code)):
+        if not isinstance(function, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        local = sorted({arg.arg for arg in function.args.args if arg.arg != "self"}
+                       | {node.id for node in ast.walk(function) if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store)})
+        if len(local) < 2:
+            continue
+        for node in ast.walk(function):
+            if (isinstance(node, ast.Name) and isinstance(node.ctx, ast.Load) and node.id in local
+                    and node.lineno == node.end_lineno and lines[node.lineno - 1].isascii()):
+                other = local[(local.index(node.id) + 1) % len(local)]
+                swap(node.lineno, node.col_offset, node.end_col_offset, other, "variable", "variable")
     return [item for item in found if compiles(item["broken"])]
 
 
@@ -286,8 +318,10 @@ def corrupt(old, rng):
     return " ".join(words[:spot] + [words[spot] + "s"] + words[spot + 1:])
 
 
-def make_trajectory(seed, rng, task_kind, broken, fix_action, request, code_file, test_file, test_text, thoughts):
-    """Run the ideal steps on a fresh copy. Returns the row, or None if the tests do not pass at the end."""
+def make_trajectory(seed, rng, task_kind, broken, fix_action, request, code_file, test_file, test_text, thoughts,
+                    wrong_fix=None, row_id=None):
+    """Run the ideal steps on a fresh copy. Returns the row, or None if the tests do not pass at the end.
+    With `wrong_fix`, that change is made first (not learnt), then put back, then the real fix."""
     with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as folder:
         project = Path(folder)
         (project / code_file).write_text(broken, encoding="utf-8")
@@ -298,8 +332,12 @@ def make_trajectory(seed, rng, task_kind, broken, fix_action, request, code_file
             return None                                  # the break did not break anything
         messages = [{"role": "system", "content": AGENT_SYSTEM},
                     {"role": "user", "content": clean(start_message(request, project, tools.last_tests))}]
+        # The failure the model sees first; a wrong fix is put back before the real one, so it is the same then.
+        fix_action = dict(fix_action, thought=fix_action["thought"].replace("{error}", failure_line(tools.last_tests.output)))
         mistake = None
-        if rng.random() < RECOVERY_SHARE:
+        if wrong_fix:
+            mistake = "second look"
+        elif rng.random() < RECOVERY_SHARE:
             mistake = "test file" if task_kind == "bug" and rng.random() < 0.3 else "slip"
         if mistake == "test file":
             asserts = [line.strip() for line in test_text.split("\n") if line.strip().startswith("assert ") and "==" in line]
@@ -315,14 +353,25 @@ def make_trajectory(seed, rng, task_kind, broken, fix_action, request, code_file
             if slip["old"] not in broken:
                 messages += act(tools, slip, train=False)
                 fix_action = dict(fix_action, thought="I copied a line wrongly. " + fix_action["thought"])
+        if mistake == "second look":
+            messages += act(tools, wrong_fix, train=False)
+            if tools.last_tests.passed:
+                return None                              # the "wrong" fix happened to work
+            line = re.search(r"Line (\d+)", wrong_fix["thought"]).group(1)
+            messages += act(tools, {"thought": rng.choice([
+                f"The tests still fail with {failure_line(tools.last_tests.output)}, so that change was not the bug. Put line {line} back.",
+                f"That did not fix it: still {failure_line(tools.last_tests.output)}. Undo my change to line {line} first."]),
+                "tool": "replace_in_file", "path": code_file, "old": wrong_fix["new"], "new": wrong_fix["old"]})
+            fix_action = dict(fix_action, thought="Look again. " + fix_action["thought"])
         messages += act(tools, fix_action)
         if not tools.last_tests.passed:
             return None
-    return {"id": f"{seed['id']}-{task_kind}", "kind": seed["kind"], "task_kind": task_kind,
-            "recovery": any(m.get("train") is False for m in messages), "messages": messages}
+    used = mistake if any(m.get("train") is False for m in messages) else None
+    return {"id": row_id or f"{seed['id']}-{task_kind}", "kind": seed["kind"], "task_kind": task_kind,
+            "recovery": used, "messages": messages}
 
 
-def bug_fix_action(seed, candidate, code_file):
+def bug_fix_action(seed, candidate, code_file, rng):
     """The exact replace that undoes one break, or None if it cannot be made unique."""
     broken, row, right = candidate["broken"], candidate["row"], candidate["right"]
     if candidate["kind"] == "import":
@@ -340,30 +389,76 @@ def bug_fix_action(seed, candidate, code_file):
         original_line = seed["code"].split("\n")[row - 1]
         new = (old[:old.rfind("\n") + 1] + original_line) if old else None
         if candidate["kind"] == "dropped":
-            thought = f"Line {row} is missing `{right.strip()}`, which is why the test fails."
+            what = f"line {row} is missing `{right.strip()}`"
+        elif candidate["kind"] == "variable":
+            what = f"line {row} uses `{candidate['wrong']}` where it should use `{right}`"
         else:
-            thought = f"Line {row} has `{candidate['wrong']}` where it needs `{right}`, which is why the test fails."
+            what = f"line {row} has `{candidate['wrong']}` where it needs `{right}`"
+        # {error} is filled in with the real test failure when the step is run.
+        thought = rng.choice([f"{what[0].upper()}{what[1:]}, which is why the test fails.",
+                              f"The test fails with {{error}}. The cause: {what}.",
+                              f"{{error}}: {what}, so fix that line."])
     if not old:
         return None
     return {"thought": thought, "tool": "replace_in_file", "path": code_file, "old": old, "new": new}
 
 
-def bug_task(seed, rng, code_file, test_file, test_text):
-    candidates = bug_candidates(seed["code"])
-    rng.shuffle(candidates)
-    for candidate in candidates[:6]:
-        fix = bug_fix_action(seed, candidate, code_file)
-        if fix is None:
-            continue
-        func = enclosing_function(seed["code"], candidate["row"]) or Path(code_file).stem
-        request = rng.choice(BUG_REQUESTS).format(file=code_file, func=func)
-        thoughts = {"read": rng.choice([f"The test fails; I will read {code_file} to find out why.",
-                                        f"Read {code_file} to see what `{func}` does."])}
-        row_data = make_trajectory(seed, rng, "bug", candidate["broken"], fix, request,
-                                   code_file, test_file, test_text, thoughts)
-        if row_data:
-            return row_data
+def failure_line(output):
+    """The most telling line of a test failure, for a thought: the first `E` line, without the E."""
+    for line in output.split("\n"):
+        if line.startswith("E "):
+            return "`" + line[1:].strip().replace("`", "'")[:100] + "`"
+    return "a failing test"
+
+
+def wrong_fix_action(broken, bug_row, code_file, rng):
+    """A believable fix in the wrong place: one slip "repaired" on another line. Shown, never learnt."""
+    options = [item for item in bug_candidates(broken)
+               if item["row"] != bug_row and item["kind"] in ("swap", "variable")]
+    rng.shuffle(options)
+    for item in options:
+        old = unique_old(broken, item["row"])
+        if old:
+            new = old[:old.rfind("\n") + 1] + item["broken"].split("\n")[item["row"] - 1]
+            return {"thought": f"Line {item['row']} has `{item['right']}` where it needs `{item['wrong']}`.",
+                    "tool": "replace_in_file", "path": code_file, "old": old, "new": new}
     return None
+
+
+def bug_tasks(seed, rng, code_file, test_file, test_text):
+    """Up to BUGS_PER_SEED bug trajectories, each of a different family (picked first, so all are common)."""
+    families = {}
+    for candidate in bug_candidates(seed["code"]):
+        families.setdefault(candidate["label"], []).append(candidate)
+    labels = sorted(families)
+    rng.shuffle(labels)
+    # Nearly every seed has a `return` and a variable to swap; try rarer families first most of the time.
+    labels.sort(key=lambda label: label in ("return", "variable") and rng.random() > 0.25)
+    rows, tries = [], 0
+    for label in labels:
+        if len(rows) == BUGS_PER_SEED or tries >= 8:
+            break
+        candidates = families[label]
+        rng.shuffle(candidates)
+        for candidate in candidates[:2]:
+            tries += 1
+            fix = bug_fix_action(seed, candidate, code_file, rng)
+            if fix is None:
+                continue
+            func = enclosing_function(seed["code"], candidate["row"]) or Path(code_file).stem
+            request = rng.choice(BUG_REQUESTS).format(file=code_file, func=func)
+            thoughts = {"read": rng.choice([f"The test fails; I will read {code_file} to find out why.",
+                                            f"Read {code_file} to see what `{func}` does."])}
+            wrong = (wrong_fix_action(candidate["broken"], candidate["row"], code_file, rng)
+                     if rng.random() < SECOND_LOOK_SHARE else None)
+            row_data = make_trajectory(seed, rng, "bug", candidate["broken"], fix, request,
+                                       code_file, test_file, test_text, thoughts, wrong_fix=wrong,
+                                       row_id=f"{seed['id']}-bug-{label.replace(' ', '-')}")
+            if row_data:
+                row_data["bug"] = label
+                rows.append(row_data)
+                break
+    return rows
 
 
 def feature_task(seed, rng, code_file, test_file, test_text):
@@ -414,13 +509,14 @@ def work(seed):
             (Path(folder) / test_file).write_text(test_text, encoding="utf-8")
             if not run_project_tests(Path(folder), sys.executable).passed:
                 return [], ["the original fails as a project"]
-        rows, notes = [], []
-        for maker, label in ((bug_task, "bug"), (feature_task, "feature")):
-            row = maker(seed, rng, code_file, test_file, test_text)
-            if row:
-                rows.append(row)
-            else:
-                notes.append(f"no working {label}")
+        rows, notes = bug_tasks(seed, rng, code_file, test_file, test_text), []
+        if not rows:
+            notes.append("no working bug")
+        row = feature_task(seed, rng, code_file, test_file, test_text)
+        if row:
+            rows.append(row)
+        else:
+            notes.append("no working feature")
         return rows, notes
     except Exception as error:                 # one odd seed must not stop the whole run
         return [], [f"could not use the code ({type(error).__name__})"]
@@ -428,6 +524,7 @@ def work(seed):
 
 def main():
     limit = next((int(arg.split("=")[1]) for arg in sys.argv if arg.startswith("--limit=")), None)
+    out_file = next((Path(arg.split("=", 1)[1]) for arg in sys.argv if arg.startswith("--out=")), OUT_FILE)
     codes, names = protected_projects()
     all_seeds = list(seeds())
     usable = [seed for seed in all_seeds if not too_close(seed, codes, names)]
@@ -442,13 +539,15 @@ def main():
             if done % 100 == 0:
                 print(f"  {done}/{len(usable)} seeds, {len(rows)} trajectories", flush=True)
 
-    with OUT_FILE.open("w", encoding="utf-8") as out:
+    with out_file.open("w", encoding="utf-8") as out:
         for row in rows:
             out.write(json.dumps(row, ensure_ascii=False) + "\n")
     kinds = Counter((row["kind"], row["task_kind"]) for row in rows)
-    print(f"wrote {len(rows)} trajectories to {OUT_FILE.name}; with a recovery: {sum(r['recovery'] for r in rows)}")
+    print(f"wrote {len(rows)} trajectories to {out_file}")
     for (kind, task_kind), count in sorted(kinds.items()):
         print(f"  {kind:8} {task_kind:8} {count}")
+    print("  recoveries:", dict(Counter(row["recovery"] for row in rows if row["recovery"])))
+    print("  bug kinds:", dict(Counter(row["bug"] for row in rows if "bug" in row).most_common()))
     for note, count in notes.most_common():
         print(f"  {count:4}  {note}")
 

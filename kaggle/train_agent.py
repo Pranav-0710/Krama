@@ -1,18 +1,26 @@
-"""Step 6 pilot: train Krama round 3 on tutor answers AND agent steps.
+"""Step 6: train Krama (round 3 = pilot, round 4 = more bug kinds and second looks)
+on tutor answers AND agent steps. Runs on Kaggle or Google Colab.
 
-Run it in ONE Kaggle cell (as in round 2: typing long files into the browser breaks them):
+Kaggle: run it in ONE cell (typing long files into the browser breaks them):
     import glob; exec(open(glob.glob("/kaggle/input/**/train_agent.py", recursive=True)[0]).read())
+    Settings: Accelerator = GPU T4 x2, Internet = On. Data: the private krama-train dataset.
+
+Colab: put train.jsonl, the agent file named in AGENT_FILE and this file in the Drive folder
+My Drive/krama-train, choose Runtime > Change runtime type > T4 GPU, then run ONE cell:
+    from google.colab import drive; drive.mount("/content/drive")
+    exec(open("/content/drive/MyDrive/krama-train/train_agent.py").read())
+    Checkpoints and the finished model go to My Drive/krama-work, so they
+    survive a disconnect.
 
 What it does:
-    reads the private krama-train dataset: train.jsonl (round 2's 1,578 tutor
-        answers) and agent_train.jsonl (agent trajectories from data/agent_data.py)
+    reads train.jsonl (round 2's 1,578 tutor answers) and agent_train.jsonl
+        (agent trajectories from data/agent_data.py)
     teaches Qwen2.5-Coder-1.5B-Instruct both, with LoRA, as in round 2
     learns only from Krama's own turns: never from questions, tool replies,
         or the mistakes marked "train": false in the trajectories
-    merges and saves the model as krama-coder-1.5b-r3, then shows one agent step
+    merges and saves the model as krama-coder-1.5b<SUFFIX>, then shows one agent step
 
-Kaggle settings needed: Accelerator = GPU T4 x2, Internet = On.
-Safe to stop and run again: it carries on from the last saved checkpoint.
+Safe to stop and run again: it carries on from the last saved checkpoint (every 50 steps).
 """
 
 import glob
@@ -38,17 +46,25 @@ LORA_RANK = 16
 LORA_ALPHA = 32
 LORA_DROPOUT = 0.05
 HELD_OUT = 60
-WORK = Path("/kaggle/working")
-SUFFIX = "-r3"
+SUFFIX = "-r5"
+AGENT_FILE = "agent_train_r5.jsonl"   # r3/r4: agent_train.jsonl; r5: round 4's examples in round 3's mix (data/mix_r5.py)
+# Colab first: Colab also has a /kaggle/input folder, so that folder alone does not mean Kaggle.
+ON_KAGGLE = "COLAB_RELEASE_TAG" not in os.environ and Path("/kaggle/input").exists()
+if ON_KAGGLE:
+    INPUT, WORK = Path("/kaggle/input"), Path("/kaggle/working")
+else:   # Google Colab, with Drive mounted at /content/drive
+    INPUT, WORK = Path("/content/drive/MyDrive/krama-train"), Path("/content/drive/MyDrive/krama-work")
 # ------------------------------------------
 
 QWEN_DEFAULT = "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."
 
 
 def find(name):
-    found = glob.glob(f"/kaggle/input/**/{name}", recursive=True)
+    found = glob.glob(f"{INPUT}/**/{name}", recursive=True)
     if not found:
-        raise SystemExit(f"{name} not found. Add the private krama-train dataset (newest version) with 'Add Input'.")
+        where = ("Add the private krama-train dataset (newest version) with 'Add Input'." if ON_KAGGLE else
+                 "Mount Drive first and put it in My Drive/krama-train.")
+        raise SystemExit(f"{name} not found in {INPUT}. {where}")
     return [json.loads(line) for line in open(found[0], encoding="utf-8")]
 
 
@@ -108,7 +124,8 @@ def main():
                               Trainer, TrainingArguments)
     from transformers.trainer_utils import get_last_checkpoint
 
-    tutor, agent = find("train.jsonl"), find("agent_train.jsonl")
+    WORK.mkdir(parents=True, exist_ok=True)
+    tutor, agent = find("train.jsonl"), find(AGENT_FILE)
     rows = tutor + agent
     random.Random(0).shuffle(rows)
     tokenizer = AutoTokenizer.from_pretrained(BASE)
